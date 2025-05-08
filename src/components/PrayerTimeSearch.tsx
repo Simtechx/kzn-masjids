@@ -12,6 +12,7 @@ import {
   TableRow 
 } from '@/components/ui/table';
 
+// Extended data structure with specific times for filtering
 const prayerTimesData = {
   'Northern Natal': [
     { fajr: '05:17', dhuhr: '12:15', asr: '15:15', maghrib: '17:45', isha: '18:45', masjid: 'Masjid Al-Noor, Newcastle' },
@@ -45,13 +46,56 @@ const prayerTimesData = {
   ],
 };
 
+// Get all unique times for a specific prayer type across all regions
+const getUniquePrayerTimes = (prayerType) => {
+  const allTimes = [];
+  Object.values(prayerTimesData).forEach(region => {
+    region.forEach(masjid => {
+      if (!allTimes.includes(masjid[prayerType])) {
+        allTimes.push(masjid[prayerType]);
+      }
+    });
+  });
+  return allTimes.sort();
+};
+
+// Generate time blocks for filtering
+const generateTimeBlocks = (prayerType) => {
+  const times = getUniquePrayerTimes(prayerType);
+  const earliestTime = times[0];
+  const latestTime = times[times.length - 1];
+  
+  return { times, earliestTime, latestTime };
+};
+
 const PrayerTimeSearch = () => {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [searchType, setSearchType] = useState<'earliest' | 'latest'>('earliest');
   const [searchQuery, setSearchQuery] = useState('');
+  const [activePrayer, setActivePrayer] = useState<'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha' | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  
+  const prayerInfo = {
+    fajr: { label: 'Fajr', arabicLabel: 'Subh Saadiq' },
+    dhuhr: { label: 'Dhuhr', arabicLabel: 'Zawaal' },
+    asr: { label: 'Asr', arabicLabel: 'Asr' },
+    maghrib: { label: 'Maghrib', arabicLabel: 'Maghrib' },
+    isha: { label: 'Isha', arabicLabel: 'Isha' },
+  };
 
   const handleRegionSelection = (region: string) => {
     setSelectedRegion(region);
+    setActivePrayer(null);
+    setSelectedTime(null);
+  };
+
+  const handlePrayerSelection = (prayer: 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha') => {
+    setActivePrayer(activePrayer === prayer ? null : prayer);
+    setSelectedTime(null);
+  };
+
+  const handleTimeSelection = (time: string) => {
+    setSelectedTime(time);
   };
 
   const getFilteredPrayerTimes = () => {
@@ -59,13 +103,23 @@ const PrayerTimeSearch = () => {
     
     const regionData = prayerTimesData[selectedRegion as keyof typeof prayerTimesData] || [];
     
+    let filteredData = [...regionData];
+    
+    // Filter by search query (masjid name)
     if (searchQuery) {
-      return regionData.filter(masjid => 
+      filteredData = filteredData.filter(masjid => 
         masjid.masjid.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
     
-    return regionData;
+    // Filter by selected prayer time
+    if (activePrayer && selectedTime) {
+      filteredData = filteredData.filter(masjid => 
+        masjid[activePrayer] === selectedTime
+      );
+    }
+    
+    return filteredData;
   };
 
   const findExtremeTime = (prayer: 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha', type: 'earliest' | 'latest') => {
@@ -97,7 +151,7 @@ const PrayerTimeSearch = () => {
       <div className="container mx-auto">
         <h2 className="text-center text-3xl font-bold mb-2 text-islamic-blue">Prayer Time Search</h2>
         <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
-          Find the earliest and latest prayer times across different masjids in KwaZulu-Natal regions.
+          Find prayer times across different masjids in KwaZulu-Natal regions by selecting specific times.
         </p>
         
         <div className="flex flex-col space-y-6">
@@ -115,101 +169,191 @@ const PrayerTimeSearch = () => {
             ))}
           </div>
           
-          {/* Search Bar */}
+          {/* Prayer Time Blocks */}
           {selectedRegion && (
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-grow relative">
-                <Input 
-                  placeholder="Search for masjid..." 
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-              </div>
-              <div className="flex gap-2">
-                <Button 
-                  variant={searchType === 'earliest' ? "default" : "outline"}
-                  className={searchType === 'earliest' ? "bg-islamic-blue" : ""}
-                  onClick={() => setSearchType('earliest')}
+            <div className="bg-gray-100 p-4 rounded-lg">
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-2 mb-4">
+                <div 
+                  className={`p-3 rounded cursor-pointer text-center ${activePrayer === 'fajr' ? 'bg-islamic-blue text-white' : 'bg-white hover:bg-gray-50'}`}
+                  onClick={() => handlePrayerSelection('fajr')}
                 >
-                  Earliest Times
-                </Button>
-                <Button 
-                  variant={searchType === 'latest' ? "default" : "outline"}
-                  className={searchType === 'latest' ? "bg-islamic-blue" : ""}
-                  onClick={() => setSearchType('latest')}
+                  <div className="font-medium">Subh Saadiq - Fajr</div>
+                  <div>{findExtremeTime('fajr', 'earliest')?.time}</div>
+                </div>
+                <div 
+                  className={`p-3 rounded cursor-pointer text-center ${activePrayer === 'dhuhr' ? 'bg-islamic-blue text-white' : 'bg-white hover:bg-gray-50'}`}
+                  onClick={() => handlePrayerSelection('dhuhr')}
                 >
-                  Latest Times
-                </Button>
+                  <div className="font-medium">Zawaal - Dhuhr</div>
+                  <div>{findExtremeTime('dhuhr', 'earliest')?.time}</div>
+                </div>
+                <div 
+                  className={`p-3 rounded cursor-pointer text-center ${activePrayer === 'asr' ? 'bg-islamic-blue text-white' : 'bg-white hover:bg-gray-50'}`}
+                  onClick={() => handlePrayerSelection('asr')}
+                >
+                  <div className="font-medium">Asr</div>
+                  <div>{findExtremeTime('asr', 'earliest')?.time}</div>
+                </div>
+                <div 
+                  className={`p-3 rounded cursor-pointer text-center ${activePrayer === 'maghrib' ? 'bg-islamic-blue text-white' : 'bg-white hover:bg-gray-50'}`}
+                  onClick={() => handlePrayerSelection('maghrib')}
+                >
+                  <div className="font-medium">Maghrib</div>
+                  <div>{findExtremeTime('maghrib', 'earliest')?.time}</div>
+                </div>
+                <div 
+                  className={`p-3 rounded cursor-pointer text-center ${activePrayer === 'isha' ? 'bg-islamic-blue text-white' : 'bg-white hover:bg-gray-50'}`}
+                  onClick={() => handlePrayerSelection('isha')}
+                >
+                  <div className="font-medium">Isha</div>
+                  <div>{findExtremeTime('isha', 'earliest')?.time}</div>
+                </div>
               </div>
-            </div>
-          )}
-          
-          {/* Prayer Times Display */}
-          {selectedRegion && (
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold mb-4 text-islamic-blue">
-                {searchType === 'earliest' ? 'Earliest' : 'Latest'} Prayer Times in {selectedRegion}
-              </h3>
-              
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="font-bold">Prayer</TableHead>
-                      <TableHead className="font-bold">Time</TableHead>
-                      <TableHead className="font-bold">Masjid</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'].map((prayer) => {
-                      const extremeTime = findExtremeTime(prayer as any, searchType);
+
+              {/* Instructions message */}
+              <div className="bg-gray-200 p-3 mb-4 rounded text-center text-gray-700">
+                Click the blocks above to filter the times.
+              </div>
+
+              {/* Prayer Time Filter Options */}
+              {activePrayer && (
+                <div className="mb-6">
+                  <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-8 gap-2">
+                    <div className={`p-2 bg-blue-100 rounded text-center`}>
+                      <div className="text-xs font-medium">EARLIEST {activePrayer.toUpperCase()}</div>
+                      <div>{findExtremeTime(activePrayer, 'earliest')?.time}</div>
+                    </div>
+                    
+                    {getUniquePrayerTimes(activePrayer).map((time, index) => {
+                      const isEarliest = time === findExtremeTime(activePrayer, 'earliest')?.time;
+                      const isLatest = time === findExtremeTime(activePrayer, 'latest')?.time;
+                      
                       return (
-                        <TableRow key={prayer} className={searchType === 'earliest' ? 
-                          (prayer === 'fajr' ? 'bg-blue-50' : '') : 
-                          (prayer === 'isha' ? 'bg-blue-50' : '')
-                        }>
-                          <TableCell className="font-medium capitalize">{prayer}</TableCell>
-                          <TableCell>{extremeTime?.time}</TableCell>
-                          <TableCell>{extremeTime?.masjid}</TableCell>
-                        </TableRow>
+                        <div 
+                          key={index}
+                          className={`p-2 rounded text-center cursor-pointer 
+                            ${selectedTime === time ? 'bg-islamic-green text-white' : 
+                              (isEarliest || isLatest) ? 'bg-blue-50' : 'bg-white hover:bg-gray-50'}`}
+                          onClick={() => handleTimeSelection(time)}
+                        >
+                          <div>{time}</div>
+                          {isLatest && <div className="text-xs mt-1">LATEST {activePrayer.toUpperCase()}</div>}
+                        </div>
                       );
                     })}
-                  </TableBody>
-                </Table>
+                  </div>
+                </div>
+              )}
+          
+              {/* Search Bar */}
+              <div className="flex flex-col md:flex-row gap-4 mb-6">
+                <div className="flex-grow relative">
+                  <Input 
+                    placeholder="Search for masjid..." 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                  />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                </div>
+                <div className="flex gap-2">
+                  <Button 
+                    variant={searchType === 'earliest' ? "default" : "outline"}
+                    className={searchType === 'earliest' ? "bg-islamic-blue" : ""}
+                    onClick={() => setSearchType('earliest')}
+                  >
+                    Earliest Times
+                  </Button>
+                  <Button 
+                    variant={searchType === 'latest' ? "default" : "outline"}
+                    className={searchType === 'latest' ? "bg-islamic-blue" : ""}
+                    onClick={() => setSearchType('latest')}
+                  >
+                    Latest Times
+                  </Button>
+                </div>
               </div>
               
-              <div className="mt-6">
-                <h3 className="text-xl font-bold mb-4 text-islamic-green">All Masjids in {selectedRegion}</h3>
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                  {getFilteredPrayerTimes().map((masjid, index) => (
-                    <div key={index} className="bg-white p-4 rounded-md shadow-sm border border-gray-100">
-                      <h4 className="font-semibold text-lg mb-2">{masjid.masjid}</h4>
-                      <div className="grid grid-cols-5 gap-1">
-                        <div className="bg-islamic-cream p-2 rounded text-center">
-                          <div className="text-xs font-medium">Fajr</div>
-                          <div>{masjid.fajr}</div>
-                        </div>
-                        <div className="bg-islamic-cream p-2 rounded text-center">
-                          <div className="text-xs font-medium">Dhuhr</div>
-                          <div>{masjid.dhuhr}</div>
-                        </div>
-                        <div className="bg-islamic-cream p-2 rounded text-center">
-                          <div className="text-xs font-medium">Asr</div>
-                          <div>{masjid.asr}</div>
-                        </div>
-                        <div className="bg-islamic-cream p-2 rounded text-center">
-                          <div className="text-xs font-medium">Maghrib</div>
-                          <div>{masjid.maghrib}</div>
-                        </div>
-                        <div className="bg-islamic-cream p-2 rounded text-center">
-                          <div className="text-xs font-medium">Isha</div>
-                          <div>{masjid.isha}</div>
+              {/* Prayer Times Display */}
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="text-xl font-bold mb-4 text-islamic-blue">
+                  {selectedTime && activePrayer 
+                    ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
+                    : `${searchType === 'earliest' ? 'Earliest' : 'Latest'} Prayer Times in ${selectedRegion}`}
+                </h3>
+                
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="font-bold">Prayer</TableHead>
+                        <TableHead className="font-bold">Time</TableHead>
+                        <TableHead className="font-bold">Masjid</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {!selectedTime ? (
+                        ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'].map((prayer) => {
+                          const extremeTime = findExtremeTime(prayer as any, searchType);
+                          return (
+                            <TableRow key={prayer} className={searchType === 'earliest' ? 
+                              (prayer === 'fajr' ? 'bg-blue-50' : '') : 
+                              (prayer === 'isha' ? 'bg-blue-50' : '')
+                            }>
+                              <TableCell className="font-medium capitalize">{prayer}</TableCell>
+                              <TableCell>{extremeTime?.time}</TableCell>
+                              <TableCell>{extremeTime?.masjid}</TableCell>
+                            </TableRow>
+                          );
+                        })
+                      ) : (
+                        getFilteredPrayerTimes().map((masjid, idx) => (
+                          <TableRow key={idx}>
+                            <TableCell className="font-medium capitalize">{activePrayer}</TableCell>
+                            <TableCell>{masjid[activePrayer as keyof typeof masjid]}</TableCell>
+                            <TableCell>{masjid.masjid}</TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+                
+                <div className="mt-6">
+                  <h3 className="text-xl font-bold mb-4 text-islamic-green">
+                    {selectedTime && activePrayer 
+                      ? `All Masjids in ${selectedRegion}` 
+                      : `All Masjids in ${selectedRegion}`}
+                  </h3>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    {getFilteredPrayerTimes().map((masjid, index) => (
+                      <div key={index} className="bg-white p-4 rounded-md shadow-sm border border-gray-100">
+                        <h4 className="font-semibold text-lg mb-2">{masjid.masjid}</h4>
+                        <div className="grid grid-cols-5 gap-1">
+                          <div className={`p-2 rounded text-center ${activePrayer === 'fajr' && masjid.fajr === selectedTime ? 'bg-islamic-green text-white' : 'bg-islamic-cream'}`}>
+                            <div className="text-xs font-medium">Fajr</div>
+                            <div>{masjid.fajr}</div>
+                          </div>
+                          <div className={`p-2 rounded text-center ${activePrayer === 'dhuhr' && masjid.dhuhr === selectedTime ? 'bg-islamic-green text-white' : 'bg-islamic-cream'}`}>
+                            <div className="text-xs font-medium">Dhuhr</div>
+                            <div>{masjid.dhuhr}</div>
+                          </div>
+                          <div className={`p-2 rounded text-center ${activePrayer === 'asr' && masjid.asr === selectedTime ? 'bg-islamic-green text-white' : 'bg-islamic-cream'}`}>
+                            <div className="text-xs font-medium">Asr</div>
+                            <div>{masjid.asr}</div>
+                          </div>
+                          <div className={`p-2 rounded text-center ${activePrayer === 'maghrib' && masjid.maghrib === selectedTime ? 'bg-islamic-green text-white' : 'bg-islamic-cream'}`}>
+                            <div className="text-xs font-medium">Maghrib</div>
+                            <div>{masjid.maghrib}</div>
+                          </div>
+                          <div className={`p-2 rounded text-center ${activePrayer === 'isha' && masjid.isha === selectedTime ? 'bg-islamic-green text-white' : 'bg-islamic-cream'}`}>
+                            <div className="text-xs font-medium">Isha</div>
+                            <div>{masjid.isha}</div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
