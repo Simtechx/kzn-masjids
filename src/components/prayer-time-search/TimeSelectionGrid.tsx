@@ -15,28 +15,30 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
   selectedTime,
   onSelectTime
 }) => {
+  const earliestTime = findExtremeTime(activePrayer, 'earliest', selectedRegion)?.time;
+  const latestTime = findExtremeTime(activePrayer, 'latest', selectedRegion)?.time;
+  
+  // Get unique times and sort them
+  const uniquePrayerTimes = getUniquePrayerTimes(activePrayer);
+  
   return (
     <div className="mb-6">
       <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-8 gap-2">
-        <div className={`p-2 bg-blue-100 rounded text-center`}>
-          <div className="text-xs font-medium">EARLIEST {activePrayer.toUpperCase()}</div>
-          <div>{findExtremeTime(activePrayer, 'earliest', selectedRegion)?.time}</div>
-        </div>
-        
-        {getUniquePrayerTimes(activePrayer).map((time, index) => {
-          const isEarliest = time === findExtremeTime(activePrayer, 'earliest', selectedRegion)?.time;
-          const isLatest = time === findExtremeTime(activePrayer, 'latest', selectedRegion)?.time;
+        {uniquePrayerTimes.map((time, index) => {
+          const isEarliest = time === earliestTime;
+          const isLatest = time === latestTime;
           
           return (
             <div 
               key={index}
               className={`p-2 rounded text-center cursor-pointer 
                 ${selectedTime === time ? 'bg-islamic-green text-white' : 
-                  (isEarliest || isLatest) ? 'bg-blue-50' : 'bg-white hover:bg-gray-50'}`}
+                  (isEarliest || isLatest) ? (isEarliest ? 'bg-blue-100' : 'bg-blue-50') : 'bg-white hover:bg-gray-50'}`}
               onClick={() => onSelectTime(time)}
             >
               <div>{time}</div>
-              {isLatest && <div className="text-xs mt-1">LATEST {activePrayer.toUpperCase()}</div>}
+              {isEarliest && <div className="text-xs mt-1">EARLIEST</div>}
+              {isLatest && <div className="text-xs mt-1">LATEST</div>}
             </div>
           );
         })}

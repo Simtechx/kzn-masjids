@@ -10,13 +10,14 @@ interface RegionSelectorProps {
 
 const RegionSelector: React.FC<RegionSelectorProps> = ({ selectedRegion, onSelectRegion }) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+    <div className="flex flex-wrap gap-2">
       {Object.keys(prayerTimesData).map((region) => (
         <Button
           key={region}
           variant={selectedRegion === region ? "default" : "outline"} 
-          className={selectedRegion === region ? "bg-islamic-green text-white" : "text-gray-700"}
+          className={`${selectedRegion === region ? "bg-islamic-green text-white" : "text-gray-700"} py-2 px-4`}
           onClick={() => onSelectRegion(region)}
+          size="sm"
         >
           {region}
         </Button>

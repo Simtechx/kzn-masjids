@@ -54,7 +54,7 @@ const Footer = () => {
         </div>
         
         <div className="mt-12 pt-4 border-t border-white/20 text-center text-white/60">
-          <p>© {new Date().getFullYear()} KZN Masjid Explorer. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} kznmasjids.co.za by Simtech W. All rights reserved.</p>
         </div>
       </div>
     </footer>

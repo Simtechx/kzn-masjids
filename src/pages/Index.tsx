@@ -7,6 +7,7 @@ import FeaturedMasjid from '@/components/FeaturedMasjid';
 import Footer from '@/components/Footer';
 import LivePrayerTimes from '@/components/LivePrayerTimes';
 import PrayerTimeSearch from '@/components/PrayerTimeSearch';
+import SupportNewMasjids from '@/components/SupportNewMasjids';
 import { regions, featuredMasjids } from '@/data/mockData';
 
 const Index = () => {
@@ -48,6 +49,9 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        {/* Support New Masjids */}
+        <SupportNewMasjids />
 
         {/* Call to Action */}
         <section className="py-16 px-4 bg-islamic-pattern">

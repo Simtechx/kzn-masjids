@@ -16,23 +16,21 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
   const prayerTypes: PrayerType[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-2 mb-4">
+    <div className="flex flex-wrap gap-2 mb-4">
       {prayerTypes.map((prayer) => (
         <div 
           key={prayer}
-          className={`p-3 rounded cursor-pointer text-center ${
+          className={`p-2 rounded cursor-pointer text-center flex-1 min-w-[100px] ${
             activePrayer === prayer 
               ? 'bg-islamic-blue text-white' 
               : 'bg-white hover:bg-gray-50'
           }`}
           onClick={() => onSelectPrayer(prayer)}
         >
-          <div className="font-medium">
-            {prayer === 'fajr' ? 'Subh Saadiq - Fajr' :
-             prayer === 'dhuhr' ? 'Zawaal - Dhuhr' :
-             prayer.charAt(0).toUpperCase() + prayer.slice(1)}
+          <div className="font-medium text-sm">
+            {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
           </div>
-          <div>{findExtremeTime(prayer, 'earliest', selectedRegion)?.time}</div>
+          <div className="text-xs">{findExtremeTime(prayer, 'earliest', selectedRegion)?.time}</div>
         </div>
       ))}
     </div>
