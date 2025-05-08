@@ -5,6 +5,8 @@ import Hero from '@/components/Hero';
 import RegionCard from '@/components/RegionCard';
 import FeaturedMasjid from '@/components/FeaturedMasjid';
 import Footer from '@/components/Footer';
+import LivePrayerTimes from '@/components/LivePrayerTimes';
+import PrayerTimeSearch from '@/components/PrayerTimeSearch';
 import { regions, featuredMasjids } from '@/data/mockData';
 
 const Index = () => {
@@ -12,6 +14,7 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main>
+        <LivePrayerTimes />
         <Hero />
 
         {/* Regions Section */}
@@ -28,6 +31,8 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        <PrayerTimeSearch />
 
         {/* Featured Masjids */}
         <section className="py-16 px-4">
