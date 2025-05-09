@@ -16,6 +16,7 @@ const Index = () => {
       <Navbar />
       <main>
         <LivePrayerTimes />
+        <PrayerTimeSearch />
         <Hero />
 
         {/* Regions Section */}
@@ -32,8 +33,6 @@ const Index = () => {
             </div>
           </div>
         </section>
-
-        <PrayerTimeSearch />
 
         {/* Featured Masjids */}
         <section className="py-16 px-4">

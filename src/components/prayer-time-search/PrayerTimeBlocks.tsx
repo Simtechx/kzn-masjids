@@ -16,11 +16,11 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
   const prayerTypes: PrayerType[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
   return (
-    <div className="flex flex-wrap gap-2 mb-4">
+    <div className="flex gap-2 mb-4">
       {prayerTypes.map((prayer) => (
         <div 
           key={prayer}
-          className={`p-2 rounded cursor-pointer text-center flex-1 min-w-[100px] ${
+          className={`p-2 rounded cursor-pointer text-center flex-1 ${
             activePrayer === prayer 
               ? 'bg-islamic-blue text-white' 
               : 'bg-white hover:bg-gray-50'

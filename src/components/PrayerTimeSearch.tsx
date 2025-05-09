@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { prayerTimesData, PrayerType, SearchType, MasjidData } from '@/utils/prayerTimeUtils';
 import RegionSelector from './prayer-time-search/RegionSelector';
+import SubRegionSelector from './prayer-time-search/SubRegionSelector';
 import PrayerTimeBlocks from './prayer-time-search/PrayerTimeBlocks';
 import TimeSelectionGrid from './prayer-time-search/TimeSelectionGrid';
 import SearchBar from './prayer-time-search/SearchBar';
@@ -10,6 +11,7 @@ import MasjidsList from './prayer-time-search/MasjidsList';
 
 const PrayerTimeSearch = () => {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [selectedSubRegion, setSelectedSubRegion] = useState<string | null>(null);
   const [searchType, setSearchType] = useState<SearchType>('earliest');
   const [searchQuery, setSearchQuery] = useState('');
   const [activePrayer, setActivePrayer] = useState<PrayerType | null>(null);
@@ -17,6 +19,13 @@ const PrayerTimeSearch = () => {
   
   const handleRegionSelection = (region: string) => {
     setSelectedRegion(region);
+    setSelectedSubRegion(null);
+    setActivePrayer(null);
+    setSelectedTime(null);
+  };
+  
+  const handleSubRegionSelection = (subRegion: string) => {
+    setSelectedSubRegion(subRegion);
     setActivePrayer(null);
     setSelectedTime(null);
   };
@@ -44,6 +53,13 @@ const PrayerTimeSearch = () => {
       );
     }
     
+    // Filter by sub-region if selected
+    if (selectedSubRegion) {
+      filteredData = filteredData.filter(masjid => 
+        masjid.masjid.includes(selectedSubRegion)
+      );
+    }
+    
     // Filter by selected prayer time
     if (activePrayer && selectedTime) {
       filteredData = filteredData.filter(masjid => 
@@ -55,7 +71,7 @@ const PrayerTimeSearch = () => {
   };
 
   return (
-    <section className="py-16 px-4 bg-white">
+    <section className="py-10 px-4 bg-white">
       <div className="container mx-auto">
         <h2 className="text-center text-3xl font-bold mb-2 text-islamic-blue">Prayer Time Search</h2>
         <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
@@ -68,6 +84,15 @@ const PrayerTimeSearch = () => {
             selectedRegion={selectedRegion}
             onSelectRegion={handleRegionSelection}
           />
+          
+          {/* Sub-region Selection */}
+          {selectedRegion && (
+            <SubRegionSelector
+              selectedRegion={selectedRegion}
+              selectedSubRegion={selectedSubRegion}
+              onSelectSubRegion={handleSubRegionSelection}
+            />
+          )}
           
           {/* Prayer Time Blocks */}
           {selectedRegion && (
@@ -104,6 +129,7 @@ const PrayerTimeSearch = () => {
               {/* Prayer Times Display */}
               <PrayerTimesDisplay
                 selectedRegion={selectedRegion}
+                selectedSubRegion={selectedSubRegion}
                 selectedTime={selectedTime}
                 activePrayer={activePrayer}
                 searchType={searchType}

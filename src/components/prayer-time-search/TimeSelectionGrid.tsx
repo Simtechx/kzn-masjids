@@ -20,10 +20,10 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
   
   // Get unique times and sort them
   const uniquePrayerTimes = getUniquePrayerTimes(activePrayer);
-  
+
   return (
     <div className="mb-6">
-      <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-8 gap-2">
+      <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
         {uniquePrayerTimes.map((time, index) => {
           const isEarliest = time === earliestTime;
           const isLatest = time === latestTime;
@@ -33,7 +33,8 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
               key={index}
               className={`p-2 rounded text-center cursor-pointer 
                 ${selectedTime === time ? 'bg-islamic-green text-white' : 
-                  (isEarliest || isLatest) ? (isEarliest ? 'bg-blue-100' : 'bg-blue-50') : 'bg-white hover:bg-gray-50'}`}
+                  isEarliest ? 'bg-blue-100' : 
+                  isLatest ? 'bg-amber-100' : 'bg-white hover:bg-gray-50'}`}
               onClick={() => onSelectTime(time)}
             >
               <div>{time}</div>

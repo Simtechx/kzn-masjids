@@ -37,6 +37,15 @@ export type PrayerType = 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
 export type SearchType = 'earliest' | 'latest';
 export type MasjidData = { fajr: string; dhuhr: string; asr: string; maghrib: string; isha: string; masjid: string };
 
+// Subregion data
+export const subRegionsData = {
+  'Northern Natal': ['Newcastle', 'Ladysmith', 'Dundee', 'Vryheid', 'Utrecht'],
+  'South Coast': ['Port Shepstone', 'Margate', 'Scottburgh', 'Umkomaas'],
+  'Durban': ['Durban CBD', 'Overport', 'Musgrave', 'Sydenham', 'Westville'],
+  'Midlands': ['Pietermaritzburg', 'Richmond', 'Howick', 'Other'],
+  'North Coast': ['Stanger', 'Ballito', 'Tongaat', 'Verulam']
+};
+
 // Get all unique times for a specific prayer type across all regions
 export const getUniquePrayerTimes = (prayerType: PrayerType): string[] => {
   const allTimes: string[] = [];

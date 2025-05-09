@@ -1,12 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Progress } from '@/components/ui/progress';
-import { MapPin, Clock } from 'lucide-react';
+import { MapPin, Clock, Sun, Sunrise, Sunset, Moon } from 'lucide-react';
 
 interface PrayerTime {
   name: string;
   time: string;
   timestamp: number;
+  icon?: React.ReactNode;
 }
 
 const LivePrayerTimes = () => {
@@ -16,11 +17,12 @@ const LivePrayerTimes = () => {
   const [timeRemaining, setTimeRemaining] = useState<string>('');
   const [remainingPercentage, setRemainingPercentage] = useState<number>(0);
   const [todayPrayerTimes, setTodayPrayerTimes] = useState<PrayerTime[]>([
-    { name: 'Fajr', time: '3:15 am', timestamp: new Date().setHours(3, 15, 0, 0) },
-    { name: 'Dhuhr', time: '11:30 am', timestamp: new Date().setHours(11, 30, 0, 0) },
-    { name: 'Asr', time: '3:30 pm', timestamp: new Date().setHours(15, 30, 0, 0) },
-    { name: 'Maghrib', time: '5:45 pm', timestamp: new Date().setHours(17, 45, 0, 0) },
-    { name: 'Isha', time: '6:40 pm', timestamp: new Date().setHours(18, 40, 0, 0) }
+    { name: 'Fajr', time: '3:15 am', timestamp: new Date().setHours(3, 15, 0, 0), icon: <Sunrise size={40} className="mb-2 text-amber-300" /> },
+    { name: 'Dhuhr', time: '11:30 am', timestamp: new Date().setHours(11, 30, 0, 0), icon: <Sun size={40} className="mb-2 text-yellow-400" /> },
+    { name: 'Asr (H)', time: '3:30 pm', timestamp: new Date().setHours(15, 30, 0, 0), icon: <Sun size={40} className="mb-2 text-orange-300" /> },
+    { name: 'Asr (S)', time: '4:00 pm', timestamp: new Date().setHours(16, 0, 0, 0), icon: <Sun size={40} className="mb-2 text-orange-300" /> },
+    { name: 'Maghrib', time: '5:45 pm', timestamp: new Date().setHours(17, 45, 0, 0), icon: <Sunset size={40} className="mb-2 text-orange-500" /> },
+    { name: 'Isha', time: '6:40 pm', timestamp: new Date().setHours(18, 40, 0, 0), icon: <Moon size={40} className="mb-2 text-blue-200" /> }
   ]);
 
   useEffect(() => {
@@ -100,6 +102,7 @@ const LivePrayerTimes = () => {
             <div className="flex justify-between items-start mb-3">
               <div>
                 <h2 className="text-xl font-medium">Upcoming Prayer</h2>
+                {upcomingPrayer?.icon}
                 <h1 className="text-5xl font-bold mt-2">{upcomingPrayer?.name}</h1>
                 <div className="mt-1 text-white/80">
                   In {timeRemaining.split(':')[0]} hours {timeRemaining.split(':')[1]} mins
@@ -139,21 +142,26 @@ const LivePrayerTimes = () => {
               </div>
               
               <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-islamic-green">Asr</div>
+                <div className="text-islamic-green">Asr (H)</div>
                 <div className="text-2xl font-semibold">{todayPrayerTimes[2].time}</div>
               </div>
               
               <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-islamic-green">Maghrib</div>
+                <div className="text-islamic-green">Asr (S)</div>
                 <div className="text-2xl font-semibold">{todayPrayerTimes[3].time}</div>
               </div>
               
               <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-islamic-green">Isha</div>
+                <div className="text-islamic-green">Maghrib</div>
                 <div className="text-2xl font-semibold">{todayPrayerTimes[4].time}</div>
               </div>
               
-              <div className="flex flex-col justify-center">
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="text-islamic-green">Isha</div>
+                <div className="text-2xl font-semibold">{todayPrayerTimes[5].time}</div>
+              </div>
+              
+              <div className="col-span-2 mt-2">
                 <div className="text-sm text-gray-500">Calculation Method: Umm Al-Qura</div>
                 <div className="text-sm text-gray-500">Juristic Method: Hanafi</div>
                 <button className="text-islamic-blue text-sm mt-2">Change Settings</button>

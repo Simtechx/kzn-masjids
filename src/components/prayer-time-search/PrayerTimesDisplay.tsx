@@ -17,6 +17,7 @@ import {
 
 interface PrayerTimesDisplayProps {
   selectedRegion: string;
+  selectedSubRegion: string | null;
   selectedTime: string | null;
   activePrayer: PrayerType | null;
   searchType: SearchType;
@@ -25,6 +26,7 @@ interface PrayerTimesDisplayProps {
 
 const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
   selectedRegion,
+  selectedSubRegion,
   selectedTime,
   activePrayer,
   searchType,
@@ -35,7 +37,9 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
       <h3 className="text-xl font-bold mb-4 text-islamic-blue">
         {selectedTime && activePrayer 
           ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
-          : `${searchType === 'earliest' ? 'Earliest' : 'Latest'} Prayer Times in ${selectedRegion}`}
+          : selectedSubRegion 
+            ? `${searchType === 'earliest' ? 'Earliest' : 'Latest'} Prayer Times in ${selectedSubRegion}, ${selectedRegion}`
+            : `${searchType === 'earliest' ? 'Earliest' : 'Latest'} Prayer Times in ${selectedRegion}`}
       </h3>
       
       <div className="overflow-x-auto">
