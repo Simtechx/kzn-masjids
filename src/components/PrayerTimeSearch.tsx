@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { prayerTimesData, PrayerType, SearchType, MasjidData } from '@/utils/prayerTimeUtils';
 import RegionSelector from './prayer-time-search/RegionSelector';
@@ -79,13 +78,13 @@ const PrayerTimeSearch = () => {
         </p>
         
         <div className="flex flex-col space-y-6">
-          {/* Region Selection */}
+          {/* Region Selection - now with styled cards */}
           <RegionSelector 
             selectedRegion={selectedRegion}
             onSelectRegion={handleRegionSelection}
           />
           
-          {/* Sub-region Selection */}
+          {/* Sub-region Selection - now with styled blocks */}
           {selectedRegion && (
             <SubRegionSelector
               selectedRegion={selectedRegion}
@@ -117,7 +116,7 @@ const PrayerTimeSearch = () => {
                   onSelectTime={handleTimeSelection}
                 />
               )}
-          
+              
               {/* Search Bar */}
               <SearchBar
                 searchQuery={searchQuery}
