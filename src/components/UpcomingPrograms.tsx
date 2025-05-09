@@ -14,7 +14,6 @@ interface Program {
   date: string;
   masjid: string;
   imageUrl: string;
-  description: string;
 }
 
 const programs: Program[] = [
@@ -23,24 +22,28 @@ const programs: Program[] = [
     title: "Jummah Special Lecture",
     date: "Friday, May 10 @ 12:30pm",
     masjid: "Westville Masjid",
-    imageUrl: "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&q=80",
-    description: "Join us for a special lecture on the importance of unity in Islam."
+    imageUrl: "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&q=80"
   },
   {
     id: 2,
     title: "Tafsir Program",
     date: "Sunday, May 12 @ 6:30pm",
     masjid: "Grey Street Masjid",
-    imageUrl: "https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?auto=format&fit=crop&q=80",
-    description: "Weekly Tafsir program exploring Surah Al-Kahf."
+    imageUrl: "https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?auto=format&fit=crop&q=80"
   },
   {
     id: 3,
     title: "Youth Workshop",
     date: "Saturday, May 18 @ 9:00am",
     masjid: "Reservoir Hills Masjid",
-    imageUrl: "https://images.unsplash.com/photo-1473177104440-ffee2f376098?auto=format&fit=crop&q=80",
-    description: "Workshop focused on building Islamic leadership skills for youth."
+    imageUrl: "https://images.unsplash.com/photo-1473177104440-ffee2f376098?auto=format&fit=crop&q=80"
+  },
+  {
+    id: 4,
+    title: "Importance of Ramadan",
+    date: "Monday, May 20 @ 7:30pm",
+    masjid: "Overport Masjid",
+    imageUrl: "/lovable-uploads/ac66a635-4746-468d-8cfa-a155c79d75ed.png"
   }
 ];
 
@@ -58,22 +61,17 @@ const UpcomingPrograms = () => {
             <CarouselContent>
               {programs.map((program) => (
                 <CarouselItem key={program.id} className="md:basis-1/2 lg:basis-1/3 p-2">
-                  <div className="h-full flex flex-col rounded-lg shadow-md overflow-hidden">
-                    <div className="h-48 relative">
-                      <img 
-                        src={program.imageUrl} 
-                        alt={program.title}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
-                        <span className="text-white font-medium text-sm">{program.date}</span>
-                      </div>
-                    </div>
-                    <div className="p-4 flex-grow flex flex-col">
-                      <h3 className="font-bold text-xl mb-1">{program.title}</h3>
-                      <p className="text-islamic-green font-medium mb-2">{program.masjid}</p>
-                      <p className="text-gray-600 text-sm flex-grow">{program.description}</p>
-                      <button className="mt-4 bg-islamic-blue hover:bg-islamic-dark-blue text-white py-2 px-4 rounded-md text-sm transition-colors">
+                  <div className="h-full rounded-lg shadow-md overflow-hidden relative">
+                    <img 
+                      src={program.imageUrl} 
+                      alt={program.title}
+                      className="w-full h-56 object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-4">
+                      <div className="text-white text-sm mb-1">{program.date}</div>
+                      <h3 className="text-white text-xl font-bold mb-1">{program.title}</h3>
+                      <p className="text-white/80 mb-2">{program.masjid}</p>
+                      <button className="bg-islamic-gold hover:bg-islamic-gold/90 text-black py-1 px-4 rounded-md text-sm mt-2 w-max">
                         View Details
                       </button>
                     </div>

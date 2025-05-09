@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Progress } from '@/components/ui/progress';
 import { MapPin, Clock, Sun, Sunrise, Sunset, Moon } from 'lucide-react';
@@ -120,7 +119,7 @@ const LivePrayerTimes = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 rounded-lg overflow-hidden">
           {/* Left side - Upcoming Prayer with background image */}
           <div 
-            className="bg-islamic-green rounded-lg relative overflow-hidden"
+            className="rounded-lg relative overflow-hidden"
             style={{ 
               position: 'relative',
             }}
@@ -131,7 +130,6 @@ const LivePrayerTimes = () => {
                 backgroundImage: getBackgroundImage(),
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                opacity: 0.3,
               }}
             />
             <div className="p-6 text-white relative z-10">
@@ -156,7 +154,7 @@ const LivePrayerTimes = () => {
                 <div className="text-white/90 mb-1">Time remaining</div>
                 <div className="text-5xl font-bold mb-3">{timeRemaining}</div>
                 <Progress value={remainingPercentage} className="h-2 bg-white/30" />
-                <div className="mt-4 inline-block bg-white/20 py-2 px-4 rounded-md">
+                <div className="mt-4 inline-block bg-black/30 py-2 px-4 rounded-md">
                   <span>Location-based times</span>
                 </div>
               </div>

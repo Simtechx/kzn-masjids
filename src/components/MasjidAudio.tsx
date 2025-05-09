@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Play, Pause, Speaker, Search, Filter, AudioLines, Headphones } from 'lucide-react';
+import { Play, Search, Filter, AudioLines, Headphones, Speaker } from 'lucide-react';
 
 interface Recording {
   id: number;
@@ -47,16 +47,8 @@ const recordings: Recording[] = [
 ];
 
 const MasjidAudio = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentRecording, setCurrentRecording] = useState<Recording | null>(recordings[0]);
-
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
-
   const playRecording = (recording: Recording) => {
-    setCurrentRecording(recording);
-    setIsPlaying(true);
+    console.log(`Playing recording: ${recording.title}`);
   };
 
   return (
@@ -66,59 +58,6 @@ const MasjidAudio = () => {
         <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
           Listen to live broadcasts, lectures and recent recordings from masjids across KwaZulu-Natal.
         </p>
-
-        {/* Now Playing Widget */}
-        {currentRecording && (
-          <div className="bg-white shadow-md rounded-lg mb-8 overflow-hidden">
-            <div className="grid grid-cols-1 md:grid-cols-4">
-              <div className="md:col-span-1 h-40 md:h-full relative">
-                <img 
-                  src={currentRecording.imageUrl} 
-                  alt={currentRecording.title}
-                  className="w-full h-full object-cover"
-                />
-                {currentRecording.isLive && (
-                  <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded-md text-xs flex items-center">
-                    <span className="animate-pulse mr-1 inline-block h-2 w-2 rounded-full bg-white"></span>
-                    LIVE
-                  </div>
-                )}
-              </div>
-              <div className="md:col-span-3 p-6 flex flex-col justify-between">
-                <div>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-2xl font-bold mb-1">{currentRecording.title}</h3>
-                      <p className="text-islamic-green">{currentRecording.speaker} • {currentRecording.masjid}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-gray-500 text-sm">{currentRecording.date}</p>
-                      <p className="text-gray-500 text-sm">{currentRecording.duration}</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mt-4 flex items-center">
-                  <button 
-                    onClick={togglePlay}
-                    className="w-12 h-12 bg-islamic-green rounded-full flex items-center justify-center text-white mr-4"
-                  >
-                    {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-                  </button>
-                  <div className="flex-grow">
-                    <div className="h-1 w-full bg-gray-200 rounded-full">
-                      <div className="h-1 bg-islamic-green rounded-full" style={{ width: '30%' }}></div>
-                    </div>
-                    <div className="flex justify-between mt-1">
-                      <span className="text-xs text-gray-500">10:15</span>
-                      <span className="text-xs text-gray-500">{currentRecording.duration}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         <Tabs defaultValue="recent">
           <div className="flex justify-between items-center mb-6">
