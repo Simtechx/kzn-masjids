@@ -8,6 +8,8 @@ import Footer from '@/components/Footer';
 import LivePrayerTimes from '@/components/LivePrayerTimes';
 import PrayerTimeSearch from '@/components/PrayerTimeSearch';
 import SupportNewMasjids from '@/components/SupportNewMasjids';
+import UpcomingPrograms from '@/components/UpcomingPrograms';
+import MasjidAudio from '@/components/MasjidAudio';
 import { regions, featuredMasjids } from '@/data/mockData';
 
 const Index = () => {
@@ -18,6 +20,12 @@ const Index = () => {
         <LivePrayerTimes />
         <PrayerTimeSearch />
         <Hero />
+
+        {/* Upcoming Programs Slideshow */}
+        <UpcomingPrograms />
+
+        {/* Audio Section */}
+        <MasjidAudio />
 
         {/* Regions Section */}
         <section className="py-16 px-4 bg-gray-50">

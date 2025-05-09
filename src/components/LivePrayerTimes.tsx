@@ -93,35 +93,72 @@ const LivePrayerTimes = () => {
     return () => clearInterval(interval);
   }, [todayPrayerTimes]);
 
+  // Get background image based on upcoming prayer
+  const getBackgroundImage = () => {
+    if (!upcomingPrayer) return "";
+    
+    switch(upcomingPrayer.name) {
+      case 'Fajr':
+        return "url('https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&q=80')";
+      case 'Dhuhr':
+        return "url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80')";
+      case 'Asr (H)':
+      case 'Asr (S)':
+        return "url('https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&q=80')";
+      case 'Maghrib':
+        return "url('https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?auto=format&fit=crop&q=80')";
+      case 'Isha':
+        return "url('https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?auto=format&fit=crop&q=80')";
+      default:
+        return "";
+    }
+  };
+
   return (
     <div className="bg-islamic-pattern">
       <div className="container mx-auto px-4 py-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 rounded-lg overflow-hidden">
-          {/* Left side - Upcoming Prayer */}
-          <div className="bg-islamic-green p-6 text-white rounded-lg">
-            <div className="flex justify-between items-start mb-3">
-              <div>
-                <h2 className="text-xl font-medium">Upcoming Prayer</h2>
-                {upcomingPrayer?.icon}
-                <h1 className="text-5xl font-bold mt-2">{upcomingPrayer?.name}</h1>
-                <div className="mt-1 text-white/80">
-                  In {timeRemaining.split(':')[0]} hours {timeRemaining.split(':')[1]} mins
+          {/* Left side - Upcoming Prayer with background image */}
+          <div 
+            className="bg-islamic-green rounded-lg relative overflow-hidden"
+            style={{ 
+              position: 'relative',
+            }}
+          >
+            <div 
+              className="absolute inset-0" 
+              style={{
+                backgroundImage: getBackgroundImage(),
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                opacity: 0.3,
+              }}
+            />
+            <div className="p-6 text-white relative z-10">
+              <div className="flex justify-between items-start mb-3">
+                <div>
+                  <h2 className="text-xl font-medium">Upcoming Prayer</h2>
+                  {upcomingPrayer?.icon}
+                  <h1 className="text-5xl font-bold mt-2">{upcomingPrayer?.name}</h1>
+                  <div className="mt-1 text-white/80">
+                    In {timeRemaining.split(':')[0]} hours {timeRemaining.split(':')[1]} mins
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="flex items-center justify-end mb-1">
+                    <MapPin size={16} className="mr-1" />
+                    <span>{currentLocation}</span>
+                  </div>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="flex items-center justify-end mb-1">
-                  <MapPin size={16} className="mr-1" />
-                  <span>{currentLocation}</span>
+              
+              <div className="mt-8">
+                <div className="text-white/90 mb-1">Time remaining</div>
+                <div className="text-5xl font-bold mb-3">{timeRemaining}</div>
+                <Progress value={remainingPercentage} className="h-2 bg-white/30" />
+                <div className="mt-4 inline-block bg-white/20 py-2 px-4 rounded-md">
+                  <span>Location-based times</span>
                 </div>
-              </div>
-            </div>
-            
-            <div className="mt-8">
-              <div className="text-white/90 mb-1">Time remaining</div>
-              <div className="text-5xl font-bold mb-3">{timeRemaining}</div>
-              <Progress value={remainingPercentage} className="h-2 bg-white/30" />
-              <div className="mt-4 inline-block bg-white/20 py-2 px-4 rounded-md">
-                <span>Location-based times</span>
               </div>
             </div>
           </div>
