@@ -51,7 +51,7 @@ const Index = () => {
       {/* Live Prayer Times at top immediately after navbar */}
       <LivePrayerTimes />
       
-      {/* Find Masjids Hero Section - restored to its original place */}
+      {/* Find Masjids Hero Section */}
       <FindMasjidsHero />
       
       <main>
@@ -88,10 +88,10 @@ const Index = () => {
         {/* Audio Section */}
         <MasjidAudio />
         
-        {/* Counter Section moved to the bottom */}
+        {/* Counter Section */}
         <CounterSection />
         
-        {/* Support New Masjids - below counter section */}
+        {/* Support New Masjids */}
         <SupportNewMasjids />
         
         {/* Hero component comes last above footer */}

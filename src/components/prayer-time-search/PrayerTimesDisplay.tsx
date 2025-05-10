@@ -15,6 +15,7 @@ import {
 } from '@/utils/prayerTimeUtils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { MapPin } from 'lucide-react';
 
 interface PrayerTimesDisplayProps {
   selectedRegion: string;
@@ -98,7 +99,8 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
                 ))}
                 <TableCell className="text-center">
                   <Button variant="default" size="sm" className="bg-teal-600 hover:bg-teal-700">
-                    View Details
+                    <MapPin className="mr-1 h-4 w-4" />
+                    Directions
                   </Button>
                 </TableCell>
               </TableRow>
@@ -137,7 +139,8 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
                 ))}
               </div>
               <Button variant="default" size="sm" className="w-full bg-teal-600 hover:bg-teal-700">
-                View Details
+                <MapPin className="mr-1 h-4 w-4" />
+                Directions
               </Button>
             </div>
           ))}

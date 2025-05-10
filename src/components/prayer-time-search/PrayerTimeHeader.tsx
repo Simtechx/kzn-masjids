@@ -19,7 +19,7 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
   return (
     <div className="flex justify-between items-center mb-6">
       <div>
-        <h2 className="text-3xl font-bold text-teal-800">Prayer Time Search</h2>
+        <h2 className="text-3xl font-bold text-[#072c23]">Prayer Time Search</h2>
         <p className="text-gray-600 mt-2">
           {selectedSubRegion && selectedRegion 
             ? `Find prayer times for masjids in ${selectedSubRegion}, ${selectedRegion}`
@@ -39,7 +39,7 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
           <ToggleGroupItem 
             value="block" 
             aria-label="Block View" 
-            className={regionViewMode === 'block' ? 'bg-gray-800 text-white' : ''}
+            className={regionViewMode === 'block' ? 'bg-[#FEF7CD] text-[#072c23]' : 'text-[#072c23]'}
           >
             <LayoutGrid className="h-5 w-5" />
             <span className="ml-2">Block</span>
@@ -47,7 +47,7 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
           <ToggleGroupItem 
             value="table" 
             aria-label="Table View" 
-            className={regionViewMode === 'table' ? 'bg-gray-800 text-white' : ''}
+            className={regionViewMode === 'table' ? 'bg-[#FEF7CD] text-[#072c23]' : 'text-[#072c23]'}
           >
             <Table2 className="h-5 w-5" />
             <span className="ml-2">Table</span>
