@@ -52,7 +52,7 @@ const UpcomingPrayer: React.FC<UpcomingPrayerProps> = ({
         }}
       />
       {/* Added darker overlay for better text visibility */}
-      <div className="absolute inset-0 bg-black/60"></div>
+      <div className="absolute inset-0 bg-black/70"></div>
       
       <div className="p-6 text-white relative z-10">
         <div className="flex justify-between items-start mb-3">

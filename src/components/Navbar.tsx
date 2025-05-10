@@ -7,24 +7,24 @@ import { Input } from '@/components/ui/input';
 
 const Navbar = () => {
   return (
-    <nav className="bg-[#14615f] text-white py-3 px-4 md:px-6 shadow-md">
-      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
-        <div className="flex items-center space-x-2 mb-4 md:mb-0">
+    <nav className="bg-[#072c23] text-white py-2 px-4 md:px-6 shadow-md">
+      <div className="container mx-auto flex items-center justify-between">
+        <div className="flex items-center space-x-2">
           <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center">
-            <div className="text-[#14615f] text-xl font-bold">KM</div>
+            <div className="text-[#072c23] text-xl font-bold">KM</div>
           </div>
           <Link to="/" className="text-xl font-semibold">KZN Masjid Explorer</Link>
         </div>
         
-        <div className="flex items-center space-x-4 w-full md:w-auto">
-          <div className="relative flex-grow md:flex-grow-0 max-w-md">
+        <div className="flex items-center space-x-4 w-auto">
+          <div className="relative">
             <Input 
               placeholder="Enter a region, area or city..." 
-              className="pl-10 bg-white border-none h-12 text-gray-800 rounded-l-md focus:ring-amber-300"
+              className="pl-10 bg-white border-none h-10 text-gray-800 rounded-l-md focus:ring-amber-300"
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
           </div>
-          <Button className="bg-amber-500 hover:bg-amber-600 text-black h-12 px-8 rounded-r-md">
+          <Button className="bg-amber-500 hover:bg-amber-600 text-black h-10 px-5 rounded-r-md">
             Search
           </Button>
         </div>

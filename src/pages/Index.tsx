@@ -11,21 +11,26 @@ import { featuredMasjids } from '@/data/mockData';
 import FeaturedMasjid from '@/components/FeaturedMasjid';
 import CounterSection from '@/components/CounterSection';
 import FindMasjidsHero from '@/components/FindMasjidsHero';
+import LivePrayerTimes from '@/components/LivePrayerTimes';
 
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
+      
+      {/* Live Prayer Times moved to top immediately after navbar */}
+      <LivePrayerTimes />
+      
       <main>
         <Hero />
         
-        {/* LivePrayerTimes is inside PrayerTimeSearch at the top */}
+        {/* PrayerTimeSearch without LivePrayerTimes at top */}
         <PrayerTimeSearch />
         
-        {/* Find Masjids Hero - Now placed after PrayerTimeSearch */}
+        {/* Find Masjids Hero after PrayerTimeSearch */}
         <FindMasjidsHero />
         
-        {/* Notices Section - Updated with auto-scrolling carousel */}
+        {/* Notices Section */}
         <NoticesSection />
         
         {/* Featured Masjids */}
@@ -43,13 +48,13 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Audio Section - Moved below Featured Masjids */}
+        {/* Audio Section - Below Featured Masjids */}
         <MasjidAudio />
         
         {/* Support New Masjids */}
         <SupportNewMasjids />
 
-        {/* Counter Section - At the bottom above footer */}
+        {/* Counter Section */}
         <CounterSection />
       </main>
       <Footer />

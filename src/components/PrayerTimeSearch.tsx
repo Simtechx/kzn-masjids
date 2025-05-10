@@ -8,8 +8,6 @@ import PrayerTimesDisplay from './prayer-time-search/PrayerTimesDisplay';
 import RegionTable from './prayer-time-search/RegionTable';
 import PrayerTimeHeader from './prayer-time-search/PrayerTimeHeader';
 import ViewToggle from './prayer-time-search/ViewToggle';
-import LivePrayerTimes from './LivePrayerTimes';
-import FindMasjidsHero from './FindMasjidsHero';
 
 const PrayerTimeSearch = () => {
   const {
@@ -33,12 +31,7 @@ const PrayerTimeSearch = () => {
   return (
     <section className="py-10 px-4 bg-white">
       <div className="container mx-auto">
-        {/* Live Prayer Times Component */}
-        <LivePrayerTimes />
-        
-        {/* Find Masjids Hero component moved to Index.tsx */}
-        
-        <div className="mt-10">
+        <div className="mt-2">
           <PrayerTimeHeader 
             selectedRegion={selectedRegion}
             selectedSubRegion={selectedSubRegion}

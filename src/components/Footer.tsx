@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 const Footer = () => {
   return (
-    <footer className="bg-islamic-dark-green text-white py-6 px-4">
+    <footer className="bg-[#072c23] text-white py-6 px-4">
       <div className="container mx-auto">        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="flex flex-col justify-between">
