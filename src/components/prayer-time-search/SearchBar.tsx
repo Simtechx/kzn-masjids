@@ -17,8 +17,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
       <div>
-        <h3 className="text-xl font-semibold text-gray-700 mb-2">Prayer Time View</h3>
-        <p className="text-sm text-gray-600">Select how you want to view prayer times</p>
+        <h3 className="text-xl font-semibold text-gray-700 mb-2">Salaah Time View</h3>
+        <p className="text-sm text-gray-600">Select how you want to view salaah times</p>
       </div>
       <div className="flex gap-2">
         <Button 

@@ -69,8 +69,8 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
           {selectedTime && activePrayer 
             ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
             : selectedSubRegion 
-              ? `Prayer Times in ${selectedSubRegion}`
-              : `Prayer Times in ${selectedRegion}`}
+              ? `Salaah Times in ${selectedSubRegion}`
+              : `Salaah Times in ${selectedRegion}`}
         </h3>
         <Table>
           <TableHeader>
@@ -116,8 +116,8 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
           {selectedTime && activePrayer 
             ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
             : selectedSubRegion 
-              ? `Prayer Times in ${selectedSubRegion}`
-              : `Prayer Times in ${selectedRegion}`}
+              ? `Salaah Times in ${selectedSubRegion}`
+              : `Salaah Times in ${selectedRegion}`}
         </h3>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
