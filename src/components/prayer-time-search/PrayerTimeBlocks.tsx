@@ -26,7 +26,7 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
             key={prayer}
             className={`p-3 rounded cursor-pointer text-center flex-1 ${
               activePrayer === prayer 
-                ? 'bg-teal-600 text-white' 
+                ? 'bg-teal-700 text-white' 
                 : 'bg-white hover:bg-gray-50'
             }`}
             onClick={() => onSelectPrayer(prayer)}

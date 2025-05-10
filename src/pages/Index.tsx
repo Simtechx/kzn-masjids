@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import LivePrayerTimes from '@/components/LivePrayerTimes';
 import PrayerTimeSearch from '@/components/PrayerTimeSearch';
 import SupportNewMasjids from '@/components/SupportNewMasjids';
-import UpcomingPrograms from '@/components/UpcomingPrograms';
+import NoticesSection from '@/components/NoticesSection';
 import MasjidAudio from '@/components/MasjidAudio';
 import { featuredMasjids } from '@/data/mockData';
 import FeaturedMasjid from '@/components/FeaturedMasjid';
@@ -18,19 +18,19 @@ const Index = () => {
       <Navbar />
       <main>
         <LivePrayerTimes />
-        <PrayerTimeSearch />
         <Hero />
+        <PrayerTimeSearch />
 
-        {/* Upcoming Programs Slideshow */}
-        <UpcomingPrograms />
-
+        {/* Notices Section - Redesigned as image slider */}
+        <NoticesSection />
+        
         {/* Audio Section */}
         <MasjidAudio />
 
         {/* Featured Masjids */}
         <section className="py-16 px-4">
           <div className="container mx-auto">
-            <h2 className="text-center text-3xl font-bold mb-2 text-teal-600">Featured Masjids</h2>
+            <h2 className="text-center text-3xl font-bold mb-2 text-teal-700">Featured Masjids</h2>
             <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
               Discover some of the most prominent and historic masjids across KwaZulu-Natal.
             </p>
@@ -45,7 +45,7 @@ const Index = () => {
         {/* Support New Masjids */}
         <SupportNewMasjids />
 
-        {/* Counter Section */}
+        {/* Counter Section - Enhanced with watermark */}
         <CounterSection />
 
         {/* Call to Action */}

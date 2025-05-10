@@ -86,7 +86,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
                   );
                 })}
                 <TableCell>
-                  <Button variant="outline" size="sm">View Details</Button>
+                  <Button variant="outline" size="sm" className="bg-teal-600 text-white border-teal-700 hover:bg-teal-700">View Details</Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -101,7 +101,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {filteredPrayerTimes.map((masjid, index) => (
           <div key={index} className="bg-white p-4 rounded-md shadow-sm border border-gray-100">
-            <h4 className="font-semibold text-lg mb-2 text-teal-600">{masjid.masjid}</h4>
+            <h4 className="font-semibold text-lg mb-2 text-teal-700">{masjid.masjid}</h4>
             <p className="text-gray-600 text-sm mb-3">123 Example St, {selectedRegion}</p>
             <div className="grid grid-cols-4 gap-1">
               {prayerTypes.map((prayer) => {
@@ -131,7 +131,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
               })}
             </div>
             <div className="mt-3 text-right">
-              <Button variant="outline" size="sm">View Details</Button>
+              <Button variant="outline" size="sm" className="bg-teal-600 text-white border-teal-700 hover:bg-teal-700">View Details</Button>
             </div>
           </div>
         ))}
@@ -141,7 +141,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
 
   return (
     <div className="mt-6">
-      <h3 className="text-xl font-bold mb-4 text-teal-600">
+      <h3 className="text-xl font-bold mb-4 text-teal-700">
         {`All Masjids in ${selectedRegion}`}
       </h3>
       {viewMode === 'table' ? renderTableView() : renderBlockView()}
