@@ -10,6 +10,7 @@ import MasjidAudio from '@/components/MasjidAudio';
 import { featuredMasjids } from '@/data/mockData';
 import FeaturedMasjid from '@/components/FeaturedMasjid';
 import CounterSection from '@/components/CounterSection';
+import FindMasjidsHero from '@/components/FindMasjidsHero';
 
 const Index = () => {
   return (
@@ -17,6 +18,13 @@ const Index = () => {
       <Navbar />
       <main>
         <Hero />
+        
+        {/* LivePrayerTimes is already at the top of PrayerTimeSearch component */}
+        
+        {/* Added FindMasjids Hero section between LivePrayerTimes and PrayerTimeSearch */}
+        <FindMasjidsHero />
+        
+        {/* Prayer Time Search */}
         <PrayerTimeSearch />
 
         {/* Notices Section - Redesigned as image slider */}
@@ -43,24 +51,8 @@ const Index = () => {
         {/* Support New Masjids */}
         <SupportNewMasjids />
 
-        {/* Counter Section - Enhanced with watermark */}
+        {/* Counter Section - Enhanced with watermark - Moved to just above footer */}
         <CounterSection />
-
-        {/* Call to Action */}
-        <section className="py-16 px-4 bg-islamic-pattern">
-          <div className="bg-teal-800/90 py-16">
-            <div className="container mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-4 text-white">Want to add a masjid or update information?</h2>
-              <p className="text-white/90 mb-8 max-w-xl mx-auto">
-                Help us make this directory more comprehensive by contributing information 
-                about masjids or musallahs in your area.
-              </p>
-              <button className="bg-amber-500 hover:bg-amber-600 text-black font-medium py-3 px-8 rounded-md text-lg">
-                Contribute Information
-              </button>
-            </div>
-          </div>
-        </section>
       </main>
       <Footer />
     </div>

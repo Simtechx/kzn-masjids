@@ -1,81 +1,75 @@
-
 import React from 'react';
-import { 
-  Carousel, 
-  CarouselContent, 
-  CarouselItem, 
-  CarouselNext, 
-  CarouselPrevious 
-} from '@/components/ui/carousel';
-
-// Sample notices data
-const noticesData = [
-  {
-    id: 1,
-    title: "Overnight Programme of Hazrat Mufti",
-    subtitle: "17-18 May 2025 at Madrasah Ta'leemudeen",
-    image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&q=80"
-  },
-  {
-    id: 2,
-    title: "Programme at Musjid Fatimah",
-    subtitle: "Sunday, 4th May 2025 after Fajr",
-    image: "https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?auto=format&fit=crop&q=80"
-  },
-  {
-    id: 3,
-    title: "Programme of Hazrat Moulana Muhammad Ilyas Patel",
-    subtitle: "Tuesday 06 May at Musalla An Noor after Esha",
-    image: "https://images.unsplash.com/photo-1536048810607-3dc7f86981cb?auto=format&fit=crop&q=80"
-  }
-];
+import { Carousel } from '@/components/ui/carousel';
+import { CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
+import { Card, CardContent } from '@/components/ui/card';
+import { AspectRatio } from "@/components/ui/aspect-ratio"
 
 const NoticesSection = () => {
+  // Mock data for notices with image URLs
+  const notices = [
+    {
+      id: 1,
+      title: 'Eid al-Adha Announcement',
+      content: 'The date for Eid al-Adha has been confirmed. Join us for prayers and community celebrations.',
+      imageUrl: 'https://images.unsplash.com/photo-1560264234-b5618a0bfb0c?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    },
+    {
+      id: 2,
+      title: 'New Islamic Studies Class',
+      content: 'Register now for our new course on understanding the Quran. Limited seats available.',
+      imageUrl: 'https://images.unsplash.com/photo-1579621956067-47f92835e927?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    },
+    {
+      id: 3,
+      title: 'Ramadan Donation Drive',
+      content: 'Support our Ramadan food drive to help families in need. Donate today and make a difference.',
+      imageUrl: 'https://images.unsplash.com/photo-1615319305984-56c7ab09959b?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    },
+    {
+      id: 4,
+      title: 'Iftar Gathering',
+      content: 'Join us for a community iftar gathering every Saturday during Ramadan.',
+      imageUrl: 'https://plus.unsplash.com/premium_photo-1664302521454-4959996c1915?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    },
+    {
+      id: 5,
+      title: 'Zakat Collection',
+      content: 'Pay your Zakat with us and ensure it reaches those who need it most.',
+      imageUrl: 'https://images.unsplash.com/photo-1606135787382-b3a299141698?auto=format&fit=crop&q=80&w=1974&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    },
+  ];
+
   return (
-    <section className="py-16 px-4 bg-gray-50">
+    <section className="py-16 px-4">
       <div className="container mx-auto">
-        <h2 className="text-center text-3xl font-bold mb-2 text-teal-800">NOTICES</h2>
-        <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
-          Stay informed about the latest events, programs, and inspirational content
-        </p>
-        
-        <div className="max-w-4xl mx-auto">
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            className="w-full"
-          >
-            <CarouselContent>
-              {noticesData.map((notice) => (
-                <CarouselItem key={notice.id} className="md:basis-1/2 lg:basis-1/3">
-                  <div className="bg-white rounded-lg overflow-hidden shadow-md h-full">
-                    <div className="h-48 bg-teal-700 bg-opacity-10">
-                      <img 
-                        src={notice.image} 
-                        alt={notice.title} 
-                        className="h-full w-full object-cover"
+        <h2 className="text-center text-3xl font-bold mb-8 text-teal-800">
+          Notices & Announcements
+        </h2>
+        <Carousel className="w-full max-w-4xl mx-auto">
+          <CarouselContent>
+            {notices.map((notice) => (
+              <CarouselItem key={notice.id} className="md:w-1/2 lg:w-1/3">
+                <Card className="border-none shadow-xl">
+                  <CardContent className="p-0">
+                    <AspectRatio ratio={16 / 9}>
+                      <img
+                        src={notice.imageUrl}
+                        alt={notice.title}
+                        className="object-cover rounded-t-md"
                       />
-                    </div>
+                    </AspectRatio>
                     <div className="p-4">
-                      <h3 className="font-semibold text-lg text-teal-800 mb-2">
-                        {notice.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm">
-                        {notice.subtitle}
-                      </p>
+                      <h3 className="text-xl font-semibold mb-2">{notice.title}</h3>
+                      <p className="text-gray-600">{notice.content}</p>
                     </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <div className="flex justify-center mt-6">
-              <CarouselPrevious className="relative static bg-teal-800 text-white hover:bg-teal-900 hover:text-white h-10 w-10 mr-2" />
-              <CarouselNext className="relative static bg-teal-800 text-white hover:bg-teal-900 hover:text-white h-10 w-10" />
-            </div>
-          </Carousel>
-        </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="left-2" />
+          <CarouselNext className="right-2" />
+        </Carousel>
       </div>
     </section>
   );
