@@ -8,6 +8,7 @@ import PrayerTimesDisplay from './prayer-time-search/PrayerTimesDisplay';
 import RegionTable from './prayer-time-search/RegionTable';
 import PrayerTimeHeader from './prayer-time-search/PrayerTimeHeader';
 import ViewToggle from './prayer-time-search/ViewToggle';
+import LivePrayerTimes from './LivePrayerTimes';
 
 const PrayerTimeSearch = () => {
   const {
@@ -31,12 +32,17 @@ const PrayerTimeSearch = () => {
   return (
     <section className="py-10 px-4 bg-white">
       <div className="container mx-auto">
-        <PrayerTimeHeader 
-          selectedRegion={selectedRegion}
-          selectedSubRegion={selectedSubRegion}
-          regionViewMode={regionViewMode}
-          onRegionViewModeChange={setRegionViewMode}
-        />
+        {/* Live Prayer Times Component */}
+        <LivePrayerTimes />
+        
+        <div className="mt-10">
+          <PrayerTimeHeader 
+            selectedRegion={selectedRegion}
+            selectedSubRegion={selectedSubRegion}
+            regionViewMode={regionViewMode}
+            onRegionViewModeChange={setRegionViewMode}
+          />
+        </div>
         
         <div className="flex flex-col space-y-6">
           {/* Region Selection - Conditionally render based on view mode */}
