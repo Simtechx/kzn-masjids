@@ -15,21 +15,25 @@ const regionBackgrounds = {
   "Midlands": "https://images.unsplash.com/photo-1536048810607-3dc7f86981cb?auto=format&fit=crop&q=80",
   "Northern Natal": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&q=80",
   "Durban": "https://images.unsplash.com/photo-1618590067324-3f5135afd526?auto=format&fit=crop&q=80",
-  "Transkei": "/lovable-uploads/fea9bc5d-d1b7-4c16-8125-48e4f0266215.png",
 };
 
 const RegionSelector: React.FC<RegionSelectorProps> = ({ selectedRegion, onSelectRegion }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-      {Object.keys(prayerTimesData).map((region) => {
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+      {Object.keys(prayerTimesData).filter(region => region !== 'Transkei').map((region) => {
         const subRegionCount = subRegionsData[region as keyof typeof subRegionsData]?.length || 0;
         const isSelected = selectedRegion === region;
+        
+        // Calculate counts for masjids and musallas
+        const masjidCount = prayerTimesData[region as keyof typeof prayerTimesData]?.length || 0;
+        // Mock musalla count - in real app, you'd get this from data
+        const musallaCount = Math.floor(masjidCount * 0.6);
         
         return (
           <div
             key={region}
             className={`relative overflow-hidden rounded-lg cursor-pointer transition-all duration-300 ${
-              isSelected ? "ring-4 ring-islamic-blue" : "hover:shadow-lg"
+              isSelected ? "ring-4 ring-islamic-green" : "hover:shadow-lg"
             }`}
             onClick={() => onSelectRegion(region)}
           >
@@ -42,10 +46,13 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({ selectedRegion, onSelec
             >
               {/* Overlay for text visibility */}
               <div className={`absolute inset-0 bg-black/40 flex flex-col justify-end p-4`}>
-                <h3 className="text-white text-2xl font-bold">{region}</h3>
+                <h3 className="text-white text-xl font-bold">{region}</h3>
                 <div className="flex items-center text-white/90 mt-1">
                   <MapPin size={16} className="mr-1" />
                   <span>{subRegionCount} sub-regions</span>
+                </div>
+                <div className="text-white/80 text-sm mt-1">
+                  {masjidCount} Masjids • {musallaCount} Musallas
                 </div>
               </div>
             </div>

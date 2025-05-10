@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { prayerTimesData, PrayerType, SearchType, MasjidData } from '@/utils/prayerTimeUtils';
 import RegionSelector from './prayer-time-search/RegionSelector';
@@ -7,6 +8,8 @@ import TimeSelectionGrid from './prayer-time-search/TimeSelectionGrid';
 import SearchBar from './prayer-time-search/SearchBar';
 import PrayerTimesDisplay from './prayer-time-search/PrayerTimesDisplay';
 import MasjidsList from './prayer-time-search/MasjidsList';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Blocks, Table } from 'lucide-react';
 
 const PrayerTimeSearch = () => {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
@@ -15,6 +18,7 @@ const PrayerTimeSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activePrayer, setActivePrayer] = useState<PrayerType | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'block' | 'table'>('block');
   
   const handleRegionSelection = (region: string) => {
     setSelectedRegion(region);
@@ -72,10 +76,29 @@ const PrayerTimeSearch = () => {
   return (
     <section className="py-10 px-4 bg-white">
       <div className="container mx-auto">
-        <h2 className="text-center text-3xl font-bold mb-2 text-islamic-blue">Prayer Time Search</h2>
-        <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
-          Find prayer times across different masjids in KwaZulu-Natal regions by selecting specific times.
-        </p>
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h2 className="text-3xl font-bold text-islamic-green">Prayer Time Search</h2>
+            <p className="text-gray-600 mt-2">
+              {selectedSubRegion && selectedRegion 
+                ? `Find prayer times for masjids in ${selectedSubRegion}, ${selectedRegion}`
+                : selectedRegion 
+                  ? `Find prayer times for masjids in ${selectedRegion}` 
+                  : "Find prayer times across different masjids in KwaZulu-Natal regions"}
+            </p>
+          </div>
+          
+          <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value as 'block' | 'table')}>
+            <ToggleGroupItem value="block" aria-label="Block View" className={viewMode === 'block' ? 'bg-islamic-green text-white' : ''}>
+              <Blocks className="h-5 w-5" />
+              <span className="ml-2">Block</span>
+            </ToggleGroupItem>
+            <ToggleGroupItem value="table" aria-label="Table View" className={viewMode === 'table' ? 'bg-islamic-green text-white' : ''}>
+              <Table className="h-5 w-5" />
+              <span className="ml-2">Table</span>
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
         
         <div className="flex flex-col space-y-6">
           {/* Region Selection - now with styled cards */}
@@ -133,6 +156,7 @@ const PrayerTimeSearch = () => {
                 activePrayer={activePrayer}
                 searchType={searchType}
                 filteredPrayerTimes={getFilteredPrayerTimes()}
+                viewMode={viewMode}
               />
 
               {/* Masjids List */}
@@ -141,6 +165,7 @@ const PrayerTimeSearch = () => {
                 activePrayer={activePrayer}
                 selectedTime={selectedTime}
                 filteredPrayerTimes={getFilteredPrayerTimes()}
+                viewMode={viewMode}
               />
             </div>
           )}

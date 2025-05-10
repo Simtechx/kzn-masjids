@@ -1,4 +1,3 @@
-
 // Extended data structure with specific times for filtering
 export const prayerTimesData = {
   'Northern Natal': [
@@ -10,6 +9,8 @@ export const prayerTimesData = {
     { fajr: '05:30', dhuhr: '12:40', asr: '16:15', maghrib: '17:55', isha: '19:05', masjid: 'Masjid Al-Islam, Port Shepstone' },
     { fajr: '05:40', dhuhr: '12:45', asr: '16:30', maghrib: '18:00', isha: '19:10', masjid: 'Masjid Al-Furqaan, Margate' },
     { fajr: '05:45', dhuhr: '13:00', asr: '16:35', maghrib: '18:05', isha: '19:15', masjid: 'Masjid Al-Huda, Scottburgh' },
+    { fajr: '05:35', dhuhr: '12:30', asr: '16:10', maghrib: '17:45', isha: '18:55', masjid: 'Umtata Masjid, Transkei' },
+    { fajr: '05:40', dhuhr: '12:35', asr: '16:15', maghrib: '17:50', isha: '19:00', masjid: 'Butterworth Masjid, Transkei' },
   ],
   'Durban': [
     { fajr: '05:50', dhuhr: '13:10', asr: '16:40', maghrib: '18:10', isha: '19:20', masjid: 'West Street Masjid, Durban CBD' },
@@ -26,6 +27,7 @@ export const prayerTimesData = {
     { fajr: '05:50', dhuhr: '12:50', asr: '16:20', maghrib: '17:55', isha: '19:05', masjid: 'Ballito Masjid, Ballito' },
     { fajr: '05:55', dhuhr: '13:00', asr: '16:25', maghrib: '18:00', isha: '19:10', masjid: 'Tongaat Masjid, Tongaat' },
   ],
+  // Keeping Transkei as a key for backward compatibility, but not showing it in the UI
   'Transkei': [
     { fajr: '05:35', dhuhr: '12:30', asr: '16:10', maghrib: '17:45', isha: '18:55', masjid: 'Umtata Masjid, Mthatha' },
     { fajr: '05:40', dhuhr: '12:35', asr: '16:15', maghrib: '17:50', isha: '19:00', masjid: 'Butterworth Masjid, Butterworth' },
@@ -37,11 +39,11 @@ export type PrayerType = 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
 export type SearchType = 'earliest' | 'latest';
 export type MasjidData = { fajr: string; dhuhr: string; asr: string; maghrib: string; isha: string; masjid: string };
 
-// Subregion data
+// Updated subregion data to reflect the five main regions with Transkei as a sub-region
 export const subRegionsData = {
   'Northern Natal': ['Newcastle', 'Ladysmith', 'Dundee', 'Vryheid', 'Utrecht'],
   'South Coast': ['Port Shepstone', 'Margate', 'Scottburgh', 'Umkomaas'],
-  'Durban': ['Durban CBD', 'Overport', 'Musgrave', 'Sydenham', 'Westville'],
+  'Durban': ['North', 'South', 'City', 'Overport', 'Suburbs'],
   'Midlands': ['Pietermaritzburg', 'Richmond', 'Howick', 'Other'],
   'North Coast': ['Stanger', 'Ballito', 'Tongaat', 'Verulam']
 };
