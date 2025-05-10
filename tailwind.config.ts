@@ -65,7 +65,7 @@ export default {
 				},
 				islamic: {
 					'green': '#12834C',
-					'dark-green': '#0D6438',
+					'dark-green': '#0A4E40',
 					'light-green': '#28A76F',
 					'blue': '#1C6E8C',
 					'dark-blue': '#14506A',
@@ -105,12 +105,23 @@ export default {
 						opacity: '1',
 						transform: 'translateY(0)'
 					}
+				},
+				'counter-animate': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'fade-in': 'fade-in 0.5s ease-out'
+				'fade-in': 'fade-in 0.5s ease-out',
+				'counter': 'counter-animate 1s ease-out forwards'
 			},
 			backgroundImage: {
 				'islamic-pattern': "url('/islamic-pattern.svg')"

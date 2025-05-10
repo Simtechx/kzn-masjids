@@ -132,4 +132,19 @@
     bottom: 0;
     left: 0;
   }
+
+  @keyframes countUp {
+    from {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .animate-count {
+    animation: countUp 1s ease forwards;
+  }
 }

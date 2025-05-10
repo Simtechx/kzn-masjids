@@ -34,19 +34,19 @@ const Footer = () => {
             <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
             <ul className="space-y-3">
               <li className="flex items-start">
-                <MapPin size={20} className="mr-2 mt-1 flex-shrink-0" />
+                <MapPin size={20} className="mr-2 mt-1 flex-shrink-0 text-islamic-gold" />
                 <span className="text-white/80">KwaZulu-Natal, South Africa</span>
               </li>
               <li className="flex items-center">
-                <Mail size={20} className="mr-2 flex-shrink-0" />
+                <Mail size={20} className="mr-2 flex-shrink-0 text-islamic-gold" />
                 <a href="mailto:contact@kznmasjids.co.za" className="text-white/80 hover:text-white transition-colors">
                   contact@kznmasjids.co.za
                 </a>
               </li>
               <li className="flex items-center">
-                <Phone size={20} className="mr-2 flex-shrink-0" />
+                <Phone size={20} className="mr-2 flex-shrink-0 text-islamic-gold" />
                 <a href="tel:+27123456789" className="text-white/80 hover:text-white transition-colors">
-                  +27 12 345 6789
+                  +27 31 555 0123
                 </a>
               </li>
             </ul>
@@ -54,7 +54,7 @@ const Footer = () => {
         </div>
         
         <div className="mt-12 pt-4 border-t border-white/20 text-center text-white/60">
-          <p>© {new Date().getFullYear()} kznmasjids.co.za by Simtech W. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} kznmasjid.co.za by Lovable AI. All rights reserved.</p>
         </div>
       </div>
     </footer>
