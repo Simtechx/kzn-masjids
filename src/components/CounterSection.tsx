@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Building2, Mosque, MapPin, Users } from 'lucide-react';
+import { Building2, Church, MapPin, Users } from 'lucide-react';
 
 interface CounterProps {
   end: number;
@@ -103,7 +103,7 @@ const CounterSection = () => {
           <Counter 
             end={masjidsCount} 
             label="Masjids" 
-            icon={<Mosque size={48} strokeWidth={1.5} />}
+            icon={<Church size={48} strokeWidth={1.5} />}
             delay={0}
           />
           <Counter 
