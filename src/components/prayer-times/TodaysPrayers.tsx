@@ -72,7 +72,7 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
 
   return (
     <div className="bg-white p-6 rounded-lg">
-      <h2 className="text-xl font-medium text-gray-800 mb-4">Today's Prayer Times</h2>
+      <h2 className="text-xl font-medium text-gray-800 mb-4">Today's Salaah Times</h2>
       
       <div className="grid grid-cols-2 gap-4">
         {reorderedPrayers.map((prayer, index) => {

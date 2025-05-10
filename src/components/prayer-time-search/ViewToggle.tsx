@@ -14,8 +14,8 @@ interface ViewToggleProps {
 const ViewToggle: React.FC<ViewToggleProps> = ({ 
   viewMode, 
   onViewChange,
-  label = "Prayer Time View",
-  description = "Select how you want to view prayer times",
+  label = "Salaah Time View",
+  description = "Select how you want to view salaah times",
   className = ""
 }) => {
   return (

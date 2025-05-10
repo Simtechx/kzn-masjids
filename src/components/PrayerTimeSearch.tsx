@@ -63,7 +63,7 @@ const PrayerTimeSearch = () => {
             />
           )}
           
-          {/* Prayer Time Blocks */}
+          {/* Salaah Time Blocks */}
           {selectedRegion && (
             <div className="bg-gray-100 p-4 rounded-lg">
               <PrayerTimeSelection
@@ -74,13 +74,13 @@ const PrayerTimeSearch = () => {
                 onSelectTime={handleTimeSelection}
               />
               
-              {/* Prayer Time View Toggle */}
+              {/* Salaah Time View Toggle */}
               <ViewToggle 
                 viewMode={viewMode} 
                 onViewChange={setViewMode} 
               />
               
-              {/* Prayer Times Display */}
+              {/* Salaah Times Display */}
               <PrayerTimesDisplay
                 selectedRegion={selectedRegion}
                 selectedSubRegion={selectedSubRegion}

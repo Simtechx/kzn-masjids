@@ -19,13 +19,13 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
   return (
     <div className="flex justify-between items-center mb-6">
       <div>
-        <h2 className="text-3xl font-bold text-[#072c23]">Prayer Time Search</h2>
+        <h2 className="text-3xl font-bold text-[#072c23]">Salaah Time Search</h2>
         <p className="text-gray-600 mt-2">
           {selectedSubRegion && selectedRegion 
-            ? `Find prayer times for masjids in ${selectedSubRegion}, ${selectedRegion}`
+            ? `Find salaah times for masjids in ${selectedSubRegion}, ${selectedRegion}`
             : selectedRegion 
-              ? `Find prayer times for masjids in ${selectedRegion}` 
-              : "Find prayer times across different masjids in KwaZulu-Natal regions"}
+              ? `Find salaah times for masjids in ${selectedRegion}` 
+              : "Find salaah times across different masjids in KwaZulu-Natal regions"}
         </p>
       </div>
       

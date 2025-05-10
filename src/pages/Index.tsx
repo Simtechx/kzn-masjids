@@ -48,14 +48,14 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      {/* Live Prayer Times at top immediately after navbar */}
+      {/* Live Salaah Times at top immediately after navbar */}
       <LivePrayerTimes />
       
       {/* Find Masjids Hero Section */}
       <FindMasjidsHero />
       
       <main>
-        {/* PrayerTimeSearch */}
+        {/* SalaahTimeSearch */}
         <PrayerTimeSearch />
         
         {/* Historic Masjids Carousel */}

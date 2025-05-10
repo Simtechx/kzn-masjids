@@ -57,7 +57,7 @@ const UpcomingPrayer: React.FC<UpcomingPrayerProps> = ({
       <div className="p-6 text-white relative z-10">
         <div className="flex justify-between items-start mb-3">
           <div>
-            <h2 className="text-xl font-medium">Upcoming Prayer</h2>
+            <h2 className="text-xl font-medium">Upcoming Salaah</h2>
             {upcomingPrayer?.icon}
             <h1 className="text-5xl font-bold mt-2">{upcomingPrayer?.name}</h1>
             <div className="mt-1 text-white/80">
