@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Sunrise, Sun, Sunset, Moon } from 'lucide-react';
 import { PrayerTime } from '@/components/prayer-times/types';
@@ -27,16 +28,16 @@ export function usePrayerTimes() {
     },
     { 
       name: 'Asr (S)', 
-      time: '4:00 pm', 
-      timestamp: new Date().setHours(16, 0, 0, 0), 
+      time: '3:30 pm', 
+      timestamp: new Date().setHours(15, 30, 0, 0), 
       icon: <Sun size={40} className="mb-2 text-orange-300" />,
-      bgColor: 'bg-teal-100',
-      textColor: 'text-teal-600'
+      bgColor: 'bg-green-50',
+      textColor: 'text-green-600'
     },
     { 
       name: 'Asr (H)', 
-      time: '3:30 pm', 
-      timestamp: new Date().setHours(15, 30, 0, 0), 
+      time: '4:00 pm', 
+      timestamp: new Date().setHours(16, 0, 0, 0), 
       icon: <Sun size={40} className="mb-2 text-orange-300" />,
       bgColor: 'bg-teal-50',
       textColor: 'text-teal-600'

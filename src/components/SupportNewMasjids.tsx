@@ -1,5 +1,7 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { Carousel } from '@/components/ui/carousel';
+import { CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { HandHeart } from 'lucide-react';
@@ -13,7 +15,7 @@ interface NewMasjidProjectProps {
 
 const NewMasjidProject: React.FC<NewMasjidProjectProps> = ({ name, location, image, completionPercentage }) => {
   return (
-    <Card className="hover:shadow-md transition-shadow overflow-hidden">
+    <Card className="hover:shadow-md transition-shadow overflow-hidden h-full">
       <div className="relative h-48 overflow-hidden">
         <img 
           src={image} 
@@ -32,13 +34,19 @@ const NewMasjidProject: React.FC<NewMasjidProjectProps> = ({ name, location, ima
       </div>
       <CardContent className="p-4">
         <h3 className="font-bold mb-1">{name}</h3>
-        <p className="text-gray-600 text-sm">{location}</p>
+        <p className="text-gray-600 text-sm mb-3">{location}</p>
+        <Button size="sm" className="w-full bg-islamic-gold hover:bg-islamic-gold/90 text-black">
+          <HandHeart className="mr-2" size={16} />
+          Contribute
+        </Button>
       </CardContent>
     </Card>
   );
 };
 
 const SupportNewMasjids: React.FC = () => {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  
   const newProjects = [
     {
       name: "Masjid Al-Noor",
@@ -57,8 +65,47 @@ const SupportNewMasjids: React.FC = () => {
       location: "Musgrave, Durban",
       image: "https://images.unsplash.com/photo-1551038247-3d9af20df552?auto=format&fit=crop&q=80",
       completionPercentage: 85
+    },
+    {
+      name: "Juma Masjid",
+      location: "Verulam",
+      image: "https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&q=80",
+      completionPercentage: 25
+    },
+    {
+      name: "Masjid Al-Rahma",
+      location: "Chatsworth",
+      image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&q=80",
+      completionPercentage: 55
     }
   ];
+
+  // Set up auto-scrolling carousel
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    
+    let intervalId: number;
+    
+    const startAutoScroll = () => {
+      intervalId = window.setInterval(() => {
+        const emblaApi = (carousel as any).__emblaApi;
+        if (emblaApi) {
+          emblaApi.scrollNext();
+          // If we're at the end, scroll back to the beginning
+          if (!emblaApi.canScrollNext()) {
+            emblaApi.scrollTo(0);
+          }
+        }
+      }, 7000); // Scroll every 7 seconds
+    };
+    
+    startAutoScroll();
+    
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   return (
     <section className="py-16 px-4 bg-gray-50">
@@ -70,24 +117,31 @@ const SupportNewMasjids: React.FC = () => {
           Help build the future of our community by contributing to these new masjid projects.
         </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {newProjects.map((project, index) => (
-            <NewMasjidProject
-              key={index}
-              name={project.name}
-              location={project.location}
-              image={project.image}
-              completionPercentage={project.completionPercentage}
-            />
-          ))}
-        </div>
-        
-        <div className="text-center">
-          <Button className="bg-islamic-gold hover:bg-islamic-gold/90 text-black font-medium py-3 px-8 rounded-md text-lg">
-            <HandHeart className="mr-2" />
-            Contribute Now
-          </Button>
-        </div>
+        <Carousel
+          ref={carouselRef}
+          className="w-full" 
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+        >
+          <CarouselContent className="-ml-4">
+            {newProjects.map((project, index) => (
+              <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                <NewMasjidProject
+                  name={project.name}
+                  location={project.location}
+                  image={project.image}
+                  completionPercentage={project.completionPercentage}
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="flex justify-center mt-8 gap-2">
+            <CarouselPrevious className="static transform-none mx-2" />
+            <CarouselNext className="static transform-none mx-2" />
+          </div>
+        </Carousel>
       </div>
     </section>
   );

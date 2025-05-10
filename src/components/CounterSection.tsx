@@ -80,7 +80,7 @@ const FlipCounter: React.FC<FlipCounterProps> = ({ end, label, delay = 0 }) => {
           <FlipDigit key={index} digit={digit} />
         ))}
       </div>
-      <div className="text-xl text-teal-800 font-medium mt-3">{label}</div>
+      <div className="text-xl text-white font-medium mt-3">{label}</div>
     </div>
   );
 };
@@ -93,22 +93,22 @@ const CounterSection = () => {
   const totalCount = masjidsCount + musallasCount;
 
   return (
-    <section className="py-16 px-4 relative bg-white overflow-hidden">
+    <section className="py-16 px-4 relative bg-[#051b16] overflow-hidden">
       {/* Background Image as Watermark with darker overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center opacity-10 z-0"
         style={{ 
           backgroundImage: 'url("/lovable-uploads/3d6cd80a-4e05-4ded-ba80-fa70d25845ce.png")',
-          backgroundColor: 'rgba(0, 0, 0, 0.3)' // Making the overlay darker
+          backgroundColor: 'rgba(0, 0, 0, 0.5)' // Making the overlay darker
         }}
       ></div>
       
       <div className="container mx-auto relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-teal-800">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
             KWA-ZULU NATAL MASJIDS AND MUSALLAS
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-gray-300 max-w-2xl mx-auto">
             Discover the growing presence of masjids and musallahs throughout the province.
           </p>
           <div className="w-24 h-1 bg-islamic-gold mx-auto mt-6"></div>

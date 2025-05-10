@@ -35,15 +35,20 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
     // Check if this is the upcoming prayer
     const upcoming = isUpcoming(prayerName);
     
-    if (prayerName.includes('Maghrib')) {
+    if (prayerName === 'Asr (S)') {
+      return {
+        bgColor: upcoming ? 'bg-green-200' : 'bg-green-50',
+        textColor: upcoming ? 'text-white' : 'text-green-600'
+      };
+    } else if (prayerName === 'Asr (H)') {
+      return {
+        bgColor: upcoming ? 'bg-teal-600' : 'bg-teal-50',
+        textColor: upcoming ? 'text-white' : 'text-teal-600'
+      };
+    } else if (prayerName.includes('Maghrib')) {
       return {
         bgColor: upcoming ? 'bg-red-100' : 'bg-red-50',
-        textColor: 'text-red-600'
-      };
-    } else if (prayerName.includes('Asr')) {
-      return {
-        bgColor: upcoming ? 'bg-teal-100' : 'bg-teal-50',
-        textColor: 'text-teal-600'
+        textColor: upcoming ? 'text-white' : 'text-red-600'
       };
     }
     
@@ -54,7 +59,7 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
     if (upcoming) {
       // Darken the background for upcoming prayers
       return {
-        bgColor: bgColor.replace('50', '100'),
+        bgColor: bgColor.replace('50', '200'),
         textColor: prayer?.textColor || 'text-gray-600'
       };
     }

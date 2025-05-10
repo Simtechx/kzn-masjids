@@ -40,7 +40,7 @@ const UpcomingPrayer: React.FC<UpcomingPrayerProps> = ({
 
   return (
     <div 
-      className="rounded-lg relative overflow-hidden"
+      className="rounded-lg relative overflow-hidden bg-[#072c23]"
       style={{ position: 'relative' }}
     >
       <div 
