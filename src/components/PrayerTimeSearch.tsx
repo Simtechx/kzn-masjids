@@ -5,7 +5,6 @@ import RegionSelector from './prayer-time-search/RegionSelector';
 import SubRegionSelector from './prayer-time-search/SubRegionSelector';
 import PrayerTimeSelection from './prayer-time-search/PrayerTimeSelection';
 import PrayerTimesDisplay from './prayer-time-search/PrayerTimesDisplay';
-import MasjidsList from './prayer-time-search/MasjidsList';
 import RegionTable from './prayer-time-search/RegionTable';
 import PrayerTimeHeader from './prayer-time-search/PrayerTimeHeader';
 import ViewToggle from './prayer-time-search/ViewToggle';
@@ -86,15 +85,6 @@ const PrayerTimeSearch = () => {
                 selectedTime={selectedTime}
                 activePrayer={activePrayer}
                 searchType={searchType}
-                filteredPrayerTimes={getFilteredPrayerTimes()}
-                viewMode={viewMode}
-              />
-
-              {/* Masjids List */}
-              <MasjidsList
-                selectedRegion={selectedRegion}
-                activePrayer={activePrayer}
-                selectedTime={selectedTime}
                 filteredPrayerTimes={getFilteredPrayerTimes()}
                 viewMode={viewMode}
               />

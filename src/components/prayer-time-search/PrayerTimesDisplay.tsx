@@ -65,13 +65,13 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
         </h3>
         <Table>
           <TableHeader>
-            <TableRow className="bg-gray-700 text-white">
-              <TableHead className="font-bold">Masjid</TableHead>
+            <TableRow className="bg-gray-800 text-white">
+              <TableHead className="font-bold text-white">Masjid</TableHead>
               {activePrayer ? (
-                <TableHead className="font-bold capitalize">{activePrayer}</TableHead>
+                <TableHead className="font-bold capitalize text-white">{activePrayer}</TableHead>
               ) : (
                 prayerTypes.map((prayer) => (
-                  <TableHead key={prayer} className="font-bold capitalize">{prayer}</TableHead>
+                  <TableHead key={prayer} className="font-bold capitalize text-white">{prayer}</TableHead>
                 ))
               )}
             </TableRow>
