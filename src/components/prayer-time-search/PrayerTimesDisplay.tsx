@@ -42,22 +42,15 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
   const prayerColors = {
     fajr: 'bg-pink-50',
     dhuhr: 'bg-amber-50',
-    asr: 'bg-emerald-50',
+    asr: 'bg-teal-50',
     isha: 'bg-indigo-50',
   };
   
   const prayerTextColors = {
     fajr: 'text-pink-600',
     dhuhr: 'text-amber-600',
-    asr: 'text-emerald-600',
+    asr: 'text-teal-600',
     isha: 'text-indigo-600',
-  };
-  
-  const prayerTableBgColors = {
-    fajr: 'bg-pink-50',
-    dhuhr: 'bg-amber-50',
-    asr: 'bg-emerald-50',
-    isha: 'bg-indigo-50',
   };
 
   const getLatestBadge = (prayer: PrayerType) => {
@@ -80,17 +73,14 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
         </h3>
         <Table>
           <TableHeader>
-            <TableRow className="bg-slate-800 text-white">
+            <TableRow className="bg-[#1A1F2C] text-white">
               <TableHead className="font-bold text-white">Masjid</TableHead>
               <TableHead className="font-bold text-white">Address</TableHead>
-              {activePrayer ? (
-                <TableHead className="font-bold capitalize text-white">{activePrayer}</TableHead>
-              ) : (
-                prayerTypes.map((prayer) => (
-                  <TableHead key={prayer} className="font-bold capitalize text-white">{prayer}</TableHead>
-                ))
-              )}
-              {!activePrayer && <TableHead className="font-bold text-white">Actions</TableHead>}
+              <TableHead className="font-bold text-white text-center">Fajr</TableHead>
+              <TableHead className="font-bold text-white text-center">Dhuhr</TableHead>
+              <TableHead className="font-bold text-white text-center">Asr</TableHead>
+              <TableHead className="font-bold text-white text-center">Isha</TableHead>
+              <TableHead className="font-bold text-white text-center">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -98,30 +88,19 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
               <TableRow key={idx} className="border-b">
                 <TableCell className="font-medium">{masjid.masjid}</TableCell>
                 <TableCell className="text-gray-600">{masjid.address || `123 Example St, ${selectedRegion}`}</TableCell>
-                {activePrayer ? (
-                  <TableCell className={prayerTableBgColors[activePrayer]}>
-                    <div className="flex items-center">
-                      {masjid[activePrayer]}
-                      {getLatestBadge(activePrayer)}
+                {prayerTypes.map((prayer) => (
+                  <TableCell key={prayer} className={`${prayerColors[prayer]} text-center`}>
+                    <div className="flex items-center justify-center">
+                      {masjid[prayer]}
+                      {getLatestBadge(prayer)}
                     </div>
                   </TableCell>
-                ) : (
-                  prayerTypes.map((prayer) => (
-                    <TableCell key={prayer} className={prayerTableBgColors[prayer]}>
-                      <div className="flex items-center">
-                        {masjid[prayer]}
-                        {getLatestBadge(prayer)}
-                      </div>
-                    </TableCell>
-                  ))
-                )}
-                {!activePrayer && (
-                  <TableCell>
-                    <Button variant="default" size="sm" className="bg-teal-600 hover:bg-teal-700">
-                      View Details
-                    </Button>
-                  </TableCell>
-                )}
+                ))}
+                <TableCell className="text-center">
+                  <Button variant="default" size="sm" className="bg-teal-600 hover:bg-teal-700">
+                    View Details
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -144,32 +123,22 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
             <div key={idx} className="p-4 bg-white rounded-lg shadow border">
               <div className="font-medium text-lg mb-2">{masjid.masjid}</div>
               <div className="text-sm text-gray-600 mb-3">{masjid.address || `123 Example St, ${selectedRegion}`}</div>
-              {activePrayer ? (
-                <div className="flex items-center">
-                  <div className={`${prayerTextColors[activePrayer]} font-medium capitalize mr-2`}>{activePrayer}:</div>
-                  <div className="text-lg font-bold">{masjid[activePrayer]}</div>
-                  {getLatestBadge(activePrayer)}
-                </div>
-              ) : (
-                <>
-                  <div className="grid grid-cols-2 gap-2 mb-3">
-                    {prayerTypes.map((prayer) => (
-                      <div key={prayer} className={`flex items-center p-2 rounded ${prayerColors[prayer]}`}>
-                        <div className={`${prayerTextColors[prayer]} font-medium capitalize mr-2`}>
-                          {prayer}:
-                        </div>
-                        <div className="font-bold">
-                          {masjid[prayer]}
-                        </div>
-                        {getLatestBadge(prayer)}
-                      </div>
-                    ))}
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                {prayerTypes.map((prayer) => (
+                  <div key={prayer} className={`flex items-center p-2 rounded ${prayerColors[prayer]}`}>
+                    <div className={`${prayerTextColors[prayer]} font-medium capitalize mr-2`}>
+                      {prayer}:
+                    </div>
+                    <div className="font-bold">
+                      {masjid[prayer]}
+                    </div>
+                    {getLatestBadge(prayer)}
                   </div>
-                  <Button variant="default" size="sm" className="w-full bg-teal-600 hover:bg-teal-700">
-                    View Details
-                  </Button>
-                </>
-              )}
+                ))}
+              </div>
+              <Button variant="default" size="sm" className="w-full bg-teal-600 hover:bg-teal-700">
+                View Details
+              </Button>
             </div>
           ))}
         </div>

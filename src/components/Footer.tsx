@@ -26,11 +26,11 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-3">Regions</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/region/northern-natal" className="text-white/80 hover:text-white transition-colors">Northern Natal</Link></li>
-              <li><Link to="/region/south-coast" className="text-white/80 hover:text-white transition-colors">South Coast</Link></li>
-              <li><Link to="/region/durban" className="text-white/80 hover:text-white transition-colors">Durban</Link></li>
-              <li><Link to="/region/midlands" className="text-white/80 hover:text-white transition-colors">Midlands</Link></li>
               <li><Link to="/region/north-coast" className="text-white/80 hover:text-white transition-colors">North Coast</Link></li>
+              <li><Link to="/region/northern-natal" className="text-white/80 hover:text-white transition-colors">Northern Natal</Link></li>
+              <li><Link to="/region/midlands" className="text-white/80 hover:text-white transition-colors">Midlands</Link></li>
+              <li><Link to="/region/durban" className="text-white/80 hover:text-white transition-colors">Durban</Link></li>
+              <li><Link to="/region/south-coast" className="text-white/80 hover:text-white transition-colors">South Coast</Link></li>
             </ul>
           </div>
           
