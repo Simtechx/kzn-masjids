@@ -10,7 +10,6 @@ import MasjidAudio from '@/components/MasjidAudio';
 import { featuredMasjids } from '@/data/mockData';
 import FeaturedMasjid from '@/components/FeaturedMasjid';
 import CounterSection from '@/components/CounterSection';
-import FindMasjidsHero from '@/components/FindMasjidsHero';
 
 const Index = () => {
   return (
@@ -18,11 +17,6 @@ const Index = () => {
       <Navbar />
       <main>
         <Hero />
-        
-        {/* LivePrayerTimes is already at the top of PrayerTimeSearch component */}
-        
-        {/* Added FindMasjids Hero section between LivePrayerTimes and PrayerTimeSearch */}
-        <FindMasjidsHero />
         
         {/* Prayer Time Search */}
         <PrayerTimeSearch />
@@ -51,7 +45,7 @@ const Index = () => {
         {/* Support New Masjids */}
         <SupportNewMasjids />
 
-        {/* Counter Section - Enhanced with watermark - Moved to just above footer */}
+        {/* Counter Section */}
         <CounterSection />
       </main>
       <Footer />
