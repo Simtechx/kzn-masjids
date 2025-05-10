@@ -10,8 +10,7 @@ interface RegionTableProps {
 }
 
 const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegion }) => {
-  // Calculate counts for each region
-  // Reorder regions according to the new sequence
+  // Reorder regions according to the new sequence as per footer
   const regions = ['North Coast', 'Northern Natal', 'Midlands', 'Durban', 'South Coast'];
   
   const regionCounts = regions.map(region => {

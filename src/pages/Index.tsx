@@ -10,6 +10,7 @@ import MasjidAudio from '@/components/MasjidAudio';
 import FeaturedMasjid from '@/components/FeaturedMasjid';
 import CounterSection from '@/components/CounterSection';
 import LivePrayerTimes from '@/components/LivePrayerTimes';
+import FindMasjidsHero from '@/components/FindMasjidsHero';
 
 const Index = () => {
   // Historic masjids data
@@ -49,6 +50,9 @@ const Index = () => {
       
       {/* Live Prayer Times at top immediately after navbar */}
       <LivePrayerTimes />
+      
+      {/* Find Masjids Hero Section - restored to its original place */}
+      <FindMasjidsHero />
       
       <main>
         {/* PrayerTimeSearch */}

@@ -59,20 +59,23 @@ const SubRegionSelector: React.FC<SubRegionSelectorProps> = ({
 
   return (
     <div className="mb-6">
-      <h3 className="text-xl text-islamic-green font-medium mb-4">{selectedRegion} Sub-Regions</h3>
+      <h3 className={`text-xl font-medium mb-4 p-2 rounded ${selectedSubRegion ? "bg-islamic-green text-white" : "text-islamic-green"}`}>
+        {selectedRegion} Sub-Regions
+        {selectedSubRegion && <span className="ml-2">→ {selectedSubRegion}</span>}
+      </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {subRegions.map((subRegion) => (
           <div
             key={subRegion}
             onClick={() => onSelectSubRegion(subRegion)}
             className={`
-              cursor-pointer rounded-md p-4 text-center transition-all duration-200
+              cursor-pointer rounded-md p-4 text-center transition-all duration-200 shadow-sm
               ${selectedSubRegion === subRegion 
-                ? "bg-islamic-green text-white" 
-                : "bg-blue-50 text-islamic-green hover:bg-blue-100"}
+                ? "bg-islamic-green text-white ring-2 ring-islamic-green ring-offset-2" 
+                : "bg-blue-50 text-islamic-dark-green hover:bg-blue-100 border border-blue-100"}
             `}
           >
-            <div className="font-medium">{subRegion}</div>
+            <div className="font-medium text-lg">{subRegion}</div>
             <div className="text-sm mt-1">
               {masjidCounts[subRegion as keyof typeof masjidCounts] || 3} Masjids
             </div>

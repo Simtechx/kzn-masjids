@@ -10,7 +10,8 @@ interface RegionSelectorProps {
 }
 
 const RegionSelector: React.FC<RegionSelectorProps> = ({ selectedRegion, onSelectRegion }) => {
-  const regions = Object.keys(prayerTimesData).filter(region => region !== 'Transkei');
+  // Reorder regions according to the footer sequence
+  const regions = ['North Coast', 'Northern Natal', 'Midlands', 'Durban', 'South Coast'];
   
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
