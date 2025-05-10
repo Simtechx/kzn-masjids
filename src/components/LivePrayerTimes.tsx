@@ -8,6 +8,8 @@ interface PrayerTime {
   time: string;
   timestamp: number;
   icon?: React.ReactNode;
+  bgColor: string;
+  textColor: string;
 }
 
 const LivePrayerTimes = () => {
@@ -17,12 +19,54 @@ const LivePrayerTimes = () => {
   const [timeRemaining, setTimeRemaining] = useState<string>('');
   const [remainingPercentage, setRemainingPercentage] = useState<number>(0);
   const [todayPrayerTimes, setTodayPrayerTimes] = useState<PrayerTime[]>([
-    { name: 'Fajr', time: '3:15 am', timestamp: new Date().setHours(3, 15, 0, 0), icon: <Sunrise size={40} className="mb-2 text-amber-300" /> },
-    { name: 'Dhuhr', time: '11:30 am', timestamp: new Date().setHours(11, 30, 0, 0), icon: <Sun size={40} className="mb-2 text-yellow-400" /> },
-    { name: 'Asr (H)', time: '3:30 pm', timestamp: new Date().setHours(15, 30, 0, 0), icon: <Sun size={40} className="mb-2 text-orange-300" /> },
-    { name: 'Asr (S)', time: '4:00 pm', timestamp: new Date().setHours(16, 0, 0, 0), icon: <Sun size={40} className="mb-2 text-orange-300" /> },
-    { name: 'Maghrib', time: '5:45 pm', timestamp: new Date().setHours(17, 45, 0, 0), icon: <Sunset size={40} className="mb-2 text-orange-500" /> },
-    { name: 'Isha', time: '6:40 pm', timestamp: new Date().setHours(18, 40, 0, 0), icon: <Moon size={40} className="mb-2 text-blue-200" /> }
+    { 
+      name: 'Fajr', 
+      time: '3:15 am', 
+      timestamp: new Date().setHours(3, 15, 0, 0), 
+      icon: <Sunrise size={40} className="mb-2 text-amber-300" />,
+      bgColor: 'bg-pink-50',
+      textColor: 'text-pink-600'
+    },
+    { 
+      name: 'Dhuhr', 
+      time: '11:30 am', 
+      timestamp: new Date().setHours(11, 30, 0, 0), 
+      icon: <Sun size={40} className="mb-2 text-yellow-400" />,
+      bgColor: 'bg-amber-50',
+      textColor: 'text-amber-600'
+    },
+    { 
+      name: 'Asr (H)', 
+      time: '3:30 pm', 
+      timestamp: new Date().setHours(15, 30, 0, 0), 
+      icon: <Sun size={40} className="mb-2 text-orange-300" />,
+      bgColor: 'bg-emerald-50',
+      textColor: 'text-emerald-600'
+    },
+    { 
+      name: 'Asr (S)', 
+      time: '4:00 pm', 
+      timestamp: new Date().setHours(16, 0, 0, 0), 
+      icon: <Sun size={40} className="mb-2 text-orange-300" />,
+      bgColor: 'bg-emerald-100',
+      textColor: 'text-emerald-600'
+    },
+    { 
+      name: 'Maghrib', 
+      time: '5:45 pm', 
+      timestamp: new Date().setHours(17, 45, 0, 0), 
+      icon: <Sunset size={40} className="mb-2 text-orange-500" />,
+      bgColor: 'bg-orange-50',
+      textColor: 'text-orange-600'
+    },
+    { 
+      name: 'Isha', 
+      time: '6:40 pm', 
+      timestamp: new Date().setHours(18, 40, 0, 0), 
+      icon: <Moon size={40} className="mb-2 text-blue-200" />,
+      bgColor: 'bg-indigo-50',
+      textColor: 'text-indigo-600'
+    }
   ]);
 
   useEffect(() => {
@@ -166,45 +210,22 @@ const LivePrayerTimes = () => {
             </div>
           </div>
           
-          {/* Right side - Today's Prayer Times */}
+          {/* Right side - Today's Prayer Times with new color blocks */}
           <div className="bg-white p-6 rounded-lg">
             <h2 className="text-xl font-medium text-gray-800 mb-4">Today's Prayer Times</h2>
             
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-pink-50 rounded-lg p-4">
-                <div className="text-islamic-green">Fajr</div>
-                <div className="text-2xl font-semibold">{todayPrayerTimes[0].time}</div>
-              </div>
-              
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-islamic-green">Dhuhr</div>
-                <div className="text-2xl font-semibold">{todayPrayerTimes[1].time}</div>
-              </div>
-              
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-islamic-green">Asr (H)</div>
-                <div className="text-2xl font-semibold">{todayPrayerTimes[2].time}</div>
-              </div>
-              
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-islamic-green">Asr (S)</div>
-                <div className="text-2xl font-semibold">{todayPrayerTimes[3].time}</div>
-              </div>
-              
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-islamic-green">Maghrib</div>
-                <div className="text-2xl font-semibold">{todayPrayerTimes[4].time}</div>
-              </div>
-              
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-islamic-green">Isha</div>
-                <div className="text-2xl font-semibold">{todayPrayerTimes[5].time}</div>
-              </div>
+              {todayPrayerTimes.map((prayer, index) => (
+                <div key={index} className={`${prayer.bgColor} rounded-lg p-4`}>
+                  <div className={prayer.textColor}>{prayer.name}</div>
+                  <div className="text-2xl font-semibold text-gray-800">{prayer.time}</div>
+                </div>
+              ))}
               
               <div className="col-span-2 mt-2">
                 <div className="text-sm text-gray-500">Calculation Method: Umm Al-Qura</div>
                 <div className="text-sm text-gray-500">Juristic Method: Hanafi</div>
-                <button className="text-islamic-blue text-sm mt-2">Change Settings</button>
+                <button className="text-[#14615f] text-sm mt-2">Change Settings</button>
               </div>
             </div>
           </div>

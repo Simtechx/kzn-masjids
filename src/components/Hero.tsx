@@ -4,7 +4,7 @@ import React from 'react';
 const Hero = () => {
   return (
     <div className="relative bg-islamic-pattern py-12 md:py-16">
-      <div className="absolute inset-0 bg-gradient-to-r from-teal-700/95 to-teal-800/95"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#14615f]/95 to-[#0d4a48]/95"></div>
       <div className="container mx-auto relative z-10 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-white mb-3 text-3xl md:text-4xl font-bold">Find Masjids & Musallahs in KwaZulu-Natal</h1>

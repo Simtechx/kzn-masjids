@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PrayerType, findExtremeTime } from '@/utils/prayerTimeUtils';
+import { PrayerType } from '@/utils/prayerTimeUtils';
 
 interface PrayerTimeBlocksProps {
   selectedRegion: string | null;
@@ -16,34 +16,33 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
   // Exclude maghrib as per requirements
   const prayerTypes: PrayerType[] = ['fajr', 'dhuhr', 'asr', 'isha'];
 
-  // Define prayer block colors
+  // Define prayer block colors with updated theme using #14615f as a base
   const prayerColors = {
-    fajr: 'bg-rose-50 hover:bg-rose-100',    // Light red
-    dhuhr: 'bg-amber-50 hover:bg-amber-100',  // Light beige/orange
+    fajr: 'bg-pink-50 hover:bg-pink-100',     // Light pink
+    dhuhr: 'bg-amber-50 hover:bg-amber-100',   // Light amber
     asr: 'bg-emerald-50 hover:bg-emerald-100', // Light green
-    isha: 'bg-indigo-50 hover:bg-indigo-100', // Light purple
+    isha: 'bg-indigo-50 hover:bg-indigo-100',  // Light purple
   };
 
   // Define prayer text colors
   const prayerTextColors = {
-    fajr: 'text-rose-600',
+    fajr: 'text-pink-600',
     dhuhr: 'text-amber-600',
     asr: 'text-emerald-600',
     isha: 'text-indigo-600',
   };
 
-  // Define active block colors
+  // Define active block colors using the requested color theme
   const activeColors = {
-    fajr: 'bg-rose-600 text-white',
-    dhuhr: 'bg-amber-600 text-white',
-    asr: 'bg-emerald-600 text-white',
-    isha: 'bg-indigo-600 text-white',
+    fajr: 'bg-[#14615f] text-white',
+    dhuhr: 'bg-[#14615f] text-white',
+    asr: 'bg-[#14615f] text-white',
+    isha: 'bg-[#14615f] text-white',
   };
 
   return (
     <div className="flex flex-wrap gap-2 mb-4">
       {prayerTypes.map((prayer) => {
-        const earliestTime = findExtremeTime(prayer, 'earliest', selectedRegion)?.time;
         const isActive = activePrayer === prayer;
         
         return (
@@ -58,9 +57,6 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
           >
             <div className={`font-medium ${!isActive ? prayerTextColors[prayer] : ''}`}>
               {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
-            </div>
-            <div className={`text-sm mt-1 ${!isActive ? 'text-gray-600' : ''}`}>
-              {earliestTime}
             </div>
           </div>
         );
