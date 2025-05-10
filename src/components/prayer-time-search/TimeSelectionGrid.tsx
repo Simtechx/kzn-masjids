@@ -30,7 +30,7 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
       earliest: 'bg-pink-100',
       middle: 'bg-pink-200',
       latest: 'bg-pink-300',
-      selected: 'bg-[#14615f] text-white',
+      selected: 'bg-pink-600 text-white',
     },
     dhuhr: {
       base: 'bg-amber-50',
@@ -38,15 +38,15 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
       earliest: 'bg-amber-100',
       middle: 'bg-amber-200',
       latest: 'bg-amber-300',
-      selected: 'bg-[#14615f] text-white',
+      selected: 'bg-amber-600 text-white',
     },
     asr: {
-      base: 'bg-emerald-50',
-      hover: 'hover:bg-emerald-100',
-      earliest: 'bg-emerald-100',
-      middle: 'bg-emerald-200',
-      latest: 'bg-emerald-300',
-      selected: 'bg-[#14615f] text-white',
+      base: 'bg-teal-50',
+      hover: 'hover:bg-teal-100',
+      earliest: 'bg-teal-100',
+      middle: 'bg-teal-200',
+      latest: 'bg-teal-300',
+      selected: 'bg-teal-600 text-white',
     },
     isha: {
       base: 'bg-indigo-50',
@@ -54,7 +54,7 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
       earliest: 'bg-indigo-100',
       middle: 'bg-indigo-200',
       latest: 'bg-indigo-300',
-      selected: 'bg-[#14615f] text-white',
+      selected: 'bg-indigo-600 text-white',
     },
   };
   

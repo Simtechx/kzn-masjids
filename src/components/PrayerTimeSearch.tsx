@@ -32,7 +32,7 @@ const PrayerTimeSearch = () => {
   return (
     <section className="py-10 px-4 bg-white">
       <div className="container mx-auto">
-        {/* Live Prayer Times Component */}
+        {/* Live Prayer Times Component - positioned at the top as requested */}
         <LivePrayerTimes />
         
         <div className="mt-10">

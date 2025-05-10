@@ -31,24 +31,24 @@ export function usePrayerTimes() {
       time: '3:30 pm', 
       timestamp: new Date().setHours(15, 30, 0, 0), 
       icon: <Sun size={40} className="mb-2 text-orange-300" />,
-      bgColor: 'bg-emerald-50',
-      textColor: 'text-emerald-600'
+      bgColor: 'bg-teal-50',
+      textColor: 'text-teal-600'
     },
     { 
       name: 'Asr (S)', 
       time: '4:00 pm', 
       timestamp: new Date().setHours(16, 0, 0, 0), 
       icon: <Sun size={40} className="mb-2 text-orange-300" />,
-      bgColor: 'bg-emerald-100',
-      textColor: 'text-emerald-600'
+      bgColor: 'bg-teal-100',
+      textColor: 'text-teal-600'
     },
     { 
       name: 'Maghrib', 
       time: '5:45 pm', 
       timestamp: new Date().setHours(17, 45, 0, 0), 
       icon: <Sunset size={40} className="mb-2 text-orange-500" />,
-      bgColor: 'bg-orange-50',
-      textColor: 'text-orange-600'
+      bgColor: 'bg-red-50',
+      textColor: 'text-red-600'
     },
     { 
       name: 'Isha', 
