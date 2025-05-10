@@ -19,10 +19,13 @@ const Index = () => {
       <main>
         <Hero />
         
-        {/* Prayer Time Search - FindMasjidsHero is handled inside PrayerTimeSearch component now */}
+        {/* LivePrayerTimes is inside PrayerTimeSearch at the top */}
         <PrayerTimeSearch />
 
-        {/* Notices Section - Redesigned as 3 blocks with scrolling images */}
+        {/* We've now moved this to the PrayerTimeSearch component */}
+        {/* <FindMasjidsHero /> */}
+        
+        {/* Notices Section - Updated with auto-scrolling carousel */}
         <NoticesSection />
         
         {/* Featured Masjids */}
@@ -46,7 +49,7 @@ const Index = () => {
         {/* Support New Masjids */}
         <SupportNewMasjids />
 
-        {/* Counter Section - Moved to the bottom above footer */}
+        {/* Counter Section - At the bottom above footer */}
         <CounterSection />
       </main>
       <Footer />
