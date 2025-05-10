@@ -10,6 +10,7 @@ import MasjidAudio from '@/components/MasjidAudio';
 import { featuredMasjids } from '@/data/mockData';
 import FeaturedMasjid from '@/components/FeaturedMasjid';
 import CounterSection from '@/components/CounterSection';
+import FindMasjidsHero from '@/components/FindMasjidsHero';
 
 const Index = () => {
   return (
@@ -18,14 +19,17 @@ const Index = () => {
       <main>
         <Hero />
         
-        {/* Prayer Time Search */}
-        <PrayerTimeSearch />
+        {/* Audio Section */}
+        <MasjidAudio />
 
         {/* Notices Section - Redesigned as image slider */}
         <NoticesSection />
+
+        {/* Find Masjids Hero - Placed between Prayer Times and Prayer Time Search */}
+        <FindMasjidsHero />
         
-        {/* Audio Section */}
-        <MasjidAudio />
+        {/* Prayer Time Search */}
+        <PrayerTimeSearch />
 
         {/* Featured Masjids */}
         <section className="py-16 px-4">
@@ -45,7 +49,7 @@ const Index = () => {
         {/* Support New Masjids */}
         <SupportNewMasjids />
 
-        {/* Counter Section */}
+        {/* Counter Section - Moved to the bottom above footer */}
         <CounterSection />
       </main>
       <Footer />

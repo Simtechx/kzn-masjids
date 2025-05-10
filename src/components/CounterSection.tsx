@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Building2, Church, MapPin, Users } from 'lucide-react';
 
 interface FlipDigitProps {
   digit: number;
@@ -21,11 +20,10 @@ const FlipDigit: React.FC<FlipDigitProps> = ({ digit }) => {
 interface FlipCounterProps {
   end: number;
   label: string;
-  icon: React.ReactNode;
   delay?: number;
 }
 
-const FlipCounter: React.FC<FlipCounterProps> = ({ end, label, icon, delay = 0 }) => {
+const FlipCounter: React.FC<FlipCounterProps> = ({ end, label, delay = 0 }) => {
   const [count, setCount] = useState(0);
   const counterRef = useRef<HTMLDivElement>(null);
   const countingDone = useRef(false);
@@ -77,9 +75,6 @@ const FlipCounter: React.FC<FlipCounterProps> = ({ end, label, icon, delay = 0 }
       className="flex flex-col items-center transform transition-all duration-700 hover:scale-105" 
       ref={counterRef}
     >
-      <div className="mb-4 text-teal-800 bg-white/90 rounded-full p-4 shadow-lg">
-        {icon}
-      </div>
       <div className="flip-counter-container">
         {digits.map((digit, index) => (
           <FlipDigit key={index} digit={digit} />
@@ -92,49 +87,62 @@ const FlipCounter: React.FC<FlipCounterProps> = ({ end, label, icon, delay = 0 }
 
 const CounterSection = () => {
   // Mock data for the counters
+  const regionsCount = 5;
   const masjidsCount = 190;
   const musallasCount = 87;
-  const regionsCount = 6;
   const totalCount = masjidsCount + musallasCount;
 
   return (
-    <section className="py-16 px-4 bg-white">
-      <div className="container mx-auto">
+    <section className="py-16 px-4 relative bg-white overflow-hidden">
+      {/* Background Image as Watermark */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center opacity-10 z-0"
+        style={{ backgroundImage: 'url("/lovable-uploads/3d6cd80a-4e05-4ded-ba80-fa70d25845ce.png")' }}
+      ></div>
+      
+      <div className="container mx-auto relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-teal-800">
-            KwaZulu-Natal Prayer Spaces
+            KWA-ZULU NATAL MASJIDS AND MUSALLAS
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Discover the growing number of prayer spaces across the province.
+            Discover the growing presence of masjids and musallahs throughout the province.
           </p>
           <div className="w-24 h-1 bg-islamic-gold mx-auto mt-6"></div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          <FlipCounter 
-            end={masjidsCount} 
-            label="Masjids" 
-            icon={<Church size={48} strokeWidth={1.5} className="text-teal-700" />}
-            delay={0}
-          />
-          <FlipCounter 
-            end={musallasCount} 
-            label="Musallas" 
-            icon={<Building2 size={48} strokeWidth={1.5} className="text-teal-700" />}
-            delay={200}
-          />
-          <FlipCounter 
-            end={regionsCount} 
-            label="Regions" 
-            icon={<MapPin size={48} strokeWidth={1.5} className="text-teal-700" />}
-            delay={400}
-          />
-          <FlipCounter 
-            end={totalCount} 
-            label="Total Prayer Spaces" 
-            icon={<Users size={48} strokeWidth={1.5} className="text-teal-700" />}
-            delay={600}
-          />
+          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
+            <FlipCounter 
+              end={regionsCount} 
+              label="Regions" 
+              delay={0}
+            />
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
+            <FlipCounter 
+              end={masjidsCount} 
+              label="Masjids" 
+              delay={200}
+            />
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
+            <FlipCounter 
+              end={musallasCount} 
+              label="Musallas" 
+              delay={400}
+            />
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
+            <FlipCounter 
+              end={totalCount} 
+              label="Total" 
+              delay={600}
+            />
+          </div>
         </div>
       </div>
     </section>
