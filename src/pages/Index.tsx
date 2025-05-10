@@ -114,14 +114,12 @@ const Index = () => {
       {/* Live Prayer Times moved to top immediately after navbar */}
       <LivePrayerTimes />
       
+      {/* FindMasjidsHero added below LivePrayerTimes */}
+      <FindMasjidsHero />
+      
       <main>
-        {/* Remove FindMasjidsHero since it's not needed anymore */}
-        
         {/* PrayerTimeSearch without LivePrayerTimes at top */}
         <PrayerTimeSearch />
-        
-        {/* Counter Section - moved up from below the SupportNewMasjids */}
-        <CounterSection />
         
         {/* Historic Masjids Carousel */}
         <section className="py-16 px-4 bg-gray-50">
@@ -148,15 +146,18 @@ const Index = () => {
             </div>
           </div>
         </section>
-
-        {/* Support New Masjids - Moved to bottom above footer */}
-        <SupportNewMasjids />
         
         {/* Notices Section */}
         <NoticesSection />
         
         {/* Audio Section - Keep at the bottom */}
         <MasjidAudio />
+        
+        {/* Counter Section moved to the bottom */}
+        <CounterSection />
+        
+        {/* Support New Masjids - Moved to below counter section */}
+        <SupportNewMasjids />
         
         {/* Hero component comes last above footer */}
         <Hero />
