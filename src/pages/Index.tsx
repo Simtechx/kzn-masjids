@@ -21,9 +21,9 @@ const Index = () => {
         
         {/* LivePrayerTimes is inside PrayerTimeSearch at the top */}
         <PrayerTimeSearch />
-
-        {/* We've now moved this to the PrayerTimeSearch component */}
-        {/* <FindMasjidsHero /> */}
+        
+        {/* Find Masjids Hero - Now placed after PrayerTimeSearch */}
+        <FindMasjidsHero />
         
         {/* Notices Section - Updated with auto-scrolling carousel */}
         <NoticesSection />

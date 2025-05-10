@@ -36,10 +36,7 @@ const PrayerTimeSearch = () => {
         {/* Live Prayer Times Component */}
         <LivePrayerTimes />
         
-        {/* Find Masjids Hero - Now placed right after LivePrayerTimes */}
-        <div className="mt-6">
-          <FindMasjidsHero />
-        </div>
+        {/* Find Masjids Hero component moved to Index.tsx */}
         
         <div className="mt-10">
           <PrayerTimeHeader 
