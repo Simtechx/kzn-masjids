@@ -19,10 +19,10 @@ const ViewToggle: React.FC<ViewToggleProps> = ({
   className = ""
 }) => {
   return (
-    <div className={`flex justify-between items-center mb-4 bg-gray-200 p-4 rounded-lg ${className}`}>
+    <div className={`flex justify-between items-center mb-4 bg-[#072c23] text-white p-4 rounded-lg ${className}`}>
       <div>
-        <h3 className="text-xl text-gray-800 font-medium">{label}</h3>
-        <p className="text-sm text-gray-600">{description}</p>
+        <h3 className="text-xl text-white font-medium">{label}</h3>
+        <p className="text-sm text-gray-200">{description}</p>
       </div>
       <ToggleGroup 
         type="single" 
@@ -33,7 +33,7 @@ const ViewToggle: React.FC<ViewToggleProps> = ({
         <ToggleGroupItem 
           value="table" 
           aria-label="Table View" 
-          className={`px-4 ${viewMode === 'table' ? 'bg-[#072c23] text-white' : ''}`}
+          className={`px-4 ${viewMode === 'table' ? 'bg-[#072c23] text-white' : 'text-[#072c23]'}`}
         >
           <Table2 className="h-5 w-5 mr-2" />
           Table View
@@ -41,7 +41,7 @@ const ViewToggle: React.FC<ViewToggleProps> = ({
         <ToggleGroupItem 
           value="block" 
           aria-label="Block View" 
-          className={`px-4 ${viewMode === 'block' ? 'bg-[#072c23] text-white' : ''}`}
+          className={`px-4 ${viewMode === 'block' ? 'bg-[#072c23] text-white' : 'text-[#072c23]'}`}
         >
           <LayoutGrid className="h-5 w-5 mr-2" />
           Block View

@@ -37,17 +37,17 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
     
     if (prayerName === 'Asr (S)') {
       return {
-        bgColor: upcoming ? 'bg-green-600' : 'bg-green-50',
+        bgColor: upcoming ? 'bg-green-700' : 'bg-green-50',
         textColor: upcoming ? 'text-white' : 'text-green-600'
       };
     } else if (prayerName === 'Asr (H)') {
       return {
-        bgColor: upcoming ? 'bg-teal-600' : 'bg-teal-50',
-        textColor: upcoming ? 'text-white' : 'text-teal-600'
+        bgColor: upcoming ? 'bg-teal-800' : 'bg-teal-100', // Darker turquoise for Asr (H)
+        textColor: upcoming ? 'text-white' : 'text-teal-800'
       };
     } else if (prayerName.includes('Maghrib')) {
       return {
-        bgColor: upcoming ? 'bg-red-600' : 'bg-red-50',
+        bgColor: upcoming ? 'bg-red-700' : 'bg-red-50',
         textColor: upcoming ? 'text-white' : 'text-red-600'
       };
     }
@@ -59,7 +59,7 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
     if (upcoming) {
       // Darken the background for upcoming prayers
       return {
-        bgColor: bgColor.replace('50', '600'),
+        bgColor: bgColor.replace('50', '700'),
         textColor: 'text-white'
       };
     }
@@ -78,14 +78,19 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
         {reorderedPrayers.map((prayer, index) => {
           // Get custom colors for prayers
           const { bgColor, textColor } = getPrayerColors(prayer.name);
+          const upcoming = isUpcoming(prayer.name);
             
           return (
-            <div key={index} className={`${bgColor} rounded-lg p-4`}>
+            <div key={index} className={`${bgColor} rounded-lg p-4 relative overflow-hidden`}>
+              {upcoming && (
+                <div className="absolute top-0 right-0">
+                  <div className="bg-yellow-400 text-black text-xs px-2 py-1 rounded-bl-md font-semibold">
+                    UPCOMING
+                  </div>
+                </div>
+              )}
               <div className={textColor}>{prayer.name}</div>
               <div className={`text-2xl font-semibold ${isUpcoming(prayer.name) ? 'text-white' : 'text-gray-800'}`}>{prayer.time}</div>
-              {isUpcoming(prayer.name) && (
-                <div className="text-xs font-medium mt-1 text-white">UPCOMING</div>
-              )}
             </div>
           );
         })}

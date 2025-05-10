@@ -19,80 +19,90 @@ const Index = () => {
       id: "grey-street",
       name: "Grey Street Juma Masjid",
       location: "Durban",
+      region: "Durban", // Adding required 'region' property
       year: "1881",
-      description: "Oldest and largest mosque in the southern hemisphere at the time of establishment.",
+      info: "Oldest and largest mosque in the southern hemisphere at the time of establishment.",
       image: "https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&q=80"
     },
     {
       id: "riverside",
       name: "Riverside Soofie Masjid",
       location: "Durban North",
+      region: "North Coast", 
       year: "1895",
-      description: "Established by Hazrath Soofie Saheb; part of the Soofie Saheb legacy.",
+      info: "Established by Hazrath Soofie Saheb; part of the Soofie Saheb legacy.",
       image: "https://images.unsplash.com/photo-1551038247-3d9af20df552?auto=format&fit=crop&q=80"
     },
     {
       id: "ladysmith",
       name: "Ladysmith Soofie Masjid",
       location: "Ladysmith",
+      region: "Northern Natal", 
       year: "1898",
-      description: "Original wooden structure built by Soofie Saheb; rebuilt in 1969 with Moghul architecture.",
+      info: "Original wooden structure built by Soofie Saheb; rebuilt in 1969 with Moghul architecture.",
       image: "https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?auto=format&fit=crop&q=80"
     },
     {
       id: "west-street",
       name: "West Street Masjid",
       location: "Durban",
+      region: "Durban", 
       year: "circa 1890s",
-      description: "Early central Durban masjid, near the city's commercial hub.",
+      info: "Early central Durban masjid, near the city's commercial hub.",
       image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&q=80"
     },
     {
       id: "ottawa",
       name: "Ottawa Soofie Masjid",
       location: "Ottawa",
+      region: "North Coast", 
       year: "circa late 1890s",
-      description: "Another in the Soofie Saheb series, foundational in the Ottawa community.",
+      info: "Another in the Soofie Saheb series, foundational in the Ottawa community.",
       image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&q=80"
     },
     {
       id: "tongaat",
       name: "Tongaat Soofie Masjid",
       location: "Tongaat",
+      region: "North Coast", 
       year: "circa 1900",
-      description: "Historic masjid in the northern KZN region, part of the Soofie mission.",
+      info: "Historic masjid in the northern KZN region, part of the Soofie mission.",
       image: "https://images.unsplash.com/photo-1560264234-b5618a0bfb0c?auto=format&fit=crop&q=80"
     },
     {
       id: "clairwood",
       name: "Clairwood Juma Masjid",
       location: "Clairwood",
+      region: "South Coast", 
       year: "early 1900s",
-      description: "Serves one of Durban's oldest Indian communities.",
+      info: "Serves one of Durban's oldest Indian communities.",
       image: "https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&q=80"
     },
     {
       id: "pietermaritzburg",
       name: "Pietermaritzburg Juma Masjid",
       location: "Pietermaritzburg",
+      region: "Midlands", 
       year: "circa 1890s–1900",
-      description: "A longstanding central masjid in the capital city of KZN.",
+      info: "A longstanding central masjid in the capital city of KZN.",
       image: "https://images.unsplash.com/photo-1551038247-3d9af20df552?auto=format&fit=crop&q=80"
     },
     {
       id: "verulam",
       name: "Verulam Juma Masjid",
       location: "Verulam",
+      region: "North Coast", 
       year: "circa early 1900s",
-      description: "Landmark mosque in this major Indian settlement.",
+      info: "Landmark mosque in this major Indian settlement.",
       image: "https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?auto=format&fit=crop&q=80"
     },
     {
       id: "isipingo",
       name: "Isipingo Beach Masjid",
       location: "Isipingo Beach",
+      region: "South Coast", 
       year: "circa early 1900s",
-      description: "Key religious hub for the Muslim community in Isipingo.",
+      info: "Key religious hub for the Muslim community in Isipingo.",
       image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&q=80"
     }
   ];
@@ -105,22 +115,13 @@ const Index = () => {
       <LivePrayerTimes />
       
       <main>
-        <Hero />
+        {/* Remove FindMasjidsHero since it's not needed anymore */}
         
         {/* PrayerTimeSearch without LivePrayerTimes at top */}
         <PrayerTimeSearch />
         
-        {/* Find Masjids Hero after PrayerTimeSearch */}
-        <FindMasjidsHero />
-        
-        {/* Counter Section */}
+        {/* Counter Section - moved up from below the SupportNewMasjids */}
         <CounterSection />
-        
-        {/* Support New Masjids - Moved below counter section */}
-        <SupportNewMasjids />
-        
-        {/* Notices Section */}
-        <NoticesSection />
         
         {/* Historic Masjids Carousel */}
         <section className="py-16 px-4 bg-gray-50">
@@ -131,16 +132,16 @@ const Index = () => {
             </p>
             
             <div className="carousel-container relative">
-              {/* Historic masjids carousel will be implemented in NoticesSection.tsx pattern */}
-              {/* Will use the same carousel component with auto-scrolling */}
+              {/* Historic masjids carousel with the properly formatted data */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {historicMasjids.slice(0, 3).map((masjid) => (
                   <FeaturedMasjid key={masjid.id} masjid={{
                     id: masjid.id,
                     name: masjid.name,
                     location: masjid.location,
+                    region: masjid.region,
                     image: masjid.image,
-                    description: `${masjid.description} (${masjid.year})`,
+                    description: `${masjid.info} (${masjid.year})`
                   }} />
                 ))}
               </div>
@@ -148,8 +149,17 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Support New Masjids - Moved to bottom above footer */}
+        <SupportNewMasjids />
+        
+        {/* Notices Section */}
+        <NoticesSection />
+        
         {/* Audio Section - Keep at the bottom */}
         <MasjidAudio />
+        
+        {/* Hero component comes last above footer */}
+        <Hero />
       </main>
       <Footer />
     </div>
