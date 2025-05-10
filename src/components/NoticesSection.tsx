@@ -4,7 +4,6 @@ import { Carousel } from '@/components/ui/carousel';
 import { CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Button } from "@/components/ui/button";
 
 const NoticesSection = () => {
   const carouselRef = useRef<HTMLDivElement>(null);

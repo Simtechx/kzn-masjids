@@ -76,7 +76,7 @@ const UpcomingPrayer: React.FC<UpcomingPrayerProps> = ({
           <div className="text-white/90 mb-1">Time remaining</div>
           {/* Semi-transparent dark background for the countdown */}
           <div className="bg-black/40 rounded-lg p-3 inline-block">
-            <div className="text-5xl font-bold">{timeRemaining}</div>
+            <div className="text-5xl font-bold text-white">{timeRemaining}</div>
           </div>
           <Progress value={remainingPercentage} className="h-2 bg-white/30 mt-3" />
           <div className="mt-4 inline-block bg-black/50 py-2 px-4 rounded-md">

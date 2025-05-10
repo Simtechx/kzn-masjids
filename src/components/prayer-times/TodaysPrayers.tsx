@@ -37,7 +37,7 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
     
     if (prayerName === 'Asr (S)') {
       return {
-        bgColor: upcoming ? 'bg-green-200' : 'bg-green-50',
+        bgColor: upcoming ? 'bg-green-600' : 'bg-green-50',
         textColor: upcoming ? 'text-white' : 'text-green-600'
       };
     } else if (prayerName === 'Asr (H)') {
@@ -47,7 +47,7 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
       };
     } else if (prayerName.includes('Maghrib')) {
       return {
-        bgColor: upcoming ? 'bg-red-100' : 'bg-red-50',
+        bgColor: upcoming ? 'bg-red-600' : 'bg-red-50',
         textColor: upcoming ? 'text-white' : 'text-red-600'
       };
     }
@@ -59,8 +59,8 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
     if (upcoming) {
       // Darken the background for upcoming prayers
       return {
-        bgColor: bgColor.replace('50', '200'),
-        textColor: prayer?.textColor || 'text-gray-600'
+        bgColor: bgColor.replace('50', '600'),
+        textColor: 'text-white'
       };
     }
     
@@ -82,9 +82,9 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
           return (
             <div key={index} className={`${bgColor} rounded-lg p-4`}>
               <div className={textColor}>{prayer.name}</div>
-              <div className="text-2xl font-semibold text-gray-800">{prayer.time}</div>
+              <div className={`text-2xl font-semibold ${isUpcoming(prayer.name) ? 'text-white' : 'text-gray-800'}`}>{prayer.time}</div>
               {isUpcoming(prayer.name) && (
-                <div className="text-xs font-medium mt-1 text-gray-500">UPCOMING</div>
+                <div className="text-xs font-medium mt-1 text-white">UPCOMING</div>
               )}
             </div>
           );
