@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="container mx-auto py-12 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-semibold mb-4">KZN Masjid Explorer</h3>
+            <h3 className="text-xl font-semibold mb-4">KwaZulu-Natal Masjids & Musallahs</h3>
             <p className="text-white/80 mb-4">
               Your comprehensive guide to masjids and musallahs across all regions of KwaZulu-Natal, South Africa.
             </p>
@@ -54,7 +54,7 @@ const Footer = () => {
         </div>
         
         <div className="mt-12 pt-4 border-t border-white/20 text-center text-white/60">
-          <p>© {new Date().getFullYear()} kznmasjid.co.za by Lovable AI. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} kznmasjid.co.za. All rights reserved.</p>
         </div>
       </div>
     </footer>

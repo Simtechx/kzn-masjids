@@ -3,7 +3,6 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
-import LivePrayerTimes from '@/components/LivePrayerTimes';
 import PrayerTimeSearch from '@/components/PrayerTimeSearch';
 import SupportNewMasjids from '@/components/SupportNewMasjids';
 import NoticesSection from '@/components/NoticesSection';
@@ -17,7 +16,6 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main>
-        <LivePrayerTimes />
         <Hero />
         <PrayerTimeSearch />
 
@@ -30,7 +28,7 @@ const Index = () => {
         {/* Featured Masjids */}
         <section className="py-16 px-4">
           <div className="container mx-auto">
-            <h2 className="text-center text-3xl font-bold mb-2 text-teal-700">Featured Masjids</h2>
+            <h2 className="text-center text-3xl font-bold mb-2 text-teal-800">Featured Masjids</h2>
             <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
               Discover some of the most prominent and historic masjids across KwaZulu-Natal.
             </p>

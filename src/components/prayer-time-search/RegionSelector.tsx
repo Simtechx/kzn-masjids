@@ -33,19 +33,19 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({ selectedRegion, onSelec
           <div
             key={region}
             className={`relative overflow-hidden rounded-lg cursor-pointer transition-all duration-300 ${
-              isSelected ? "ring-4 ring-islamic-green" : "hover:shadow-lg"
+              isSelected ? "ring-4 ring-teal-700" : "hover:shadow-lg"
             }`}
             onClick={() => onSelectRegion(region)}
           >
             {/* Background Image */}
             <div 
-              className="aspect-[5/3] bg-cover bg-center"
+              className="aspect-[4/3] bg-cover bg-center"
               style={{ 
                 backgroundImage: `url(${regionBackgrounds[region as keyof typeof regionBackgrounds] || "https://images.unsplash.com/photo-1616432043562-3671ea2e5242"})` 
               }}
             >
               {/* Overlay for text visibility */}
-              <div className={`absolute inset-0 bg-black/40 flex flex-col justify-end p-4`}>
+              <div className={`absolute inset-0 bg-black/50 flex flex-col justify-end p-4`}>
                 <h3 className="text-white text-xl font-bold">{region}</h3>
                 <div className="flex items-center text-white/90 mt-1">
                   <MapPin size={16} className="mr-1" />

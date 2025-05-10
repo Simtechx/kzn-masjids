@@ -8,8 +8,9 @@ import TimeSelectionGrid from './prayer-time-search/TimeSelectionGrid';
 import SearchBar from './prayer-time-search/SearchBar';
 import PrayerTimesDisplay from './prayer-time-search/PrayerTimesDisplay';
 import MasjidsList from './prayer-time-search/MasjidsList';
+import RegionTable from './prayer-time-search/RegionTable';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Blocks, Table } from 'lucide-react';
+import { Table2, LayoutGrid } from 'lucide-react';
 
 const PrayerTimeSearch = () => {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
@@ -18,6 +19,7 @@ const PrayerTimeSearch = () => {
   const [activePrayer, setActivePrayer] = useState<PrayerType | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'block' | 'table'>('block');
+  const [regionViewMode, setRegionViewMode] = useState<'block' | 'table'>('block');
   
   const handleRegionSelection = (region: string) => {
     setSelectedRegion(region);
@@ -70,7 +72,7 @@ const PrayerTimeSearch = () => {
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h2 className="text-3xl font-bold text-teal-700">Prayer Time Search</h2>
+            <h2 className="text-3xl font-bold text-teal-800">Prayer Time Search</h2>
             <p className="text-gray-600 mt-2">
               {selectedSubRegion && selectedRegion 
                 ? `Find prayer times for masjids in ${selectedSubRegion}, ${selectedRegion}`
@@ -80,24 +82,46 @@ const PrayerTimeSearch = () => {
             </p>
           </div>
           
-          <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value as 'block' | 'table')}>
-            <ToggleGroupItem value="block" aria-label="Block View" className={viewMode === 'block' ? 'bg-teal-700 text-white' : ''}>
-              <Blocks className="h-5 w-5" />
-              <span className="ml-2">Block</span>
-            </ToggleGroupItem>
-            <ToggleGroupItem value="table" aria-label="Table View" className={viewMode === 'table' ? 'bg-teal-700 text-white' : ''}>
-              <Table className="h-5 w-5" />
-              <span className="ml-2">Table</span>
-            </ToggleGroupItem>
-          </ToggleGroup>
+          <div className="bg-gray-100 p-2 rounded-md">
+            <ToggleGroup 
+              type="single" 
+              value={regionViewMode} 
+              onValueChange={(value) => value && setRegionViewMode(value as 'block' | 'table')}
+              className="bg-white shadow-sm rounded-md"
+            >
+              <ToggleGroupItem 
+                value="block" 
+                aria-label="Block View" 
+                className={regionViewMode === 'block' ? 'bg-teal-700 text-white' : ''}
+              >
+                <LayoutGrid className="h-5 w-5" />
+                <span className="ml-2">Block</span>
+              </ToggleGroupItem>
+              <ToggleGroupItem 
+                value="table" 
+                aria-label="Table View" 
+                className={regionViewMode === 'table' ? 'bg-teal-700 text-white' : ''}
+              >
+                <Table2 className="h-5 w-5" />
+                <span className="ml-2">Table</span>
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
         </div>
         
         <div className="flex flex-col space-y-6">
-          {/* Region Selection */}
-          <RegionSelector 
-            selectedRegion={selectedRegion}
-            onSelectRegion={handleRegionSelection}
-          />
+          {/* Region Selection - Conditionally render based on view mode */}
+          {regionViewMode === 'block' ? (
+            <RegionSelector 
+              selectedRegion={selectedRegion}
+              onSelectRegion={handleRegionSelection}
+            />
+          ) : (
+            <RegionTable 
+              selectedRegion={selectedRegion}
+              onSelectRegion={handleRegionSelection}
+            />
+          )}
           
           {/* Sub-region Selection */}
           {selectedRegion && (
@@ -132,11 +156,36 @@ const PrayerTimeSearch = () => {
                 />
               )}
               
-              {/* View Toggle (Table/Block) */}
-              <SearchBar
-                searchType={searchType}
-                setSearchType={setSearchType}
-              />
+              {/* Prayer Time View Toggle */}
+              <div className="flex justify-between items-center mb-4 bg-gray-200 p-4 rounded-lg">
+                <div>
+                  <h3 className="text-xl text-gray-800 font-medium">Prayer Time View</h3>
+                  <p className="text-sm text-gray-600">Select how you want to view prayer times</p>
+                </div>
+                <ToggleGroup 
+                  type="single" 
+                  value={viewMode} 
+                  onValueChange={(value) => value && setViewMode(value as 'block' | 'table')}
+                  className="bg-white shadow-sm rounded-md"
+                >
+                  <ToggleGroupItem 
+                    value="table" 
+                    aria-label="Table View" 
+                    className={`px-4 ${viewMode === 'table' ? 'bg-teal-700 text-white' : ''}`}
+                  >
+                    <Table2 className="h-5 w-5 mr-2" />
+                    Table View
+                  </ToggleGroupItem>
+                  <ToggleGroupItem 
+                    value="block" 
+                    aria-label="Block View" 
+                    className={`px-4 ${viewMode === 'block' ? 'bg-teal-700 text-white' : ''}`}
+                  >
+                    <LayoutGrid className="h-5 w-5 mr-2" />
+                    Block View
+                  </ToggleGroupItem>
+                </ToggleGroup>
+              </div>
               
               {/* Prayer Times Display */}
               <PrayerTimesDisplay
