@@ -94,10 +94,13 @@ const CounterSection = () => {
 
   return (
     <section className="py-16 px-4 relative bg-white overflow-hidden">
-      {/* Background Image as Watermark */}
+      {/* Background Image as Watermark with darker overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center opacity-10 z-0"
-        style={{ backgroundImage: 'url("/lovable-uploads/3d6cd80a-4e05-4ded-ba80-fa70d25845ce.png")' }}
+        style={{ 
+          backgroundImage: 'url("/lovable-uploads/3d6cd80a-4e05-4ded-ba80-fa70d25845ce.png")',
+          backgroundColor: 'rgba(0, 0, 0, 0.15)' // Adding a slight dark overlay
+        }}
       ></div>
       
       <div className="container mx-auto relative z-10">
@@ -112,7 +115,8 @@ const CounterSection = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
+          {/* Removed the bg-white and shadow-lg classes to remove white blocks */}
+          <div className="p-6 flex flex-col items-center">
             <FlipCounter 
               end={regionsCount} 
               label="Regions" 
@@ -120,7 +124,7 @@ const CounterSection = () => {
             />
           </div>
           
-          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
+          <div className="p-6 flex flex-col items-center">
             <FlipCounter 
               end={masjidsCount} 
               label="Masjids" 
@@ -128,7 +132,7 @@ const CounterSection = () => {
             />
           </div>
           
-          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
+          <div className="p-6 flex flex-col items-center">
             <FlipCounter 
               end={musallasCount} 
               label="Musallas" 
@@ -136,7 +140,7 @@ const CounterSection = () => {
             />
           </div>
           
-          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
+          <div className="p-6 flex flex-col items-center">
             <FlipCounter 
               end={totalCount} 
               label="Total" 

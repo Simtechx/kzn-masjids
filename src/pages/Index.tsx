@@ -24,11 +24,8 @@ const Index = () => {
 
         {/* Notices Section - Redesigned as image slider */}
         <NoticesSection />
-
-        {/* Find Masjids Hero - Placed between Prayer Times and Prayer Time Search */}
-        <FindMasjidsHero />
         
-        {/* Prayer Time Search */}
+        {/* Prayer Time Search - FindMasjidsHero is handled inside PrayerTimeSearch component now */}
         <PrayerTimeSearch />
 
         {/* Featured Masjids */}

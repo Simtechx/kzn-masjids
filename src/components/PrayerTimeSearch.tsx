@@ -9,6 +9,7 @@ import RegionTable from './prayer-time-search/RegionTable';
 import PrayerTimeHeader from './prayer-time-search/PrayerTimeHeader';
 import ViewToggle from './prayer-time-search/ViewToggle';
 import LivePrayerTimes from './LivePrayerTimes';
+import FindMasjidsHero from './FindMasjidsHero';
 
 const PrayerTimeSearch = () => {
   const {
@@ -32,8 +33,13 @@ const PrayerTimeSearch = () => {
   return (
     <section className="py-10 px-4 bg-white">
       <div className="container mx-auto">
-        {/* Live Prayer Times Component - positioned at the top as requested */}
+        {/* Live Prayer Times Component */}
         <LivePrayerTimes />
+        
+        {/* Find Masjids Hero - Placed right after LivePrayerTimes */}
+        <div className="mt-6">
+          <FindMasjidsHero />
+        </div>
         
         <div className="mt-10">
           <PrayerTimeHeader 
