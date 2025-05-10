@@ -12,7 +12,6 @@ import {
   PrayerType, 
   SearchType, 
   MasjidData,
-  findExtremeTime
 } from '@/utils/prayerTimeUtils';
 import { Badge } from '@/components/ui/badge';
 
@@ -53,91 +52,89 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
     isha: 'text-indigo-600',
   };
   
-  // This section is completely removed as per request
-  const renderTableView = () => {
+  // Only render the selected view type (table or block)
+  if (viewMode === 'table') {
     return (
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto bg-gray-50 p-6 rounded-lg">
+        <h3 className="text-xl font-bold mb-4 text-teal-700">
+          {selectedTime && activePrayer 
+            ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
+            : selectedSubRegion 
+              ? `Prayer Times in ${selectedSubRegion}, ${selectedRegion}`
+              : `Prayer Times in ${selectedRegion}`}
+        </h3>
         <Table>
           <TableHeader>
             <TableRow className="bg-gray-700 text-white">
-              <TableHead className="font-bold">Prayer</TableHead>
-              <TableHead className="font-bold">Time</TableHead>
               <TableHead className="font-bold">Masjid</TableHead>
+              {activePrayer ? (
+                <TableHead className="font-bold capitalize">{activePrayer}</TableHead>
+              ) : (
+                prayerTypes.map((prayer) => (
+                  <TableHead key={prayer} className="font-bold capitalize">{prayer}</TableHead>
+                ))
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {!selectedTime ? (
-              prayerTypes.map((prayer) => {
-                const extremeTime = findExtremeTime(prayer as PrayerType, searchType, selectedRegion);
-                return (
-                  <TableRow key={prayer}>
-                    <TableCell className="font-medium capitalize">{prayer}</TableCell>
-                    <TableCell>{extremeTime?.time}</TableCell>
-                    <TableCell>{extremeTime?.masjid}</TableCell>
-                  </TableRow>
-                );
-              })
-            ) : (
-              filteredPrayerTimes.map((masjid, idx) => (
-                <TableRow key={idx}>
-                  <TableCell className="font-medium capitalize">{activePrayer}</TableCell>
-                  <TableCell>{activePrayer ? masjid[activePrayer] : ''}</TableCell>
-                  <TableCell>{masjid.masjid}</TableCell>
-                </TableRow>
-              ))
-            )}
+            {filteredPrayerTimes.map((masjid, idx) => (
+              <TableRow key={idx}>
+                <TableCell className="font-medium">{masjid.masjid}</TableCell>
+                {activePrayer ? (
+                  <TableCell>{masjid[activePrayer]}</TableCell>
+                ) : (
+                  prayerTypes.map((prayer) => (
+                    <TableCell key={prayer}>
+                      {masjid[prayer as keyof typeof masjid]}
+                    </TableCell>
+                  ))
+                )}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>
     );
-  };
-  
-  const renderBlockView = () => {
-    return !selectedTime ? (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        {prayerTypes.map((prayer) => {
-          const extremeTime = findExtremeTime(prayer as PrayerType, searchType, selectedRegion);
-          return (
-            <div 
-              key={prayer} 
-              className={`p-4 rounded-lg ${prayerColors[prayer]} shadow`}
-            >
-              <div className={`text-lg font-medium capitalize mb-2 ${prayerTextColors[prayer]}`}>{prayer}</div>
-              <div className="text-2xl font-bold mb-1">{extremeTime?.time}</div>
-              <div className="text-sm text-gray-600">{extremeTime?.masjid}</div>
-              <Badge className="mt-2 bg-teal-700">{searchType === 'earliest' ? 'Earliest' : 'Latest'}</Badge>
+  } else {
+    return (
+      <div className="bg-gray-50 p-6 rounded-lg">
+        <h3 className="text-xl font-bold mb-4 text-teal-700">
+          {selectedTime && activePrayer 
+            ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
+            : selectedSubRegion 
+              ? `Prayer Times in ${selectedSubRegion}, ${selectedRegion}`
+              : `Prayer Times in ${selectedRegion}`}
+        </h3>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredPrayerTimes.map((masjid, idx) => (
+            <div key={idx} className="p-4 bg-white rounded-lg shadow">
+              <div className="font-medium text-lg mb-2">{masjid.masjid}</div>
+              {activePrayer ? (
+                <div className="flex items-center">
+                  <div className="text-teal-700 font-medium capitalize mr-2">{activePrayer}:</div>
+                  <div className="text-lg font-bold">{masjid[activePrayer]}</div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-2">
+                  {prayerTypes.map((prayer) => (
+                    <div key={prayer} className="flex items-center">
+                      <div className={`${prayerTextColors[prayer]} font-medium capitalize mr-2`}>
+                        {prayer}:
+                      </div>
+                      <div className="font-bold">
+                        {masjid[prayer as keyof typeof masjid]}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          );
-        })}
-      </div>
-    ) : (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredPrayerTimes.map((masjid, idx) => (
-          <div key={idx} className="p-4 bg-white rounded-lg shadow">
-            <div className="font-medium text-lg mb-2">{masjid.masjid}</div>
-            <div className="flex items-center">
-              <div className="text-teal-700 font-medium capitalize mr-2">{activePrayer}:</div>
-              <div className="text-lg font-bold">{activePrayer ? masjid[activePrayer] : ''}</div>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     );
-  };
-  
-  return (
-    <div className="bg-gray-50 p-6 rounded-lg">
-      <h3 className="text-xl font-bold mb-4 text-teal-700">
-        {selectedTime && activePrayer 
-          ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
-          : selectedSubRegion 
-            ? `${searchType === 'earliest' ? 'Earliest' : 'Latest'} Prayer Times in ${selectedSubRegion}, ${selectedRegion}`
-            : `${searchType === 'earliest' ? 'Earliest' : 'Latest'} Prayer Times in ${selectedRegion}`}
-      </h3>
-      
-      {viewMode === 'table' ? renderTableView() : renderBlockView()}
-    </div>
-  );
+  }
 };
 
 export default PrayerTimesDisplay;
