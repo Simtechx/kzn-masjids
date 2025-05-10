@@ -19,15 +19,12 @@ const Index = () => {
       <main>
         <Hero />
         
-        {/* Audio Section */}
-        <MasjidAudio />
-
-        {/* Notices Section - Redesigned as image slider */}
-        <NoticesSection />
-        
         {/* Prayer Time Search - FindMasjidsHero is handled inside PrayerTimeSearch component now */}
         <PrayerTimeSearch />
 
+        {/* Notices Section - Redesigned as 3 blocks with scrolling images */}
+        <NoticesSection />
+        
         {/* Featured Masjids */}
         <section className="py-16 px-4">
           <div className="container mx-auto">
@@ -43,6 +40,9 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Audio Section - Moved below Featured Masjids */}
+        <MasjidAudio />
+        
         {/* Support New Masjids */}
         <SupportNewMasjids />
 

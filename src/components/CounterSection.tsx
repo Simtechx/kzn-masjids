@@ -99,7 +99,7 @@ const CounterSection = () => {
         className="absolute inset-0 bg-cover bg-center opacity-10 z-0"
         style={{ 
           backgroundImage: 'url("/lovable-uploads/3d6cd80a-4e05-4ded-ba80-fa70d25845ce.png")',
-          backgroundColor: 'rgba(0, 0, 0, 0.15)' // Adding a slight dark overlay
+          backgroundColor: 'rgba(0, 0, 0, 0.3)' // Making the overlay darker
         }}
       ></div>
       

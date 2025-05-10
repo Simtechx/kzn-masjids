@@ -9,13 +9,17 @@ const Footer = () => {
     <footer className="bg-islamic-dark-green text-white py-6 px-4">
       <div className="container mx-auto">        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <h3 className="text-lg font-semibold mb-3">KwaZulu-Natal Masjids & Musallahs</h3>
-            <p className="text-white/80 mb-3 text-sm">
-              Your comprehensive guide to masjids and musallahs across all regions of KwaZulu-Natal, South Africa.
-            </p>
-            <div className="flex space-x-4">
-              {/* Social media icons would go here */}
+          <div className="flex flex-col justify-between">
+            <div>
+              <h3 className="text-lg font-semibold mb-3">KwaZulu-Natal Masjids & Musallahs</h3>
+              <p className="text-white/80 mb-3 text-sm">
+                Your comprehensive guide to masjids and musallahs across all regions of KwaZulu-Natal, South Africa.
+              </p>
+            </div>
+            <div className="mt-4">
+              <Button className="bg-amber-500 hover:bg-amber-600 text-black py-1 px-3 rounded-md text-sm">
+                Contribute Information
+              </Button>
             </div>
           </div>
           
@@ -48,11 +52,6 @@ const Footer = () => {
                 <a href="tel:+27123456789" className="text-white/80 hover:text-white transition-colors">
                   +27 31 555 0123
                 </a>
-              </li>
-              <li className="mt-3">
-                <Button className="bg-amber-500 hover:bg-amber-600 text-black py-1 px-3 rounded-md text-sm">
-                  Contribute Information
-                </Button>
               </li>
             </ul>
           </div>
