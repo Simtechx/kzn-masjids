@@ -22,6 +22,21 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
   // Exclude maghrib as per requirements
   const prayerTypes: PrayerType[] = ['fajr', 'dhuhr', 'asr', 'isha'];
 
+  // Define prayer block colors - soft colors 
+  const prayerColors = {
+    fajr: 'bg-pink-50',
+    dhuhr: 'bg-amber-50',
+    asr: 'bg-emerald-50',
+    isha: 'bg-indigo-50',
+  };
+  
+  const prayerTextColors = {
+    fajr: 'text-pink-600',
+    dhuhr: 'text-amber-600',
+    asr: 'text-emerald-600',
+    isha: 'text-indigo-600',
+  };
+  
   // Find the earliest and latest times for each prayer type
   const earliestTimes = prayerTypes.reduce((acc, prayer) => {
     const extreme = findExtremeTime(prayer, 'earliest', selectedRegion);
@@ -69,11 +84,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
                       className={
                         activePrayer === prayer && masjid[prayer] === selectedTime
                           ? 'bg-teal-600 text-white font-bold' 
-                          : extremeType === 'earliest'
-                          ? 'bg-teal-100 font-bold'
-                          : extremeType === 'latest'
-                          ? 'bg-amber-100 font-bold'
-                          : ''
+                          : prayerColors[prayer]
                       }
                     >
                       {masjid[prayer]}
@@ -112,11 +123,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
                     className={`p-2 rounded text-center ${
                       activePrayer === prayer && masjid[prayer] === selectedTime 
                         ? 'bg-teal-600 text-white' 
-                        : extremeType === 'earliest'
-                        ? 'bg-teal-100'
-                        : extremeType === 'latest'
-                        ? 'bg-amber-100'
-                        : 'bg-gray-50'
+                        : prayerColors[prayer]
                     }`}
                   >
                     <div className="text-xs font-medium">{prayer.charAt(0).toUpperCase() + prayer.slice(1)}</div>

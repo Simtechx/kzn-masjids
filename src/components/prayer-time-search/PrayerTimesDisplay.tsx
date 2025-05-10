@@ -38,6 +38,22 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
   // Get prayer types excluding maghrib
   const prayerTypes: PrayerType[] = ['fajr', 'dhuhr', 'asr', 'isha'];
   
+  // Define prayer block colors
+  const prayerColors = {
+    fajr: 'bg-pink-50',
+    dhuhr: 'bg-amber-50',
+    asr: 'bg-emerald-50',
+    isha: 'bg-indigo-50',
+  };
+  
+  const prayerTextColors = {
+    fajr: 'text-pink-600',
+    dhuhr: 'text-amber-600',
+    asr: 'text-emerald-600',
+    isha: 'text-indigo-600',
+  };
+  
+  // This section is completely removed as per request
   const renderTableView = () => {
     return (
       <div className="overflow-x-auto">
@@ -54,11 +70,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
               prayerTypes.map((prayer) => {
                 const extremeTime = findExtremeTime(prayer as PrayerType, searchType, selectedRegion);
                 return (
-                  <TableRow key={prayer} className={
-                    searchType === 'earliest' ? 
-                      (prayer === 'fajr' ? 'bg-teal-50' : '') : 
-                      (prayer === 'isha' ? 'bg-teal-50' : '')
-                  }>
+                  <TableRow key={prayer}>
                     <TableCell className="font-medium capitalize">{prayer}</TableCell>
                     <TableCell>{extremeTime?.time}</TableCell>
                     <TableCell>{extremeTime?.masjid}</TableCell>
@@ -88,13 +100,9 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
           return (
             <div 
               key={prayer} 
-              className={`p-4 rounded-lg ${
-                searchType === 'earliest' ? 
-                  (prayer === 'fajr' ? 'bg-teal-100' : 'bg-white') : 
-                  (prayer === 'isha' ? 'bg-teal-100' : 'bg-white')
-              } shadow`}
+              className={`p-4 rounded-lg ${prayerColors[prayer]} shadow`}
             >
-              <div className="text-lg font-medium capitalize text-teal-700 mb-2">{prayer}</div>
+              <div className={`text-lg font-medium capitalize mb-2 ${prayerTextColors[prayer]}`}>{prayer}</div>
               <div className="text-2xl font-bold mb-1">{extremeTime?.time}</div>
               <div className="text-sm text-gray-600">{extremeTime?.masjid}</div>
               <Badge className="mt-2 bg-teal-700">{searchType === 'earliest' ? 'Earliest' : 'Latest'}</Badge>
