@@ -18,22 +18,26 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
 
   return (
     <div className="flex gap-2 mb-4">
-      {prayerTypes.map((prayer) => (
-        <div 
-          key={prayer}
-          className={`p-3 rounded cursor-pointer text-center flex-1 ${
-            activePrayer === prayer 
-              ? 'bg-islamic-green text-white' 
-              : 'bg-white hover:bg-gray-50'
-          }`}
-          onClick={() => onSelectPrayer(prayer)}
-        >
-          <div className="font-medium">
-            {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
+      {prayerTypes.map((prayer) => {
+        const earliestTime = findExtremeTime(prayer, 'earliest', selectedRegion)?.time;
+        
+        return (
+          <div 
+            key={prayer}
+            className={`p-3 rounded cursor-pointer text-center flex-1 ${
+              activePrayer === prayer 
+                ? 'bg-teal-600 text-white' 
+                : 'bg-white hover:bg-gray-50'
+            }`}
+            onClick={() => onSelectPrayer(prayer)}
+          >
+            <div className="font-medium">
+              {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
+            </div>
+            <div className="text-xs mt-1">{earliestTime}</div>
           </div>
-          <div className="text-xs mt-1">{findExtremeTime(prayer, 'earliest', selectedRegion)?.time}</div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

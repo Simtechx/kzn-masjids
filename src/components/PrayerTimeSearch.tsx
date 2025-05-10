@@ -78,7 +78,7 @@ const PrayerTimeSearch = () => {
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h2 className="text-3xl font-bold text-islamic-green">Prayer Time Search</h2>
+            <h2 className="text-3xl font-bold text-teal-600">Prayer Time Search</h2>
             <p className="text-gray-600 mt-2">
               {selectedSubRegion && selectedRegion 
                 ? `Find prayer times for masjids in ${selectedSubRegion}, ${selectedRegion}`
@@ -89,11 +89,11 @@ const PrayerTimeSearch = () => {
           </div>
           
           <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value as 'block' | 'table')}>
-            <ToggleGroupItem value="block" aria-label="Block View" className={viewMode === 'block' ? 'bg-islamic-green text-white' : ''}>
+            <ToggleGroupItem value="block" aria-label="Block View" className={viewMode === 'block' ? 'bg-teal-600 text-white' : ''}>
               <Blocks className="h-5 w-5" />
               <span className="ml-2">Block</span>
             </ToggleGroupItem>
-            <ToggleGroupItem value="table" aria-label="Table View" className={viewMode === 'table' ? 'bg-islamic-green text-white' : ''}>
+            <ToggleGroupItem value="table" aria-label="Table View" className={viewMode === 'table' ? 'bg-teal-600 text-white' : ''}>
               <Table className="h-5 w-5" />
               <span className="ml-2">Table</span>
             </ToggleGroupItem>
@@ -101,13 +101,13 @@ const PrayerTimeSearch = () => {
         </div>
         
         <div className="flex flex-col space-y-6">
-          {/* Region Selection - now with styled cards */}
+          {/* Region Selection */}
           <RegionSelector 
             selectedRegion={selectedRegion}
             onSelectRegion={handleRegionSelection}
           />
           
-          {/* Sub-region Selection - now with styled blocks */}
+          {/* Sub-region Selection */}
           {selectedRegion && (
             <SubRegionSelector
               selectedRegion={selectedRegion}
@@ -140,7 +140,7 @@ const PrayerTimeSearch = () => {
                 />
               )}
               
-              {/* Search Bar */}
+              {/* Search Type Toggle (Earliest/Latest) */}
               <SearchBar
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}

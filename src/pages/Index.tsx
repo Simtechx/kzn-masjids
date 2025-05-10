@@ -30,7 +30,7 @@ const Index = () => {
         {/* Featured Masjids */}
         <section className="py-16 px-4">
           <div className="container mx-auto">
-            <h2 className="text-center text-3xl font-bold mb-2 text-islamic-green">Featured Masjids</h2>
+            <h2 className="text-center text-3xl font-bold mb-2 text-teal-600">Featured Masjids</h2>
             <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
               Discover some of the most prominent and historic masjids across KwaZulu-Natal.
             </p>
@@ -50,14 +50,14 @@ const Index = () => {
 
         {/* Call to Action */}
         <section className="py-16 px-4 bg-islamic-pattern">
-          <div className="bg-islamic-dark-green/90 py-16">
+          <div className="bg-teal-800/90 py-16">
             <div className="container mx-auto text-center">
               <h2 className="text-3xl font-bold mb-4 text-white">Want to add a masjid or update information?</h2>
               <p className="text-white/90 mb-8 max-w-xl mx-auto">
                 Help us make this directory more comprehensive by contributing information 
                 about masjids or musallahs in your area.
               </p>
-              <button className="bg-islamic-gold hover:bg-islamic-gold/90 text-black font-medium py-3 px-8 rounded-md text-lg">
+              <button className="bg-amber-500 hover:bg-amber-600 text-black font-medium py-3 px-8 rounded-md text-lg">
                 Contribute Information
               </button>
             </div>

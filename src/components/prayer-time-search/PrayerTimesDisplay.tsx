@@ -43,7 +43,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className="bg-islamic-green text-white">
+            <TableRow className="bg-gray-700 text-white">
               <TableHead className="font-bold">Prayer</TableHead>
               <TableHead className="font-bold">Time</TableHead>
               <TableHead className="font-bold">Masjid</TableHead>
@@ -56,8 +56,8 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
                 return (
                   <TableRow key={prayer} className={
                     searchType === 'earliest' ? 
-                      (prayer === 'fajr' ? 'bg-blue-50' : '') : 
-                      (prayer === 'isha' ? 'bg-blue-50' : '')
+                      (prayer === 'fajr' ? 'bg-teal-50' : '') : 
+                      (prayer === 'isha' ? 'bg-teal-50' : '')
                   }>
                     <TableCell className="font-medium capitalize">{prayer}</TableCell>
                     <TableCell>{extremeTime?.time}</TableCell>
@@ -90,14 +90,14 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
               key={prayer} 
               className={`p-4 rounded-lg ${
                 searchType === 'earliest' ? 
-                  (prayer === 'fajr' ? 'bg-blue-100' : 'bg-white') : 
-                  (prayer === 'isha' ? 'bg-blue-100' : 'bg-white')
+                  (prayer === 'fajr' ? 'bg-teal-100' : 'bg-white') : 
+                  (prayer === 'isha' ? 'bg-teal-100' : 'bg-white')
               } shadow`}
             >
-              <div className="text-lg font-medium capitalize text-islamic-green mb-2">{prayer}</div>
+              <div className="text-lg font-medium capitalize text-teal-600 mb-2">{prayer}</div>
               <div className="text-2xl font-bold mb-1">{extremeTime?.time}</div>
               <div className="text-sm text-gray-600">{extremeTime?.masjid}</div>
-              <Badge className="mt-2 bg-islamic-green">{searchType === 'earliest' ? 'Earliest' : 'Latest'}</Badge>
+              <Badge className="mt-2 bg-teal-600">{searchType === 'earliest' ? 'Earliest' : 'Latest'}</Badge>
             </div>
           );
         })}
@@ -108,7 +108,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
           <div key={idx} className="p-4 bg-white rounded-lg shadow">
             <div className="font-medium text-lg mb-2">{masjid.masjid}</div>
             <div className="flex items-center">
-              <div className="text-islamic-green font-medium capitalize mr-2">{activePrayer}:</div>
+              <div className="text-teal-600 font-medium capitalize mr-2">{activePrayer}:</div>
               <div className="text-lg font-bold">{activePrayer ? masjid[activePrayer] : ''}</div>
             </div>
           </div>
@@ -119,7 +119,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
   
   return (
     <div className="bg-gray-50 p-6 rounded-lg">
-      <h3 className="text-xl font-bold mb-4 text-islamic-green">
+      <h3 className="text-xl font-bold mb-4 text-teal-600">
         {selectedTime && activePrayer 
           ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
           : selectedSubRegion 

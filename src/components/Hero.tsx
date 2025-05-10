@@ -7,12 +7,12 @@ import { Button } from '@/components/ui/button';
 const Hero = () => {
   return (
     <div className="relative bg-islamic-pattern py-16 md:py-24">
-      <div className="absolute inset-0 bg-gradient-to-r from-islamic-green/90 to-islamic-blue/90"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-teal-600/90 to-teal-700/90"></div>
       <div className="container mx-auto relative z-10 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-white mb-4 text-4xl md:text-5xl font-bold">Find Masjids & Musallahs in KwaZulu-Natal</h1>
           <p className="text-white/90 text-lg md:text-xl mb-8">
-            Discover prayer spaces across KZN's 5 regions - Northern Natal, South Coast, Durban, Midlands, North Coast and Transkei.
+            Discover prayer spaces across KZN's 5 regions - Northern Natal, South Coast, Durban, Midlands, North Coast.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
             <div className="relative flex-grow">
@@ -22,7 +22,7 @@ const Hero = () => {
               />
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
             </div>
-            <Button className="h-12 px-6 bg-islamic-gold hover:bg-islamic-gold/90 text-black">Search</Button>
+            <Button className="h-12 px-6 bg-amber-500 hover:bg-amber-600 text-black">Search</Button>
           </div>
         </div>
       </div>

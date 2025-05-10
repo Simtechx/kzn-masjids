@@ -32,8 +32,8 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
             <div 
               key={index}
               className={`p-2 rounded text-center cursor-pointer 
-                ${selectedTime === time ? 'bg-islamic-green text-white' : 
-                  isEarliest ? 'bg-blue-100' : 
+                ${selectedTime === time ? 'bg-teal-600 text-white' : 
+                  isEarliest ? 'bg-teal-100' : 
                   isLatest ? 'bg-amber-100' : 'bg-white hover:bg-gray-50'}`}
               onClick={() => onSelectTime(time)}
             >
