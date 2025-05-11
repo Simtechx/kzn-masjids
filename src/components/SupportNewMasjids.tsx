@@ -49,7 +49,7 @@ const NewMasjidProject: React.FC<NewMasjidProjectProps> = ({
         </div>
         
         <div className="absolute top-3 left-3">
-          <span className="px-3 py-1 bg-amber-700 text-white rounded-full text-sm font-medium shadow-md">
+          <span className="px-3 py-1 bg-gray-800 text-white rounded-full text-sm font-medium shadow-md">
             {completionPercentage}% Complete
           </span>
         </div>
@@ -95,6 +95,18 @@ const SupportNewMasjids: React.FC = () => {
       location: "Chatsworth",
       image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&q=80",
       completionPercentage: 55
+    },
+    {
+      name: "Masjid Al-Taqwa",
+      location: "Westville",
+      image: "https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&q=80",
+      completionPercentage: 70
+    },
+    {
+      name: "Central Mosque",
+      location: "Durban CBD",
+      image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&q=80",
+      completionPercentage: 45
     }
   ];
 
@@ -140,7 +152,7 @@ const SupportNewMasjids: React.FC = () => {
           }
         }
         startAutoScroll(); // Recursively call to create a loop
-      }, 4000); // Scroll every 4 seconds (changed from 5000 to 4000)
+      }, 4000); // Scroll every 4 seconds (same as notices)
     };
     
     startAutoScroll();

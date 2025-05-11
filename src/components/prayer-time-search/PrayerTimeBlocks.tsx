@@ -45,21 +45,21 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
 
   return (
     <div className="w-full overflow-x-auto pb-2">
-      <div className={`flex ${isMobile ? 'flex-row' : 'flex-wrap'} gap-2 mb-4 ${isMobile ? 'min-w-max' : ''}`}>
+      <div className="flex flex-row gap-2 mb-4 min-w-max">
         {prayerTypes.map((prayer) => {
           const isActive = activePrayer === prayer;
           
           return (
             <div 
               key={prayer}
-              className={`p-3 rounded cursor-pointer text-center shadow-sm ${isMobile ? 'min-w-[100px]' : 'flex-1'} ${
+              className={`p-2 rounded cursor-pointer text-center shadow-sm ${isMobile ? 'min-w-[80px]' : 'min-w-[100px] p-3'} ${
                 isActive 
                   ? activeColors[prayer] 
                   : `${prayerColors[prayer]}`
               }`}
               onClick={() => onSelectPrayer(prayer)}
             >
-              <div className={`font-medium ${!isActive ? prayerTextColors[prayer] : ''}`}>
+              <div className={`font-medium ${!isActive ? prayerTextColors[prayer] : ''} ${isMobile ? 'text-sm' : ''}`}>
                 {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
               </div>
             </div>

@@ -3,6 +3,7 @@ import React from 'react';
 import { prayerTimesData, subRegionsData } from '@/utils/prayerTimeUtils';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { ArrowRight } from 'lucide-react';
 
 interface RegionTableProps {
   selectedRegion: string | null;
@@ -29,7 +30,7 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
   });
 
   return (
-    <div className="overflow-x-auto border rounded-lg">
+    <div className="overflow-x-auto rounded-lg shadow-md border">
       <Table>
         <TableHeader className="bg-[#1A1F2C]">
           <TableRow>
@@ -45,21 +46,28 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
           {regionCounts.map((regionData) => (
             <TableRow 
               key={regionData.name} 
-              className={selectedRegion === regionData.name ? "bg-[#FEF7CD]" : ""}
+              className={`
+                hover:bg-gray-50 cursor-pointer transition-colors
+                ${selectedRegion === regionData.name ? "bg-[#FEF7CD]" : ""}
+              `}
               onClick={() => onSelectRegion(regionData.name)}
             >
               <TableCell className="font-medium">{regionData.name}</TableCell>
               <TableCell className="text-center">{regionData.subRegions}</TableCell>
               <TableCell className="text-center">{regionData.masjids}</TableCell>
               <TableCell className="text-center">{regionData.musallas}</TableCell>
-              <TableCell className="text-center">{regionData.total}</TableCell>
+              <TableCell className="text-center font-medium">{regionData.total}</TableCell>
               <TableCell className="text-right">
                 <Button 
                   variant="link" 
-                  className="text-teal-700 hover:text-teal-900"
-                  onClick={() => onSelectRegion(regionData.name)}
+                  className="text-teal-700 hover:text-teal-900 font-medium gap-0.5"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelectRegion(regionData.name);
+                  }}
                 >
                   Explore
+                  <ArrowRight className="h-4 w-4" />
                 </Button>
               </TableCell>
             </TableRow>
