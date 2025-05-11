@@ -79,7 +79,7 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
     );
   }
 
-  // Desktop view with enhanced table
+  // Desktop view with enhanced table and consistent styling with image references
   return (
     <div className="overflow-hidden rounded-lg shadow-md border">
       <Table>

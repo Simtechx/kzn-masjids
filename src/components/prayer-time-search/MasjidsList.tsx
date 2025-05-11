@@ -61,6 +61,44 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
   };
 
   const renderTableView = () => {
+    if (isMobile) {
+      // Mobile optimized table view
+      return (
+        <div className="space-y-4 overflow-x-hidden">
+          {filteredPrayerTimes.map((masjid, index) => (
+            <div key={index} className="bg-white p-4 rounded-md shadow border border-gray-100">
+              <h3 className="font-semibold text-lg mb-2 text-teal-700">{masjid.masjid}</h3>
+              
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                {prayerTypes.map((prayer) => {
+                  const extremeType = isExtremeTime(prayer, masjid[prayer]);
+                  return (
+                    <div 
+                      key={prayer} 
+                      className={`p-2 rounded text-center ${
+                        activePrayer === prayer && masjid[prayer] === selectedTime 
+                          ? 'bg-teal-600 text-white' 
+                          : prayerColors[prayer]
+                      }`}
+                    >
+                      <div className="text-xs font-medium capitalize">{prayer}</div>
+                      <div className="text-base font-medium">{masjid[prayer]}</div>
+                      {extremeType && (
+                        <div className="text-xs mt-1 bg-gray-800 text-white px-1.5 py-0.5 rounded-full mx-auto inline-block">
+                          {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // Desktop table view
     return (
       <div className="overflow-x-auto">
         <div className="rounded-lg shadow-lg border border-gray-200">
@@ -126,7 +164,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
           <div key={index} className="bg-white p-4 rounded-md shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <h4 className="font-semibold text-lg mb-2 text-teal-700">{masjid.masjid}</h4>
             <p className="text-gray-600 text-sm mb-3">123 Example St, {selectedRegion}</p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1">
+            <div className="grid grid-cols-2 gap-1">
               {prayerTypes.map((prayer) => {
                 const extremeType = isExtremeTime(prayer, masjid[prayer]);
                 return (

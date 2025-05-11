@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Table, Blocks } from 'lucide-react';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Table, LayoutGrid } from 'lucide-react';
 import { SearchType } from '@/utils/prayerTimeUtils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SearchBarProps {
   searchType: SearchType;
@@ -14,29 +15,44 @@ const SearchBar: React.FC<SearchBarProps> = ({
   searchType,
   setSearchType,
 }) => {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
-      <div>
-        <h3 className="text-xl font-semibold text-gray-700 mb-2">Salaah Time View</h3>
-        <p className="text-sm text-gray-600">Select how you want to view salaah times</p>
-      </div>
-      <div className="flex gap-2">
-        <Button 
-          variant={searchType === 'earliest' ? "default" : "outline"}
-          className={searchType === 'earliest' ? "bg-yellow-400 text-black hover:bg-yellow-500" : ""}
-          onClick={() => setSearchType('earliest')}
-        >
-          <Table className="mr-2 h-4 w-4" />
-          Table View
-        </Button>
-        <Button 
-          variant={searchType === 'latest' ? "default" : "outline"}
-          className={searchType === 'latest' ? "bg-yellow-400 text-black hover:bg-yellow-500" : ""}
-          onClick={() => setSearchType('latest')}
-        >
-          <Blocks className="mr-2 h-4 w-4" />
-          Block View
-        </Button>
+    <div className="bg-[#072C24] text-white rounded-lg p-4 mb-6">
+      <div className="flex flex-col md:flex-row justify-between gap-4">
+        <div>
+          <h3 className="text-xl font-semibold text-white mb-2">Salaah Time View</h3>
+          <p className="text-sm text-gray-200">Select how you want to view salaah times</p>
+        </div>
+        <div className="flex items-center justify-center md:justify-end">
+          <ToggleGroup 
+            type="single" 
+            value={searchType === 'earliest' ? 'table' : 'block'} 
+            onValueChange={(value) => {
+              if (value) {
+                setSearchType(value === 'table' ? 'earliest' : 'latest')
+              }
+            }}
+            className="bg-white shadow-sm rounded-md flex-nowrap min-w-max"
+          >
+            <ToggleGroupItem 
+              value="table" 
+              aria-label="Table View" 
+              className="px-4 text-black data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black font-medium data-[state=off]:!text-gray-700"
+            >
+              <Table className="h-5 w-5 mr-2" />
+              <span>Table View</span>
+            </ToggleGroupItem>
+            <ToggleGroupItem 
+              value="block" 
+              aria-label="Block View" 
+              className="px-4 text-black data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black font-medium data-[state=off]:!text-gray-700"
+            >
+              <LayoutGrid className="h-5 w-5 mr-2" />
+              <span>Block View</span>
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
       </div>
     </div>
   );

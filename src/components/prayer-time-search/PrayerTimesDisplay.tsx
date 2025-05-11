@@ -77,28 +77,23 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
         </h3>
         
         {isMobile ? (
-          // Mobile specific table layout with stacking
+          // Mobile specific table layout - simplified with only essential columns
           <div className="space-y-4 p-4">
             {filteredPrayerTimes.map((masjid, idx) => (
               <div key={idx} className="bg-white rounded-lg border shadow-sm p-4">
-                <h4 className="font-semibold text-lg mb-1">{masjid.masjid}</h4>
-                <p className="text-gray-600 text-sm mb-3">{masjid.address || `123 Example St, ${selectedRegion}`}</p>
-                <div className="grid grid-cols-2 gap-2 mb-3">
+                <h4 className="font-semibold text-lg mb-3">{masjid.masjid}</h4>
+                <div className="grid grid-cols-2 gap-2">
                   {prayerTypes.map((prayer) => (
-                    <div key={prayer} className={`flex items-center justify-between p-2 rounded ${prayerColors[prayer]}`}>
-                      <div className={`${prayerTextColors[prayer]} font-medium capitalize`}>
-                        {prayer}:
+                    <div key={prayer} className={`flex flex-col justify-center items-center p-2 rounded ${prayerColors[prayer]}`}>
+                      <div className={`${prayerTextColors[prayer]} font-medium text-sm capitalize`}>
+                        {prayer}
                       </div>
-                      <div className="font-bold">
+                      <div className="font-bold text-center">
                         {masjid[prayer]}
                       </div>
                     </div>
                   ))}
                 </div>
-                <Button variant="default" size="sm" className="w-full bg-teal-600 hover:bg-teal-700">
-                  <MapPin className="mr-1 h-4 w-4" />
-                  Directions
-                </Button>
               </div>
             ))}
           </div>
@@ -160,11 +155,11 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
               <div className="text-sm text-gray-600 mb-3">{masjid.address || `123 Example St, ${selectedRegion}`}</div>
               <div className="grid grid-cols-2 gap-2 mb-3">
                 {prayerTypes.map((prayer) => (
-                  <div key={prayer} className={`flex items-center justify-between p-2 rounded ${prayerColors[prayer]}`}>
-                    <div className={`${prayerTextColors[prayer]} font-medium capitalize`}>
-                      {prayer}:
+                  <div key={prayer} className={`flex flex-col items-center justify-center p-2 rounded ${prayerColors[prayer]}`}>
+                    <div className={`${prayerTextColors[prayer]} font-medium capitalize text-sm`}>
+                      {prayer}
                     </div>
-                    <div className="font-bold">
+                    <div className="font-bold text-center">
                       {masjid[prayer]}
                     </div>
                     {getLatestBadge(prayer)}

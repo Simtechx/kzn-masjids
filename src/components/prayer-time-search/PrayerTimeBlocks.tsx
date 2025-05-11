@@ -43,9 +43,12 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
     isha: 'bg-indigo-600 text-white',
   };
 
+  // For mobile, use a 2x2 grid layout
+  const gridCols = isMobile ? "grid-cols-2" : "grid-cols-4";
+
   return (
     <div className="w-full">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+      <div className={`grid ${gridCols} gap-3 mb-4`}>
         {prayerTypes.map((prayer) => {
           const isActive = activePrayer === prayer;
           

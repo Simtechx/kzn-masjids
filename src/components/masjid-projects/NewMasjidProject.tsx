@@ -47,7 +47,7 @@ const NewMasjidProject: React.FC<NewMasjidProjectProps> = ({
         </div>
         
         <div className="absolute top-3 left-3">
-          <span className="px-3 py-1 bg-[#072C24] text-white rounded-full text-sm font-medium shadow-md">
+          <span className="px-3 py-1 bg-[#094941] text-white rounded-full text-sm font-medium shadow-md">
             {completionPercentage}% Complete
           </span>
         </div>

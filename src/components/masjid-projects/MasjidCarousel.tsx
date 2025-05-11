@@ -30,16 +30,16 @@ const MasjidCarousel: React.FC<MasjidCarouselProps> = ({ projects }) => {
       
       intervalRef.current = setTimeout(() => {
         if (!isPaused && carouselRef.current) {
-          const emblaApi = (carouselRef.current as any).__emblaApi;
+          const emblaApi = (carouselRef.current as any)?.__emblaApi;
           if (emblaApi) {
             emblaApi.scrollNext();
-            handleCarouselChange(emblaApi);
           }
         }
         startAutoScroll(); // Recursively call to create a loop
-      }, 1000); // Slide every 1 second as requested
+      }, 1000); // Slide every 1 second
     };
     
+    // Start auto-scrolling
     startAutoScroll();
     
     return () => {
@@ -47,12 +47,15 @@ const MasjidCarousel: React.FC<MasjidCarouselProps> = ({ projects }) => {
         clearTimeout(intervalRef.current);
       }
     };
-  }, [isPaused]);
+  }, [isPaused, projects.length]);
   
   return (
-    <div className="relative max-w-5xl mx-auto"
+    <div 
+      className="relative max-w-5xl mx-auto"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={() => setIsPaused(true)}
+      onTouchEnd={() => setIsPaused(false)}
     >
       <Carousel
         ref={carouselRef}
@@ -60,17 +63,16 @@ const MasjidCarousel: React.FC<MasjidCarouselProps> = ({ projects }) => {
         opts={{
           align: "center",
           loop: true,
-          dragFree: true,
         }}
-        setApi={(api) => {
-          api?.on("select", () => handleCarouselChange(api));
+        onSelect={(api) => {
+          handleCarouselChange(api);
         }}
       >
-        <CarouselContent className="transition-all duration-700 ease-in-out">
+        <CarouselContent className="transition-all duration-500 ease-in-out">
           {projects.map((project, index) => (
             <CarouselItem 
               key={index} 
-              className="pl-4 basis-full md:basis-full lg:basis-full transition-all duration-300"
+              className="md:pl-4 basis-full"
             >
               <NewMasjidProject
                 name={project.name}
