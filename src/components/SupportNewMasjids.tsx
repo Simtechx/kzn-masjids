@@ -83,8 +83,11 @@ const SupportNewMasjids: React.FC = () => {
                       <span className="text-sm text-gray-600">Project Progress</span>
                       <span className="font-medium text-gray-700">{project.completionPercentage}%</span>
                     </div>
-                    <Progress value={project.completionPercentage} className="h-2 mb-6 bg-gray-200" 
-                              indicatorClassName="bg-amber-500" />
+                    <Progress 
+                      value={project.completionPercentage} 
+                      className="h-2 mb-6 bg-gray-200" 
+                      indicatorClassName="bg-amber-500" 
+                    />
                     <p className="mb-4 text-gray-700">{project.description || 'Help us complete this important project for the community.'}</p>
                     <div className="mt-6">
                       {/* Yellow Contribute Button */}
