@@ -19,43 +19,40 @@ const NewMasjidProject: React.FC<NewMasjidProjectProps> = ({
   name, 
   location, 
   image, 
-  description,
   completionPercentage 
 }) => {
   return (
     <Card className="h-[420px] rounded-xl overflow-hidden border-2 border-amber-500 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] flex flex-col">
-      <div className="relative h-[180px] overflow-hidden">
+      <div className="relative h-full overflow-hidden">
         <img 
           src={image} 
           alt={name} 
           className="w-full h-full object-cover"
         />
-        <div className="absolute top-3 left-3">
-          <span className="px-3 py-1 bg-amber-500 text-white rounded-full text-sm font-medium">
-            {completionPercentage}% Complete
-          </span>
-        </div>
-      </div>
-      <div className="p-5 flex flex-col flex-grow">
-        <h3 className="text-xl font-bold mb-1 text-gray-900">{name}</h3>
-        <p className="text-gray-500 dark:text-gray-400 mb-4 text-sm">{location}</p>
-        <p className="text-gray-600 dark:text-gray-300 text-sm mb-6 line-clamp-3">{description}</p>
-        
-        <div className="mt-auto">
-          <div className="mb-2">
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-5">
+          <h3 className="text-xl font-bold mb-1 text-white">{name}</h3>
+          <p className="text-gray-200 mb-4 text-sm">{location}</p>
+          
+          <div className="mb-4">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-gray-700">Project Progress</span>
-              <span className="text-sm font-medium text-amber-600">{completionPercentage}%</span>
+              <span className="text-sm font-medium text-white">Project Progress</span>
+              <span className="text-sm font-medium text-amber-300">{completionPercentage}%</span>
             </div>
-            <Progress value={completionPercentage} className="h-2 bg-gray-200" />
+            <Progress value={completionPercentage} className="h-2 bg-gray-600/50" />
           </div>
           
           <Button 
-            className="w-full mt-4 bg-amber-500 hover:bg-amber-600 text-black font-semibold"
+            className="w-full mt-2 bg-amber-500 hover:bg-amber-600 text-black font-semibold"
           >
             <DollarSign className="h-5 w-5 p-0.5 rounded-full border border-current" />
             Contribute
           </Button>
+        </div>
+        
+        <div className="absolute top-3 left-3">
+          <span className="px-3 py-1 bg-amber-500 text-white rounded-full text-sm font-medium">
+            {completionPercentage}% Complete
+          </span>
         </div>
       </div>
     </Card>
@@ -65,7 +62,7 @@ const NewMasjidProject: React.FC<NewMasjidProjectProps> = ({
 const SupportNewMasjids: React.FC = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const isMobile = useIsMobile();
   
@@ -137,10 +134,10 @@ const SupportNewMasjids: React.FC = () => {
   useEffect(() => {
     const startAutoScroll = () => {
       if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+        clearTimeout(intervalRef.current);
       }
       
-      intervalRef.current = window.setInterval(() => {
+      intervalRef.current = setTimeout(() => {
         if (!isPaused && carouselRef.current) {
           const emblaApi = (carouselRef.current as any).__emblaApi;
           if (emblaApi) {
@@ -148,6 +145,7 @@ const SupportNewMasjids: React.FC = () => {
             handleCarouselChange(emblaApi);
           }
         }
+        startAutoScroll(); // Recursively call to create a loop
       }, 5000); // Scroll every 5 seconds
     };
     
@@ -155,7 +153,7 @@ const SupportNewMasjids: React.FC = () => {
     
     return () => {
       if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+        clearTimeout(intervalRef.current);
       }
     };
   }, [isPaused]);
@@ -189,7 +187,7 @@ const SupportNewMasjids: React.FC = () => {
               {newProjects.map((project, index) => (
                 <CarouselItem 
                   key={index} 
-                  className={`pl-4 ${isMobile ? 'basis-full' : 'basis-1/2 lg:basis-1/3'} transition-all duration-300`}
+                  className="pl-4 basis-full md:basis-3/4 lg:basis-3/5 transition-all duration-300"
                 >
                   <NewMasjidProject
                     name={project.name}
