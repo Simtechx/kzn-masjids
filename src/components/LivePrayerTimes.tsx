@@ -14,6 +14,7 @@ const LivePrayerTimes = () => {
   } = usePrayerTimes();
 
   console.log('Upcoming Prayer:', upcomingPrayer); // Debug log to check upcoming prayer data
+  console.log('Today Prayer Times:', todayPrayerTimes); // Additional debug log
 
   return (
     <div className="bg-white text-black">

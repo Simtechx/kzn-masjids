@@ -29,20 +29,20 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
   
   // Function to determine background and text color based on prayer name
   const getPrayerColors = (prayerName: string, isUpcoming: boolean) => {
-    // If this is the upcoming prayer, use dark background with white text
+    // If this is the upcoming prayer, use darker shade of same color with white text
     if (isUpcoming) {
       if (prayerName === 'Fajr') {
-        return { bgColor: 'bg-pink-700', textColor: 'text-white' };
+        return { bgColor: 'bg-pink-600', textColor: 'text-white' };
       } else if (prayerName === 'Dhuhr') {
-        return { bgColor: 'bg-amber-700', textColor: 'text-white' };
+        return { bgColor: 'bg-amber-600', textColor: 'text-white' };
       } else if (prayerName === 'Asr (S)') {
-        return { bgColor: 'bg-green-700', textColor: 'text-white' };
+        return { bgColor: 'bg-green-600', textColor: 'text-white' };
       } else if (prayerName === 'Asr (H)') {
-        return { bgColor: 'bg-teal-700', textColor: 'text-white' };
+        return { bgColor: 'bg-teal-600', textColor: 'text-white' };
       } else if (prayerName === 'Maghrib') {
-        return { bgColor: 'bg-red-700', textColor: 'text-white' };
+        return { bgColor: 'bg-red-600', textColor: 'text-white' };
       } else if (prayerName === 'Isha') {
-        return { bgColor: 'bg-indigo-700', textColor: 'text-white' };
+        return { bgColor: 'bg-indigo-600', textColor: 'text-white' };
       }
     }
     
@@ -66,7 +66,7 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
 
   return (
     <div className="bg-white p-6 rounded-lg">
-      <h2 className="text-xl font-medium text-gray-800 mb-4">Today's Salaah Times</h2>
+      <h2 className="text-xl font-medium text-gray-800 mb-4 text-center">Today's Salaah Times</h2>
       
       <div className="grid grid-cols-2 gap-4">
         {reorderedPrayers.map((prayer, index) => {
@@ -78,13 +78,13 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
             <div key={index} className={`${bgColor} rounded-lg p-4 relative overflow-hidden`}>
               {isUpcoming && (
                 <div className="absolute top-0 right-0">
-                  <div className="bg-yellow-600 text-white text-xs px-2 py-1 rounded-bl-md font-semibold">
+                  <div className="bg-yellow-500 text-white text-xs px-2 py-1 rounded-bl-md font-semibold">
                     UPCOMING
                   </div>
                 </div>
               )}
-              <div className={textColor}>{prayer.name}</div>
-              <div className={`text-2xl font-semibold ${textColor}`}>{prayer.time}</div>
+              <div className={`${textColor} text-center`}>{prayer.name}</div>
+              <div className={`text-2xl font-semibold ${textColor} text-center`}>{prayer.time}</div>
             </div>
           );
         })}

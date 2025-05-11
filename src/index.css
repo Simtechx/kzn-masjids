@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -219,7 +220,7 @@
   }
 
   .embla__dot--selected {
-    @apply bg-gray-700; /* Dark gray for selected dot */
+    @apply bg-yellow-500; /* Changed to yellow for selected dot */
   }
 
   /* Progress bar styles */

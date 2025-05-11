@@ -33,9 +33,9 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
           bgNormal: 'bg-pink-100',
           textNormal: 'text-pink-700',
           bgSelected: 'bg-yellow-500',
-          textSelected: 'text-white',
-          bgEarliest: 'bg-gray-100',
-          textEarliest: 'text-gray-700',
+          textSelected: 'text-black',
+          bgEarliest: 'bg-pink-50',
+          textEarliest: 'text-pink-800',
           bgLatest: 'bg-pink-700',
           textLatest: 'text-white'
         };
@@ -44,9 +44,9 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
           bgNormal: 'bg-amber-100',
           textNormal: 'text-amber-700',
           bgSelected: 'bg-yellow-500',
-          textSelected: 'text-white',
-          bgEarliest: 'bg-gray-100',
-          textEarliest: 'text-gray-700',
+          textSelected: 'text-black',
+          bgEarliest: 'bg-amber-50',
+          textEarliest: 'text-amber-800',
           bgLatest: 'bg-amber-700',
           textLatest: 'text-white'
         };
@@ -55,9 +55,9 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
           bgNormal: 'bg-teal-100',
           textNormal: 'text-teal-700',
           bgSelected: 'bg-yellow-500',
-          textSelected: 'text-white',
-          bgEarliest: 'bg-gray-100',
-          textEarliest: 'text-gray-700',
+          textSelected: 'text-black',
+          bgEarliest: 'bg-teal-50',
+          textEarliest: 'text-teal-800',
           bgLatest: 'bg-teal-700',
           textLatest: 'text-white'
         };
@@ -66,9 +66,9 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
           bgNormal: 'bg-indigo-100',
           textNormal: 'text-indigo-700',
           bgSelected: 'bg-yellow-500',
-          textSelected: 'text-white',
-          bgEarliest: 'bg-gray-100',
-          textEarliest: 'text-gray-700',
+          textSelected: 'text-black',
+          bgEarliest: 'bg-indigo-50',
+          textEarliest: 'text-indigo-800',
           bgLatest: 'bg-indigo-700',
           textLatest: 'text-white'
         };
@@ -77,9 +77,9 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
           bgNormal: 'bg-gray-100',
           textNormal: 'text-gray-700',
           bgSelected: 'bg-yellow-500',
-          textSelected: 'text-white',
-          bgEarliest: 'bg-gray-100',
-          textEarliest: 'text-gray-700',
+          textSelected: 'text-black',
+          bgEarliest: 'bg-gray-50',
+          textEarliest: 'text-gray-800',
           bgLatest: 'bg-gray-700',
           textLatest: 'text-white'
         };
@@ -91,12 +91,12 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
   const getTimeClass = (time: string) => {
     let baseClass = 'p-2 rounded text-center cursor-pointer relative';
     
-    // Selected time - dark yellow background with white text
+    // Selected time - yellow background with black text
     if (time === selectedTime) {
-      return `${baseClass} bg-yellow-500 text-white`;
+      return `${baseClass} bg-yellow-500 text-black`;
     }
     
-    // Earliest time - light gray with dark text
+    // Earliest time - lightest shade of prayer color with dark text
     if (earliestTime && time === earliestTime.time) {
       return `${baseClass} ${colors.bgEarliest} ${colors.textEarliest}`;
     }
@@ -123,17 +123,17 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
             {time}
             {/* Add EARLIEST badge for earliest time */}
             {earliestTime && time === earliestTime.time && (
-              <div className="mt-1 text-xs font-semibold">EARLIEST</div>
+              <div className={`mt-1 text-xs font-semibold ${colors.textEarliest}`}>EARLIEST</div>
             )}
             
             {/* Add LATEST badge for latest time */}
             {latestTime && time === latestTime.time && (
-              <div className="mt-1 text-xs font-semibold">LATEST</div>
+              <div className="mt-1 text-xs font-semibold text-white">LATEST</div>
             )}
             
             {/* Add SELECTED badge for selected time */}
             {time === selectedTime && (
-              <div className="mt-1 text-xs font-semibold text-white">SELECTED</div>
+              <div className="mt-1 text-xs font-semibold text-black">SELECTED</div>
             )}
           </div>
         ))}

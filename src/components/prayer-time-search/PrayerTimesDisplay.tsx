@@ -161,7 +161,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
           {filteredPrayerTimes.map((masjid, idx) => (
             <div key={idx} className="p-4 bg-white rounded-lg shadow border text-center">
               <div className="flex items-center justify-center mb-3">
-                <div>
+                <div className="text-center">
                   <div className="font-medium text-lg">{masjid.masjid}</div>
                   <div className="text-sm text-gray-600">{masjid.address || `123 Example St, ${selectedRegion}`}</div>
                 </div>
@@ -169,7 +169,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
               <div className="grid grid-cols-2 gap-2 mb-3">
                 {prayerTypes.map((prayer) => (
                   <div key={prayer} className={`flex flex-col items-center justify-center p-2 rounded ${prayerColors[prayer]}`}>
-                    <div className={`${prayerTextColors[prayer]} font-medium capitalize text-sm`}>
+                    <div className={`${prayerTextColors[prayer]} font-medium capitalize text-sm text-center`}>
                       {prayer}
                     </div>
                     <div className="font-bold text-center">
