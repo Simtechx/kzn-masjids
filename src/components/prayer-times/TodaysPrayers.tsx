@@ -25,17 +25,8 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
   const now = new Date().getTime();
   
   // Find the upcoming prayer - the next prayer after current time
-  const upcomingPrayerName = todayPrayerTimes.find(p => p.timestamp > now)?.name || '';
+  const upcomingPrayer = todayPrayerTimes.find(p => p.timestamp > now)?.name || '';
   
-  console.log('TodaysPrayers - Current time:', now);
-  console.log('TodaysPrayers - Upcoming prayer name:', upcomingPrayerName);
-  console.log('TodaysPrayers - All prayers:', todayPrayerTimes.map(p => ({ 
-    name: p.name, 
-    time: p.time,
-    timestamp: p.timestamp,
-    isUpcoming: p.timestamp > now
-  })));
-
   // Function to determine background and text color based on prayer name
   const getPrayerColors = (prayerName: string, isUpcoming: boolean) => {
     // If this is the upcoming prayer, use dark background with white text
@@ -79,7 +70,7 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
       
       <div className="grid grid-cols-2 gap-4">
         {reorderedPrayers.map((prayer, index) => {
-          const isUpcoming = prayer.name === upcomingPrayerName;
+          const isUpcoming = prayer.name === upcomingPrayer;
           // Get custom colors for prayers
           const { bgColor, textColor } = getPrayerColors(prayer.name, isUpcoming);
             

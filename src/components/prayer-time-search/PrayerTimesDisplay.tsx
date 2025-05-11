@@ -68,7 +68,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
   if (viewMode === 'table') {
     return (
       <div className="overflow-x-auto bg-white rounded-lg shadow">
-        <h3 className="text-2xl font-bold p-4 text-teal-700">
+        <h3 className={`text-2xl font-bold p-4 text-teal-700 ${isMobile ? "text-center" : ""}`}>
           {selectedTime && activePrayer 
             ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
             : selectedSubRegion 
@@ -157,7 +157,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
     // Block view
     return (
       <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-2xl font-bold mb-4 text-teal-700">
+        <h3 className={`text-2xl font-bold mb-4 text-teal-700 ${isMobile ? "text-center" : ""}`}>
           {selectedTime && activePrayer 
             ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
             : selectedSubRegion 
@@ -167,8 +167,8 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredPrayerTimes.map((masjid, idx) => (
-            <div key={idx} className="p-4 bg-white rounded-lg shadow border">
-              <div className="flex items-center mb-3">
+            <div key={idx} className="p-4 bg-white rounded-lg shadow border text-center">
+              <div className="flex items-center justify-center mb-3">
                 <div>
                   <div className="font-medium text-lg">{masjid.masjid}</div>
                   <div className="text-sm text-gray-600">{masjid.address || `123 Example St, ${selectedRegion}`}</div>

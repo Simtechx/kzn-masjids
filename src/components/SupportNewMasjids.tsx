@@ -58,7 +58,7 @@ const SupportNewMasjids: React.FC = () => {
             {newProjects.map((project, index) => (
               <div key={index} className="w-full flex-shrink-0">
                 <Card className="border-2 border-yellow-700/30 shadow-xl overflow-hidden">
-                  <div className="relative h-72 md:h-96">
+                  <div className={`relative ${isMobile ? 'h-96' : 'h-72 md:h-96'}`}>
                     <img 
                       src={project.image}
                       alt={project.name}
@@ -69,15 +69,15 @@ const SupportNewMasjids: React.FC = () => {
                     
                     {/* Content overlay */}
                     <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <div className="bg-black/40 backdrop-blur-sm p-4 rounded-lg inline-block">
+                      <div className="bg-black/30 backdrop-blur-sm p-4 rounded-lg inline-block">
                         <h3 className="text-white font-bold text-xl md:text-2xl">{project.name}</h3>
                         <p className="text-white/80 text-sm md:text-base">{project.location}</p>
                       </div>
                       
                       <div className="mt-3">
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm text-white/90">Project Progress</span>
-                          <span className="font-medium text-yellow-400">{project.completionPercentage}%</span>
+                          <span className="text-sm text-white font-medium">Project Progress</span>
+                          <span className="font-medium text-white">{project.completionPercentage}%</span>
                         </div>
                         <Progress 
                           value={project.completionPercentage} 
@@ -110,7 +110,7 @@ const SupportNewMasjids: React.FC = () => {
               <button
                 key={index}
                 className={`h-3 rounded-full transition-all ${
-                  currentSlide === index ? "w-8 bg-yellow-800" : "w-3 bg-gray-300"
+                  currentSlide === index ? "w-8 bg-gray-800" : "w-3 bg-gray-300"
                 }`}
                 onClick={() => setCurrentSlide(index)}
                 aria-label={`Go to slide ${index + 1}`}

@@ -62,7 +62,7 @@ const SubRegionSelector: React.FC<SubRegionSelectorProps> = ({
 
   return (
     <div className="mb-6">
-      <h3 className={`text-xl font-medium mb-4 p-2 rounded ${selectedSubRegion ? "bg-[#072c23] text-white" : "text-[#072c23]"}`}>
+      <h3 className={`text-xl font-medium mb-4 p-2 rounded ${isMobile ? "text-center " : ""}${selectedSubRegion ? "bg-[#072c23] text-white" : "text-[#072c23]"}`}>
         {selectedRegion} Sub-Regions
         {selectedSubRegion && <span className="ml-2">→ {selectedSubRegion}</span>}
       </h3>
