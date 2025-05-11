@@ -1,10 +1,10 @@
 
-import React, { useEffect, useRef } from 'react';
-import { Carousel } from '@/components/ui/carousel';
-import { CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
-import { Card, CardContent } from '@/components/ui/card';
+import React, { useEffect, useRef, useState } from 'react';
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { HandHeart } from 'lucide-react';
+import { HandHeart, ArrowLeft, ArrowRight } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface NewMasjidProjectProps {
   name: string;
@@ -15,37 +15,44 @@ interface NewMasjidProjectProps {
 
 const NewMasjidProject: React.FC<NewMasjidProjectProps> = ({ name, location, image, completionPercentage }) => {
   return (
-    <Card className="hover:shadow-md transition-shadow overflow-hidden h-full">
-      <div className="relative h-48 overflow-hidden">
+    <Card className="overflow-hidden rounded-xl shadow-lg h-full transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+      <div className="relative h-56 overflow-hidden">
         <img 
           src={image} 
           alt={name} 
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
         />
-        <div className="absolute bottom-0 w-full bg-black/60 text-white p-2">
-          <div className="text-sm">{completionPercentage}% Complete</div>
-          <div className="w-full bg-gray-300 h-1.5 rounded-full">
+        <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent pt-8 pb-3 px-4">
+          <div className="flex justify-between items-center text-white mb-1">
+            <div className="font-medium">{completionPercentage}% Complete</div>
+          </div>
+          <div className="w-full bg-gray-300/40 h-2 rounded-full overflow-hidden">
             <div 
-              className="bg-islamic-gold h-1.5 rounded-full" 
+              className="bg-islamic-gold h-2 rounded-full" 
               style={{ width: `${completionPercentage}%` }}
             ></div>
           </div>
         </div>
       </div>
-      <CardContent className="p-4">
-        <h3 className="font-bold mb-1">{name}</h3>
-        <p className="text-gray-600 text-sm mb-3">{location}</p>
-        <Button size="sm" className="w-full bg-islamic-gold hover:bg-islamic-gold/90 text-black">
+      <div className="p-5">
+        <h3 className="text-xl font-bold mb-1 text-islamic-blue">{name}</h3>
+        <p className="text-gray-600 text-sm mb-4">{location}</p>
+        <Button 
+          size="sm" 
+          className="w-full bg-islamic-gold hover:bg-islamic-gold/90 text-black transition-colors font-semibold"
+        >
           <HandHeart className="mr-2" size={16} />
           Contribute
         </Button>
-      </CardContent>
+      </div>
     </Card>
   );
 };
 
 const SupportNewMasjids: React.FC = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const isMobile = useIsMobile();
   
   const newProjects = [
     {
@@ -92,12 +99,11 @@ const SupportNewMasjids: React.FC = () => {
         const emblaApi = (carousel as any).__emblaApi;
         if (emblaApi) {
           emblaApi.scrollNext();
-          // If we're at the end, scroll back to the beginning
-          if (!emblaApi.canScrollNext()) {
-            emblaApi.scrollTo(0);
-          }
+          // Update active index
+          const currentIndex = emblaApi.selectedScrollSnap();
+          setActiveIndex(currentIndex);
         }
-      }, 7000); // Scroll every 7 seconds
+      }, 5000); // Scroll every 5 seconds
     };
     
     startAutoScroll();
@@ -107,41 +113,101 @@ const SupportNewMasjids: React.FC = () => {
     };
   }, []);
 
+  // Handle manual navigation
+  const handleSlideChange = (index: number) => {
+    const carousel = carouselRef.current;
+    if (carousel) {
+      const emblaApi = (carousel as any).__emblaApi;
+      if (emblaApi) {
+        emblaApi.scrollTo(index);
+        setActiveIndex(index);
+      }
+    }
+  };
+
   return (
-    <section className="py-16 px-4 bg-gray-50">
+    <section className="py-16 px-4 bg-white">
       <div className="container mx-auto">
-        <h2 className="text-center text-3xl font-bold mb-2 text-islamic-blue">
+        <h2 className="text-center text-3xl md:text-4xl font-bold mb-2 text-islamic-blue">
           Support New and Upcoming Masjid Projects Near You
         </h2>
         <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
           Help build the future of our community by contributing to these new masjid projects.
         </p>
         
-        <Carousel
-          ref={carouselRef}
-          className="w-full" 
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-        >
-          <CarouselContent className="-ml-4">
-            {newProjects.map((project, index) => (
-              <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                <NewMasjidProject
-                  name={project.name}
-                  location={project.location}
-                  image={project.image}
-                  completionPercentage={project.completionPercentage}
+        <div className="relative">
+          <Carousel
+            ref={carouselRef}
+            className="w-full" 
+            opts={{
+              align: "center",
+              loop: true,
+              skipSnaps: false,
+            }}
+          >
+            <CarouselContent className="-ml-4">
+              {newProjects.map((project, index) => (
+                <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                  <div className={`transition-all duration-500 ${activeIndex === index ? 'scale-100 opacity-100' : 'scale-95 opacity-80'}`}>
+                    <NewMasjidProject
+                      name={project.name}
+                      location={project.location}
+                      image={project.image}
+                      completionPercentage={project.completionPercentage}
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+          
+          <div className="flex justify-center mt-6 gap-4">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="rounded-full border-islamic-gold text-islamic-blue hover:bg-islamic-gold/10 hover:text-islamic-blue"
+              onClick={() => {
+                const carousel = carouselRef.current;
+                if (carousel) {
+                  const emblaApi = (carousel as any).__emblaApi;
+                  if (emblaApi) emblaApi.scrollPrev();
+                }
+              }}
+            >
+              <ArrowLeft className="h-5 w-5" />
+              <span className="sr-only">Previous slide</span>
+            </Button>
+            
+            <div className="flex gap-1.5 items-center">
+              {newProjects.map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                    index === activeIndex ? 'bg-islamic-gold w-4' : 'bg-gray-300'
+                  }`}
+                  onClick={() => handleSlideChange(index)}
+                  aria-label={`Go to slide ${index + 1}`}
                 />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="flex justify-center mt-8 gap-2">
-            <CarouselPrevious className="static transform-none mx-2" />
-            <CarouselNext className="static transform-none mx-2" />
+              ))}
+            </div>
+            
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="rounded-full border-islamic-gold text-islamic-blue hover:bg-islamic-gold/10 hover:text-islamic-blue"
+              onClick={() => {
+                const carousel = carouselRef.current;
+                if (carousel) {
+                  const emblaApi = (carousel as any).__emblaApi;
+                  if (emblaApi) emblaApi.scrollNext();
+                }
+              }}
+            >
+              <ArrowRight className="h-5 w-5" />
+              <span className="sr-only">Next slide</span>
+            </Button>
           </div>
-        </Carousel>
+        </div>
       </div>
     </section>
   );
