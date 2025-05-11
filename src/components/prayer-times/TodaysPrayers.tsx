@@ -53,20 +53,21 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
     }
     
     // For non-upcoming prayers, use the original light colors
-    if (prayerName === 'Asr (S)') {
+    if (prayerName === 'Fajr') {
+      return { bgColor: 'bg-pink-50', textColor: 'text-pink-600' };
+    } else if (prayerName === 'Dhuhr') {
+      return { bgColor: 'bg-amber-50', textColor: 'text-amber-600' };
+    } else if (prayerName === 'Asr (S)') {
       return { bgColor: 'bg-green-50', textColor: 'text-green-600' };
     } else if (prayerName === 'Asr (H)') {
       return { bgColor: 'bg-teal-100', textColor: 'text-teal-800' };
     } else if (prayerName === 'Maghrib') {
       return { bgColor: 'bg-red-50', textColor: 'text-red-600' };
+    } else if (prayerName === 'Isha') {
+      return { bgColor: 'bg-indigo-50', textColor: 'text-indigo-600' };
     }
     
-    // Return the original colors for other prayers
-    const prayer = todayPrayerTimes.find(p => p.name === prayerName);
-    return {
-      bgColor: prayer?.bgColor || 'bg-gray-50',
-      textColor: prayer?.textColor || 'text-gray-600'
-    };
+    return { bgColor: 'bg-gray-50', textColor: 'text-gray-600' };
   };
 
   return (

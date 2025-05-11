@@ -1,56 +1,49 @@
 
 import React from 'react';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Table2, LayoutGrid } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { LayoutGrid, Table2 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ViewToggleProps {
   viewMode: 'block' | 'table';
-  onViewChange: (value: 'block' | 'table') => void;
-  label?: string;
-  description?: string;
-  className?: string;
+  onViewChange: (mode: 'block' | 'table') => void;
 }
 
-const ViewToggle: React.FC<ViewToggleProps> = ({ 
-  viewMode, 
-  onViewChange,
-  label = "Salaah Time View",
-  description = "Select how you want to view salaah times",
-  className = ""
-}) => {
+const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onViewChange }) => {
   const isMobile = useIsMobile();
 
   return (
-    <div className={`flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4 bg-[#072c23] text-white p-4 rounded-lg ${className}`}>
-      <div>
-        <h3 className="text-xl text-white font-medium">{label}</h3>
-        <p className="text-sm text-gray-200">{description}</p>
-      </div>
-      <div className="w-full md:w-auto flex justify-center">
-        <ToggleGroup 
-          type="single" 
-          value={viewMode} 
-          onValueChange={(value) => value && onViewChange(value as 'block' | 'table')}
-          className="bg-white shadow-sm rounded-md flex-nowrap min-w-max"
+    <div className={`flex items-center justify-end space-x-2 my-4 ${isMobile ? 'pr-0' : 'pr-2'}`}>
+      <span className="text-sm text-gray-500 mr-2">Display:</span>
+      <div className="flex border rounded-md overflow-hidden">
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className={`flex items-center px-3 py-2 ${
+            viewMode === 'block'
+              ? 'bg-gray-200 text-gray-800'
+              : 'bg-white text-gray-600 hover:bg-gray-100'
+          }`}
+          onClick={() => onViewChange('block')}
         >
-          <ToggleGroupItem 
-            value="table" 
-            aria-label="Table" 
-            className="px-4 text-black data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black font-medium data-[state=off]:!text-gray-700"
-          >
-            <Table2 className="h-5 w-5 mr-2" />
-            <span>Table</span>
-          </ToggleGroupItem>
-          <ToggleGroupItem 
-            value="block" 
-            aria-label="Block" 
-            className="px-4 text-black data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black font-medium data-[state=off]:!text-gray-700"
-          >
-            <LayoutGrid className="h-5 w-5 mr-2" />
-            <span>Block</span>
-          </ToggleGroupItem>
-        </ToggleGroup>
+          <LayoutGrid size={18} className="mr-1" />
+          {!isMobile && <span>Block</span>}
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className={`flex items-center px-3 py-2 ${
+            viewMode === 'table'
+              ? 'bg-gray-200 text-gray-800'
+              : 'bg-white text-gray-600 hover:bg-gray-100'
+          }`}
+          onClick={() => onViewChange('table')}
+        >
+          <Table2 size={18} className="mr-1" />
+          {!isMobile && <span>Table</span>}
+        </Button>
       </div>
     </div>
   );

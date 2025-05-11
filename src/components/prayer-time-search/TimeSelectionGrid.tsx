@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PrayerType, getUniquePrayerTimes, findExtremeTime } from '@/utils/prayerTimeUtils';
+import { PrayerType, findExtremeTime, getDistinctTimes } from '@/utils/prayerTimeUtils';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface TimeSelectionGridProps {
@@ -18,145 +18,57 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
 }) => {
   const isMobile = useIsMobile();
   
-  // Get unique times and sort them
-  const uniquePrayerTimes = getUniquePrayerTimes(activePrayer);
-  
-  // Find earliest and latest times for gradient effect
-  const earliestTime = findExtremeTime(activePrayer, 'earliest', selectedRegion)?.time || '';
-  const latestTime = findExtremeTime(activePrayer, 'latest', selectedRegion)?.time || '';
+  // Get distinct times for the selected prayer
+  const times = getDistinctTimes(activePrayer, selectedRegion);
 
-  // Reorder times to ensure earliest is first and latest is last
-  const orderedTimes = [...uniquePrayerTimes].sort((a, b) => {
-    if (a === earliestTime) return -1;
-    if (b === earliestTime) return 1;
-    if (a === latestTime) return 1;
-    if (b === latestTime) return -1;
-    return uniquePrayerTimes.indexOf(a) - uniquePrayerTimes.indexOf(b);
-  });
+  // Find earliest and latest times
+  const earliestTime = findExtremeTime(activePrayer, 'earliest', selectedRegion);
+  const latestTime = findExtremeTime(activePrayer, 'latest', selectedRegion);
 
-  // Define color themes for each prayer type
-  const colorThemes = {
-    fajr: {
-      base: 'bg-pink-50',
-      hover: 'hover:bg-pink-100',
-      earliest: 'bg-pink-100',
-      middle: 'bg-pink-200',
-      latest: 'bg-pink-300',
-      selected: 'bg-gray-800 text-white font-medium',
-      next: 'bg-[#FEF7CD] font-medium border border-pink-300',
-    },
-    dhuhr: {
-      base: 'bg-amber-50',
-      hover: 'hover:bg-amber-100',
-      earliest: 'bg-amber-100',
-      middle: 'bg-amber-200',
-      latest: 'bg-amber-300',
-      selected: 'bg-gray-800 text-white font-medium',
-      next: 'bg-[#FEF7CD] font-medium border border-amber-300',
-    },
-    asr: {
-      base: 'bg-teal-50',
-      hover: 'hover:bg-teal-100',
-      earliest: 'bg-teal-100',
-      middle: 'bg-teal-200',
-      latest: 'bg-teal-300',
-      selected: 'bg-gray-800 text-white font-medium',
-      next: 'bg-[#FEF7CD] font-medium border border-teal-300',
-    },
-    isha: {
-      base: 'bg-indigo-50',
-      hover: 'hover:bg-indigo-100',
-      earliest: 'bg-indigo-100',
-      middle: 'bg-indigo-200',
-      latest: 'bg-indigo-300',
-      selected: 'bg-gray-800 text-white font-medium',
-      next: 'bg-[#FEF7CD] font-medium border border-indigo-300',
-    },
-  };
-  
-  // Get the appropriate color theme for the current prayer
-  const theme = colorThemes[activePrayer];
-
-  // Find the next prayer time (closest time that is later than current time)
-  const getCurrentTime = () => {
-    const now = new Date();
-    return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-  };
-  
-  const currentTime = getCurrentTime();
-  const nextPrayerTime = orderedTimes.find(time => time > currentTime) || orderedTimes[0];
-
-  // Determine the color based on time's position in the sequence
-  const getTimeColor = (time: string) => {
-    if (selectedTime === time) {
-      return theme.selected;
-    }
-
-    if (time === nextPrayerTime && !selectedTime) {
-      return theme.next;
+  const getTimeClass = (time: string) => {
+    let baseClass = 'p-2 rounded text-center cursor-pointer';
+    
+    // Selected state
+    if (time === selectedTime) {
+      return `${baseClass} bg-teal-600 text-white`;
     }
     
-    if (time === earliestTime) {
-      return theme.earliest;
+    // Earliest time
+    if (earliestTime && time === earliestTime.time) {
+      return `${baseClass} bg-green-100 text-green-700 border border-green-300`;
     }
     
-    if (time === latestTime) {
-      return theme.latest;
+    // Latest time
+    if (latestTime && time === latestTime.time) {
+      return `${baseClass} bg-orange-100 text-orange-700 border border-orange-300`;
     }
     
-    // Middle shade for times in between
-    return theme.base;
+    // Default
+    return `${baseClass} bg-gray-100 hover:bg-gray-200 text-gray-700`;
   };
+
+  // Mobile: 3 per row, Desktop: 5 per row
+  const gridCols = isMobile ? "grid-cols-3" : "grid-cols-5";
 
   return (
-    <div className="mb-6">
-      {isMobile ? (
-        <div className="w-full overflow-x-auto pb-2">
-          <div className="flex flex-row gap-2 min-w-max">
-            {orderedTimes.map((time, index) => {
-              const isEarliest = time === earliestTime;
-              const isLatest = time === latestTime;
-              const isNext = time === nextPrayerTime && !selectedTime;
-              const timeColor = getTimeColor(time);
-              
-              return (
-                <div 
-                  key={index}
-                  className={`min-w-[80px] p-2 rounded text-center cursor-pointer transition-all ${timeColor} hover:opacity-90`}
-                  onClick={() => onSelectTime(time)}
-                >
-                  <div>{time}</div>
-                  {isEarliest && <div className="text-xs mt-1 font-medium">EARLIEST</div>}
-                  {isLatest && <div className="text-xs mt-1 font-medium">LATEST</div>}
-                  {isNext && !isEarliest && !isLatest && <div className="text-xs mt-1 font-medium">NEXT</div>}
-                </div>
-              );
-            })}
+    <div className="mt-4">
+      <div className={`grid ${gridCols} gap-2`}>
+        {times.map((time) => (
+          <div
+            key={time}
+            className={getTimeClass(time)}
+            onClick={() => onSelectTime(time)}
+          >
+            {time}
+            {earliestTime && time === earliestTime.time && (
+              <div className="text-xs mt-1 bg-green-600 text-white px-1 py-0.5 rounded-sm">Earliest</div>
+            )}
+            {latestTime && time === latestTime.time && (
+              <div className="text-xs mt-1 bg-orange-600 text-white px-1 py-0.5 rounded-sm">Latest</div>
+            )}
           </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
-          {orderedTimes.map((time, index) => {
-            const isEarliest = time === earliestTime;
-            const isLatest = time === latestTime;
-            const isNext = time === nextPrayerTime && !selectedTime;
-            const timeColor = getTimeColor(time);
-            
-            return (
-              <div 
-                key={index}
-                className={`p-2 rounded text-center cursor-pointer transition-all ${timeColor} hover:opacity-90`}
-                onClick={() => onSelectTime(time)}
-              >
-                <div>{time}</div>
-                {isEarliest && <div className="text-xs mt-1 font-medium">EARLIEST</div>}
-                {isLatest && <div className="text-xs mt-1 font-medium">LATEST</div>}
-                {isNext && !isEarliest && !isLatest && <div className="text-xs mt-1 font-medium">NEXT</div>}
-              </div>
-            );
-          })}
-        </div>
-      )}
+        ))}
+      </div>
     </div>
   );
 };

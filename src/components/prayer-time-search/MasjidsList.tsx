@@ -62,7 +62,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
 
   const renderTableView = () => {
     if (isMobile) {
-      // Mobile optimized table view
+      // Mobile optimized table view - simplified with no address/actions columns
       return (
         <div className="space-y-4 overflow-x-hidden">
           {filteredPrayerTimes.map((masjid, index) => (
@@ -72,18 +72,22 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
               <div className="grid grid-cols-2 gap-2 mb-3">
                 {prayerTypes.map((prayer) => {
                   const extremeType = isExtremeTime(prayer, masjid[prayer]);
+                  const isSelected = activePrayer === prayer && masjid[prayer] === selectedTime;
+                  
                   return (
                     <div 
                       key={prayer} 
                       className={`p-2 rounded text-center ${
-                        activePrayer === prayer && masjid[prayer] === selectedTime 
-                          ? 'bg-teal-600 text-white' 
+                        isSelected 
+                          ? 'bg-gray-700 text-white' 
                           : prayerColors[prayer]
                       }`}
                     >
-                      <div className="text-xs font-medium capitalize">{prayer}</div>
+                      <div className={`text-xs font-medium capitalize ${isSelected ? 'text-white' : prayerTextColors[prayer]}`}>
+                        {prayer}
+                      </div>
                       <div className="text-base font-medium">{masjid[prayer]}</div>
-                      {extremeType && (
+                      {extremeType && !isSelected && (
                         <div className="text-xs mt-1 bg-gray-800 text-white px-1.5 py-0.5 rounded-full mx-auto inline-block">
                           {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                         </div>
@@ -112,28 +116,37 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
                     {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
                   </TableHead>
                 ))}
-                <TableHead className="font-bold text-white text-center">Actions</TableHead>
+                <TableHead className="font-bold text-white text-center">Location</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredPrayerTimes.map((masjid, index) => (
-                <TableRow key={index} className="hover:bg-gray-50 transition-colors">
+                <TableRow 
+                  key={index} 
+                  className={`hover:bg-gray-50 transition-colors ${
+                    activePrayer && selectedTime && masjid[activePrayer] === selectedTime 
+                      ? 'bg-gray-100' 
+                      : ''
+                  }`}
+                >
                   <TableCell className="font-medium">{masjid.masjid}</TableCell>
                   <TableCell>123 Example St, {selectedRegion}</TableCell>
                   {prayerTypes.map(prayer => {
                     const extremeType = isExtremeTime(prayer, masjid[prayer]);
+                    const isSelected = activePrayer === prayer && masjid[prayer] === selectedTime;
+                    
                     return (
                       <TableCell 
                         key={prayer} 
                         className={
-                          activePrayer === prayer && masjid[prayer] === selectedTime
-                            ? 'bg-teal-600 text-white font-bold text-center' 
+                          isSelected
+                            ? 'bg-gray-700 text-white font-bold text-center' 
                             : `${prayerColors[prayer]} text-center`
                         }
                       >
                         <div className="flex flex-col items-center justify-center">
                           <span>{masjid[prayer]}</span>
-                          {extremeType && (
+                          {extremeType && !isSelected && (
                             <div className="text-xs mt-1 bg-gray-800 text-white px-1.5 py-0.5 rounded-full">
                               {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                             </div>
@@ -167,18 +180,22 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
             <div className="grid grid-cols-2 gap-1">
               {prayerTypes.map((prayer) => {
                 const extremeType = isExtremeTime(prayer, masjid[prayer]);
+                const isSelected = activePrayer === prayer && masjid[prayer] === selectedTime;
+                
                 return (
                   <div 
                     key={prayer}
                     className={`p-2 rounded text-center ${
-                      activePrayer === prayer && masjid[prayer] === selectedTime 
-                        ? 'bg-teal-600 text-white' 
+                      isSelected
+                        ? 'bg-gray-700 text-white' 
                         : prayerColors[prayer]
                     }`}
                   >
-                    <div className="text-xs font-medium">{prayer.charAt(0).toUpperCase() + prayer.slice(1)}</div>
+                    <div className={`text-xs font-medium ${isSelected ? 'text-white' : prayerTextColors[prayer]}`}>
+                      {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
+                    </div>
                     <div className="text-center">{masjid[prayer]}</div>
-                    {extremeType && (
+                    {extremeType && !isSelected && (
                       <div className="text-xs mt-1 bg-gray-800 text-white px-1 py-0.5 rounded-full mx-auto inline-block">
                         {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                       </div>

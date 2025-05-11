@@ -14,7 +14,7 @@ interface RegionTableProps {
 const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegion }) => {
   const isMobile = useIsMobile();
   
-  // Reorder regions according to the new sequence as per footer
+  // Reorder regions according to the requested sequence
   const regions = ['North Coast', 'Northern Natal', 'Midlands', 'Durban', 'South Coast'];
   
   const regionCounts = regions.map(region => {
@@ -79,61 +79,70 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
     );
   }
 
-  // Desktop view with enhanced table and consistent styling with image references
+  // Desktop view with enhanced table and image-based regions like the reference image
   return (
-    <div className="overflow-hidden rounded-lg shadow-md border">
-      <Table>
-        <TableHeader className="bg-[#1A1F2C]">
-          <TableRow>
-            <TableHead className="text-white font-bold">Region</TableHead>
-            <TableHead className="text-white font-bold text-center">Sub-regions</TableHead>
-            <TableHead className="text-white font-bold text-center">Masjids</TableHead>
-            <TableHead className="text-white font-bold text-center">Musallas</TableHead>
-            <TableHead className="text-white font-bold text-center">Total</TableHead>
-            <TableHead className="text-white font-bold text-right"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {regionCounts.map((regionData) => (
-            <TableRow 
-              key={regionData.name} 
-              className={`
-                hover:bg-gray-100 cursor-pointer transition-colors
-                ${selectedRegion === regionData.name ? "bg-gray-200" : ""}
-              `}
-              onClick={() => onSelectRegion(regionData.name)}
+    <div className="grid grid-cols-1 gap-4">
+      {regionCounts.map((regionData) => (
+        <div 
+          key={regionData.name}
+          className={`overflow-hidden rounded-lg shadow-sm cursor-pointer border border-gray-200 transition-all hover:shadow-md ${
+            selectedRegion === regionData.name ? "bg-gray-100 border-gray-300" : ""
+          }`}
+          onClick={() => onSelectRegion(regionData.name)}
+        >
+          <div className="flex items-center h-24">
+            {/* Region image background - styled like reference image */}
+            <div 
+              className="w-1/4 h-full relative bg-cover bg-center flex items-center justify-center"
+              style={{ 
+                backgroundImage: `url('https://source.unsplash.com/featured/?${regionData.name.toLowerCase().replace(' ', ',')}')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
             >
-              <TableCell className="font-medium">
-                <div className="flex items-center">
-                  <div className="rounded-md overflow-hidden mr-3 h-10 w-16 bg-cover bg-center"
-                       style={{ 
-                         backgroundImage: `url('https://source.unsplash.com/featured/?${regionData.name.toLowerCase().replace(' ', ',')}')` 
-                       }}>
-                  </div>
-                  <span>{regionData.name}</span>
+              {/* Overlay with region name */}
+              <div className="absolute inset-0 bg-black/40"></div>
+              <span className="relative z-10 text-white font-bold text-xl">{regionData.name}</span>
+            </div>
+            
+            {/* Region stats */}
+            <div className="flex-1 flex items-center px-6">
+              <div className="flex space-x-8">
+                <div className="text-center">
+                  <span className="block text-2xl font-bold text-blue-700">{regionData.subRegions}</span>
+                  <span className="text-sm text-gray-500">Sub-regions</span>
                 </div>
-              </TableCell>
-              <TableCell className="text-center">{regionData.subRegions}</TableCell>
-              <TableCell className="text-center">{regionData.masjids}</TableCell>
-              <TableCell className="text-center">{regionData.musallas}</TableCell>
-              <TableCell className="text-center font-medium">{regionData.total}</TableCell>
-              <TableCell className="text-right">
+                <div className="text-center">
+                  <span className="block text-2xl font-bold text-green-700">{regionData.masjids}</span>
+                  <span className="text-sm text-gray-500">Masjids</span>
+                </div>
+                <div className="text-center">
+                  <span className="block text-2xl font-bold text-amber-700">{regionData.musallas}</span>
+                  <span className="text-sm text-gray-500">Musallas</span>
+                </div>
+                <div className="text-center">
+                  <span className="block text-2xl font-bold text-purple-700">{regionData.total}</span>
+                  <span className="text-sm text-gray-500">Total</span>
+                </div>
+              </div>
+              
+              <div className="ml-auto">
                 <Button 
-                  variant="link" 
-                  className="text-teal-700 hover:text-teal-900 font-medium gap-0.5"
+                  variant="outline" 
+                  className="bg-teal-600 text-white hover:bg-teal-700"
                   onClick={(e) => {
                     e.stopPropagation();
                     onSelectRegion(regionData.name);
                   }}
                 >
                   Explore
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4 ml-1" />
                 </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

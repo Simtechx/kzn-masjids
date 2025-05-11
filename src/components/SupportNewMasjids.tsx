@@ -12,12 +12,12 @@ const SupportNewMasjids: React.FC = () => {
   const isMobile = useIsMobile();
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  // Auto-slide effect with faster speed (1 second)
+  // Auto-slide effect with slower speed (3.5 seconds)
   useEffect(() => {
     if (!isPaused) {
       const interval = setInterval(() => {
         setCurrentSlide(prev => (prev + 1) % newProjects.length);
-      }, 1000);
+      }, 3500); // Changed to 3.5 seconds
       
       return () => clearInterval(interval);
     }
@@ -29,8 +29,11 @@ const SupportNewMasjids: React.FC = () => {
   };
 
   return (
-    <section className="py-12 md:py-16 px-4 bg-white">
-      <div className="container mx-auto">
+    <section className="py-12 md:py-16 px-4 bg-gray-100 relative overflow-hidden">
+      {/* 3D Perspective Gallery-like Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-teal-50 opacity-70"></div>
+      
+      <div className="container mx-auto relative z-10">
         <h2 className="text-center text-2xl md:text-3xl lg:text-4xl font-bold mb-2 text-gray-900">
           Support New and Upcoming Masjid Projects
         </h2>
@@ -38,12 +41,13 @@ const SupportNewMasjids: React.FC = () => {
           Help build the future of our community by contributing to these new masjid projects.
         </p>
         
-        {/* Simplified, optimized auto-sliding carousel */}
+        {/* 3D Perspective Gallery-style Slider */}
         <div 
-          className="relative overflow-hidden rounded-xl w-full max-w-5xl mx-auto"
+          className="relative overflow-hidden rounded-xl w-full max-w-5xl mx-auto perspective-1000"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
           ref={sliderRef}
+          style={{perspective: '1000px'}}
         >
           {/* Carousel track with proper transform */}
           <div 
@@ -52,7 +56,11 @@ const SupportNewMasjids: React.FC = () => {
           >
             {newProjects.map((project, index) => (
               <div key={index} className="w-full flex-shrink-0">
-                <Card className="border-0 shadow-lg overflow-hidden">
+                <Card className="border-2 border-amber-400/30 shadow-xl overflow-hidden transform transition-all hover:scale-[1.01]" 
+                      style={{
+                        transformStyle: 'preserve-3d',
+                        boxShadow: '0 15px 25px rgba(0, 0, 0, 0.1)'
+                      }}>
                   <div className="relative h-52 md:h-80">
                     <img 
                       src={project.image}
@@ -63,19 +71,26 @@ const SupportNewMasjids: React.FC = () => {
                       <h3 className="text-white font-bold text-xl md:text-2xl">{project.name}</h3>
                       <p className="text-white/80 text-sm md:text-base">{project.location}</p>
                     </div>
-                  </div>
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm text-gray-600">Progress</span>
-                      <span className="font-bold text-white bg-[#094941] px-2 py-1 rounded-md text-sm">
+                    {/* Project Completion Badge - Orange style similar to reference image */}
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-amber-500 text-white text-sm font-bold px-4 py-2 rounded-full">
                         {project.completionPercentage}% Complete
                       </span>
                     </div>
-                    <Progress value={project.completionPercentage} className="h-2 mb-6" />
+                  </div>
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm text-gray-600">Project Progress</span>
+                      <span className="font-medium text-gray-700">{project.completionPercentage}%</span>
+                    </div>
+                    <Progress value={project.completionPercentage} className="h-2 mb-6 bg-gray-200" 
+                              indicatorClassName="bg-amber-500" />
                     <p className="mb-4 text-gray-700">{project.description || 'Help us complete this important project for the community.'}</p>
-                    <div className="flex justify-between gap-4">
-                      <Button className="flex-1" variant="outline">Learn More</Button>
-                      <Button className="flex-1 bg-teal-600 hover:bg-teal-700">Donate Now</Button>
+                    <div className="mt-6">
+                      {/* Yellow Contribute Button */}
+                      <Button className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3">
+                        Contribute
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -84,12 +99,12 @@ const SupportNewMasjids: React.FC = () => {
           </div>
 
           {/* Pagination indicators */}
-          <div className="flex justify-center mt-4 space-x-2">
+          <div className="flex justify-center mt-6 space-x-2">
             {newProjects.map((_, index) => (
               <button
                 key={index}
-                className={`h-2.5 rounded-full transition-all ${
-                  currentSlide === index ? "w-6 bg-teal-600" : "w-2.5 bg-gray-300"
+                className={`h-3 rounded-full transition-all ${
+                  currentSlide === index ? "w-8 bg-amber-500" : "w-3 bg-gray-300"
                 }`}
                 onClick={() => setCurrentSlide(index)}
                 aria-label={`Go to slide ${index + 1}`}
