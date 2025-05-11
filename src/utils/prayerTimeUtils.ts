@@ -86,6 +86,30 @@ export const prayerInfo = {
   isha: { label: 'Isha', arabicLabel: 'Isha' },
 };
 
+// Get distinct times for a specific prayer type in a specific region
+export const getDistinctTimes = (prayerType: PrayerType, region: string): string[] => {
+  const regionData = prayerTimesData[region as keyof typeof prayerTimesData] || [];
+  
+  // Extract all times for the prayer type from the region
+  const times = regionData.map(item => item[prayerType]);
+  
+  // Filter to get only distinct times and sort them
+  const distinctTimes = Array.from(new Set(times)).sort((a, b) => {
+    const [hoursA, minutesA] = a.split(':').map(Number);
+    const [hoursB, minutesB] = b.split(':').map(Number);
+    
+    // Compare hours first
+    if (hoursA !== hoursB) {
+      return hoursA - hoursB;
+    }
+    
+    // If hours are the same, compare minutes
+    return minutesA - minutesB;
+  });
+  
+  return distinctTimes;
+};
+
 export const findExtremeTime = (
   prayer: PrayerType,
   type: SearchType,
