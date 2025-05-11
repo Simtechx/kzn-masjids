@@ -67,12 +67,12 @@ const SupportNewMasjids: React.FC = () => {
                   <CardContent className="p-6">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm text-gray-600">Progress</span>
-                      <span className="font-bold text-[#094941] bg-green-50 px-2 py-1 rounded-md text-sm">
-                        {project.percentComplete}% Complete
+                      <span className="font-bold text-white bg-[#094941] px-2 py-1 rounded-md text-sm">
+                        {project.completionPercentage}% Complete
                       </span>
                     </div>
-                    <Progress value={project.percentComplete} className="h-2 mb-6" />
-                    <p className="mb-4 text-gray-700">{project.description}</p>
+                    <Progress value={project.completionPercentage} className="h-2 mb-6" />
+                    <p className="mb-4 text-gray-700">{project.description || 'Help us complete this important project for the community.'}</p>
                     <div className="flex justify-between gap-4">
                       <Button className="flex-1" variant="outline">Learn More</Button>
                       <Button className="flex-1 bg-teal-600 hover:bg-teal-700">Donate Now</Button>
