@@ -23,7 +23,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       <div className="flex gap-2">
         <Button 
           variant={searchType === 'earliest' ? "default" : "outline"}
-          className={searchType === 'earliest' ? "bg-teal-700 text-white" : ""}
+          className={searchType === 'earliest' ? "bg-yellow-400 text-black hover:bg-yellow-500" : ""}
           onClick={() => setSearchType('earliest')}
         >
           <Table className="mr-2 h-4 w-4" />
@@ -31,7 +31,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         </Button>
         <Button 
           variant={searchType === 'latest' ? "default" : "outline"}
-          className={searchType === 'latest' ? "bg-teal-700 text-white" : ""}
+          className={searchType === 'latest' ? "bg-yellow-400 text-black hover:bg-yellow-500" : ""}
           onClick={() => setSearchType('latest')}
         >
           <Blocks className="mr-2 h-4 w-4" />
