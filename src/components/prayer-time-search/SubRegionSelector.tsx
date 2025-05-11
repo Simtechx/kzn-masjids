@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { subRegionsData } from '@/utils/prayerTimeUtils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SubRegionSelectorProps {
   selectedRegion: string | null;
@@ -13,6 +14,8 @@ const SubRegionSelector: React.FC<SubRegionSelectorProps> = ({
   selectedSubRegion, 
   onSelectSubRegion 
 }) => {
+  const isMobile = useIsMobile();
+  
   if (!selectedRegion) return null;
   
   // Add Transkei as a sub-region of South Coast if selected region is South Coast
@@ -63,20 +66,20 @@ const SubRegionSelector: React.FC<SubRegionSelectorProps> = ({
         {selectedRegion} Sub-Regions
         {selectedSubRegion && <span className="ml-2">→ {selectedSubRegion}</span>}
       </h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {subRegions.map((subRegion) => (
           <div
             key={subRegion}
             onClick={() => onSelectSubRegion(subRegion)}
             className={`
-              cursor-pointer rounded-md p-4 text-center transition-all duration-200 shadow-sm
+              cursor-pointer rounded-md p-3 text-center transition-all duration-200 shadow-sm
               ${selectedSubRegion === subRegion 
                 ? "bg-[#072c23] text-white ring-2 ring-[#072c23] ring-offset-2" 
                 : "bg-blue-50 text-[#072c23] hover:bg-blue-100 border border-blue-100"}
             `}
           >
-            <div className="font-medium text-lg">{subRegion}</div>
-            <div className="text-sm mt-1">
+            <div className="font-medium text-md">{subRegion}</div>
+            <div className="text-xs mt-1">
               {masjidCounts[subRegion as keyof typeof masjidCounts] || 3} Masjids
             </div>
           </div>

@@ -27,12 +27,12 @@ const ViewToggle: React.FC<ViewToggleProps> = ({
         <h3 className="text-xl text-white font-medium">{label}</h3>
         <p className="text-sm text-gray-200">{description}</p>
       </div>
-      <div className="w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
+      <div className="w-full md:w-auto flex justify-center">
         <ToggleGroup 
           type="single" 
           value={viewMode} 
           onValueChange={(value) => value && onViewChange(value as 'block' | 'table')}
-          className="bg-white shadow-sm rounded-md self-start md:self-auto flex-nowrap min-w-max"
+          className="bg-white shadow-sm rounded-md flex-nowrap min-w-max"
         >
           <ToggleGroupItem 
             value="table" 

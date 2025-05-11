@@ -41,7 +41,7 @@ const MasjidCarousel: React.FC<MasjidCarouselProps> = ({ projects }) => {
     }
   };
 
-  // Set up auto-scrolling carousel
+  // Set up auto-scrolling carousel with faster speed
   useEffect(() => {
     const startAutoScroll = () => {
       if (intervalRef.current) {
@@ -57,7 +57,7 @@ const MasjidCarousel: React.FC<MasjidCarouselProps> = ({ projects }) => {
           }
         }
         startAutoScroll(); // Recursively call to create a loop
-      }, 4000); // Scroll every 4 seconds (same as notices)
+      }, 3000); // Reduced from 4000ms to 3000ms for faster sliding
     };
     
     startAutoScroll();
@@ -86,7 +86,7 @@ const MasjidCarousel: React.FC<MasjidCarouselProps> = ({ projects }) => {
           api?.on("select", () => handleCarouselChange(api));
         }}
       >
-        <CarouselContent className="transition-all duration-700 ease-in-out">
+        <CarouselContent className="transition-all duration-500 ease-in-out">
           {projects.map((project, index) => (
             <CarouselItem 
               key={index} 

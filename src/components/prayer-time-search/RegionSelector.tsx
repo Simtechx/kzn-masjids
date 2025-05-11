@@ -16,7 +16,7 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({ selectedRegion, onSelec
   const isMobile = useIsMobile();
   
   return (
-    <div className={`${isMobile ? 'overflow-x-auto pb-4' : ''} mb-6`}>
+    <div className={`${isMobile ? 'overflow-x-auto -mx-4 px-4' : ''} mb-6`}>
       <div className={`${isMobile ? 'flex flex-row min-w-max gap-4' : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4'}`}>
         {regions.map((region) => {
           const subRegionCount = subRegionsData[region as keyof typeof subRegionsData]?.length || 0;
@@ -28,7 +28,7 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({ selectedRegion, onSelec
           const musallaCount = Math.floor(masjidCount * 0.6);
           
           return (
-            <div key={region} className={isMobile ? 'min-w-[220px]' : ''}>
+            <div key={region} className={isMobile ? 'min-w-[180px] max-w-[220px]' : ''}>
               <RegionCard
                 region={region}
                 isSelected={isSelected}

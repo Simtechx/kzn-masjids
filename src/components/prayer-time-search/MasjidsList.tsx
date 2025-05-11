@@ -3,6 +3,8 @@ import React from 'react';
 import { MasjidData, PrayerType, findExtremeTime } from '@/utils/prayerTimeUtils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { MapPin } from 'lucide-react';
 
 interface MasjidsListProps {
   selectedRegion: string;
@@ -19,6 +21,8 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
   filteredPrayerTimes,
   viewMode
 }) => {
+  const isMobile = useIsMobile();
+  
   // Exclude maghrib as per requirements
   const prayerTypes: PrayerType[] = ['fajr', 'dhuhr', 'asr', 'isha'];
 
@@ -59,62 +63,70 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
   const renderTableView = () => {
     return (
       <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-gray-700 text-white">
-              <TableHead className="font-bold">Masjid</TableHead>
-              <TableHead className="font-bold">Address</TableHead>
-              <TableHead className="font-bold">Fajr</TableHead>
-              <TableHead className="font-bold">Dhuhr</TableHead>
-              <TableHead className="font-bold">Asr</TableHead>
-              <TableHead className="font-bold">Isha</TableHead>
-              <TableHead className="font-bold">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredPrayerTimes.map((masjid, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">{masjid.masjid}</TableCell>
-                <TableCell>123 Example St, {selectedRegion}</TableCell>
-                {prayerTypes.map(prayer => {
-                  const extremeType = isExtremeTime(prayer, masjid[prayer]);
-                  return (
-                    <TableCell 
-                      key={prayer} 
-                      className={
-                        activePrayer === prayer && masjid[prayer] === selectedTime
-                          ? 'bg-teal-600 text-white font-bold' 
-                          : prayerColors[prayer]
-                      }
-                    >
-                      {masjid[prayer]}
-                      {extremeType && (
-                        <div className="text-xs">
-                          {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
-                        </div>
-                      )}
-                    </TableCell>
-                  );
-                })}
-                <TableCell>
-                  <Button variant="outline" size="sm" className="bg-teal-600 text-white border-teal-700 hover:bg-teal-700">View Details</Button>
-                </TableCell>
+        <div className="rounded-lg shadow-lg border border-gray-200">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-[#1A1F2C] !border-b-0">
+                <TableHead className="font-bold text-white">Masjid</TableHead>
+                <TableHead className="font-bold text-white">Address</TableHead>
+                {prayerTypes.map(prayer => (
+                  <TableHead key={prayer} className="font-bold text-white text-center">
+                    {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
+                  </TableHead>
+                ))}
+                <TableHead className="font-bold text-white text-center">Actions</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {filteredPrayerTimes.map((masjid, index) => (
+                <TableRow key={index} className="hover:bg-gray-50 transition-colors">
+                  <TableCell className="font-medium">{masjid.masjid}</TableCell>
+                  <TableCell>123 Example St, {selectedRegion}</TableCell>
+                  {prayerTypes.map(prayer => {
+                    const extremeType = isExtremeTime(prayer, masjid[prayer]);
+                    return (
+                      <TableCell 
+                        key={prayer} 
+                        className={
+                          activePrayer === prayer && masjid[prayer] === selectedTime
+                            ? 'bg-teal-600 text-white font-bold text-center' 
+                            : `${prayerColors[prayer]} text-center`
+                        }
+                      >
+                        <div className="flex flex-col items-center justify-center">
+                          <span>{masjid[prayer]}</span>
+                          {extremeType && (
+                            <div className="text-xs mt-1 bg-gray-800 text-white px-1.5 py-0.5 rounded-full">
+                              {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
+                            </div>
+                          )}
+                        </div>
+                      </TableCell>
+                    );
+                  })}
+                  <TableCell className="text-center">
+                    <Button variant="outline" size="sm" className="bg-teal-600 text-white border-teal-700 hover:bg-teal-700">
+                      <MapPin className="mr-1 h-4 w-4" />
+                      Directions
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     );
   };
 
   const renderBlockView = () => {
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredPrayerTimes.map((masjid, index) => (
-          <div key={index} className="bg-white p-4 rounded-md shadow-sm border border-gray-100">
+          <div key={index} className="bg-white p-4 rounded-md shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <h4 className="font-semibold text-lg mb-2 text-teal-700">{masjid.masjid}</h4>
             <p className="text-gray-600 text-sm mb-3">123 Example St, {selectedRegion}</p>
-            <div className="grid grid-cols-4 gap-1">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1">
               {prayerTypes.map((prayer) => {
                 const extremeType = isExtremeTime(prayer, masjid[prayer]);
                 return (
@@ -127,9 +139,9 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
                     }`}
                   >
                     <div className="text-xs font-medium">{prayer.charAt(0).toUpperCase() + prayer.slice(1)}</div>
-                    <div>{masjid[prayer]}</div>
+                    <div className="text-center">{masjid[prayer]}</div>
                     {extremeType && (
-                      <div className="text-xs mt-1">
+                      <div className="text-xs mt-1 bg-gray-800 text-white px-1 py-0.5 rounded-full mx-auto inline-block">
                         {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                       </div>
                     )}
@@ -137,8 +149,11 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
                 );
               })}
             </div>
-            <div className="mt-3 text-right">
-              <Button variant="outline" size="sm" className="bg-teal-600 text-white border-teal-700 hover:bg-teal-700">View Details</Button>
+            <div className="mt-3 text-center">
+              <Button variant="outline" size="sm" className="w-full bg-teal-600 text-white border-teal-700 hover:bg-teal-700">
+                <MapPin className="mr-1 h-4 w-4" />
+                Directions
+              </Button>
             </div>
           </div>
         ))}

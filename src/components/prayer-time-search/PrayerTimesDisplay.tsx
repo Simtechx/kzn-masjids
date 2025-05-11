@@ -16,6 +16,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { MapPin } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface PrayerTimesDisplayProps {
   selectedRegion: string;
@@ -36,6 +37,8 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
   filteredPrayerTimes,
   viewMode
 }) => {
+  const isMobile = useIsMobile();
+  
   // Get prayer types excluding maghrib
   const prayerTypes: PrayerType[] = ['fajr', 'dhuhr', 'asr', 'isha'];
   
@@ -72,41 +75,71 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
               ? `Salaah Times in ${selectedSubRegion}`
               : `Salaah Times in ${selectedRegion}`}
         </h3>
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-[#1A1F2C] text-white">
-              <TableHead className="font-bold text-white">Masjid</TableHead>
-              <TableHead className="font-bold text-white">Address</TableHead>
-              <TableHead className="font-bold text-white text-center">Fajr</TableHead>
-              <TableHead className="font-bold text-white text-center">Dhuhr</TableHead>
-              <TableHead className="font-bold text-white text-center">Asr</TableHead>
-              <TableHead className="font-bold text-white text-center">Isha</TableHead>
-              <TableHead className="font-bold text-white text-center">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
+        
+        {isMobile ? (
+          // Mobile specific table layout with stacking
+          <div className="space-y-4 p-4">
             {filteredPrayerTimes.map((masjid, idx) => (
-              <TableRow key={idx} className="border-b">
-                <TableCell className="font-medium">{masjid.masjid}</TableCell>
-                <TableCell className="text-gray-600">{masjid.address || `123 Example St, ${selectedRegion}`}</TableCell>
-                {prayerTypes.map((prayer) => (
-                  <TableCell key={prayer} className={`${prayerColors[prayer]} text-center`}>
-                    <div className="flex items-center justify-center">
-                      {masjid[prayer]}
-                      {getLatestBadge(prayer)}
+              <div key={idx} className="bg-white rounded-lg border shadow-sm p-4">
+                <h4 className="font-semibold text-lg mb-1">{masjid.masjid}</h4>
+                <p className="text-gray-600 text-sm mb-3">{masjid.address || `123 Example St, ${selectedRegion}`}</p>
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  {prayerTypes.map((prayer) => (
+                    <div key={prayer} className={`flex items-center justify-between p-2 rounded ${prayerColors[prayer]}`}>
+                      <div className={`${prayerTextColors[prayer]} font-medium capitalize`}>
+                        {prayer}:
+                      </div>
+                      <div className="font-bold">
+                        {masjid[prayer]}
+                      </div>
                     </div>
-                  </TableCell>
-                ))}
-                <TableCell className="text-center">
-                  <Button variant="default" size="sm" className="bg-teal-600 hover:bg-teal-700">
-                    <MapPin className="mr-1 h-4 w-4" />
-                    Directions
-                  </Button>
-                </TableCell>
-              </TableRow>
+                  ))}
+                </div>
+                <Button variant="default" size="sm" className="w-full bg-teal-600 hover:bg-teal-700">
+                  <MapPin className="mr-1 h-4 w-4" />
+                  Directions
+                </Button>
+              </div>
             ))}
-          </TableBody>
-        </Table>
+          </div>
+        ) : (
+          // Desktop table view
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-[#1A1F2C] text-white">
+                <TableHead className="font-bold text-white">Masjid</TableHead>
+                <TableHead className="font-bold text-white">Address</TableHead>
+                <TableHead className="font-bold text-white text-center">Fajr</TableHead>
+                <TableHead className="font-bold text-white text-center">Dhuhr</TableHead>
+                <TableHead className="font-bold text-white text-center">Asr</TableHead>
+                <TableHead className="font-bold text-white text-center">Isha</TableHead>
+                <TableHead className="font-bold text-white text-center">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredPrayerTimes.map((masjid, idx) => (
+                <TableRow key={idx} className="border-b">
+                  <TableCell className="font-medium">{masjid.masjid}</TableCell>
+                  <TableCell className="text-gray-600">{masjid.address || `123 Example St, ${selectedRegion}`}</TableCell>
+                  {prayerTypes.map((prayer) => (
+                    <TableCell key={prayer} className={`${prayerColors[prayer]} text-center`}>
+                      <div className="flex items-center justify-center">
+                        {masjid[prayer]}
+                        {getLatestBadge(prayer)}
+                      </div>
+                    </TableCell>
+                  ))}
+                  <TableCell className="text-center">
+                    <Button variant="default" size="sm" className="bg-teal-600 hover:bg-teal-700">
+                      <MapPin className="mr-1 h-4 w-4" />
+                      Directions
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
     );
   } else {
@@ -127,8 +160,8 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
               <div className="text-sm text-gray-600 mb-3">{masjid.address || `123 Example St, ${selectedRegion}`}</div>
               <div className="grid grid-cols-2 gap-2 mb-3">
                 {prayerTypes.map((prayer) => (
-                  <div key={prayer} className={`flex items-center p-2 rounded ${prayerColors[prayer]}`}>
-                    <div className={`${prayerTextColors[prayer]} font-medium capitalize mr-2`}>
+                  <div key={prayer} className={`flex items-center justify-between p-2 rounded ${prayerColors[prayer]}`}>
+                    <div className={`${prayerTextColors[prayer]} font-medium capitalize`}>
                       {prayer}:
                     </div>
                     <div className="font-bold">
