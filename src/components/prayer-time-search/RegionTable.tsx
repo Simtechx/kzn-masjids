@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { prayerTimesData, subRegionsData } from '@/utils/prayerTimeUtils';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ArrowRight } from 'lucide-react';
@@ -15,30 +14,55 @@ interface RegionTableProps {
 const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegion }) => {
   const isMobile = useIsMobile();
   
-  // Reorder regions according to the requested sequence
-  const regions = ['North Coast', 'Northern Natal', 'Midlands', 'Durban', 'South Coast'];
-  
-  const regionCounts = regions.map(region => {
-    const subRegionCount = subRegionsData[region as keyof typeof subRegionsData]?.length || 0;
-    const masjidCount = prayerTimesData[region as keyof typeof prayerTimesData]?.length || 0;
-    // Mock musalla count - in real app, you'd get this from data
-    const musallaCount = Math.floor(masjidCount * 0.6);
-    
-    return {
-      name: region,
-      subRegions: subRegionCount,
-      masjids: masjidCount,
-      musallas: musallaCount,
-      total: masjidCount + musallaCount,
-      backgroundImage: regionBackgroundImages[region as keyof typeof regionBackgroundImages] || ''
-    };
-  });
+  // Updated region data with correct counts
+  const regions = [
+    {
+      name: 'Durban',
+      subRegions: 5,
+      masjids: 79,
+      musallas: 59,
+      total: 138,
+      backgroundImage: regionBackgroundImages['Durban']
+    },
+    {
+      name: 'Midlands',
+      subRegions: 4,
+      masjids: 39,
+      musallas: 22,
+      total: 61,
+      backgroundImage: regionBackgroundImages['Midlands']
+    },
+    {
+      name: 'North Coast',
+      subRegions: 4,
+      masjids: 37,
+      musallas: 26,
+      total: 63,
+      backgroundImage: regionBackgroundImages['North Coast']
+    },
+    {
+      name: 'South Coast',
+      subRegions: 4,
+      masjids: 19,
+      musallas: 15,
+      total: 34,
+      backgroundImage: regionBackgroundImages['South Coast']
+    },
+    {
+      name: 'Northern Natal',
+      subRegions: 5,
+      masjids: 20,
+      musallas: 13,
+      total: 33,
+      backgroundImage: regionBackgroundImages['Northern Natal']
+    }
+  ];
 
   // For mobile view, we'll show a simplified card-based layout
   if (isMobile) {
     return (
       <div className="space-y-4">
-        {regionCounts.map((regionData) => (
+        {regions.map((regionData) => (
           <div 
             key={regionData.name}
             className={`rounded-lg border p-4 cursor-pointer transition-colors ${
@@ -94,7 +118,7 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
   // Desktop view with enhanced table and image-based regions
   return (
     <div className="grid grid-cols-1 gap-4">
-      {regionCounts.map((regionData) => (
+      {regions.map((regionData) => (
         <div 
           key={regionData.name}
           className={`overflow-hidden rounded-lg shadow-sm cursor-pointer border border-gray-200 transition-all hover:shadow-md ${

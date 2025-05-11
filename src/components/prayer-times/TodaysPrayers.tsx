@@ -27,6 +27,8 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
   // Find the upcoming prayer - the next prayer after current time
   const upcomingPrayer = todayPrayerTimes.find(p => p.timestamp > now)?.name || '';
   
+  console.log("Upcoming prayer found:", upcomingPrayer);
+  
   // Function to determine background and text color based on prayer name
   const getPrayerColors = (prayerName: string, isUpcoming: boolean) => {
     // If this is the upcoming prayer, use darker shade of same color with white text
@@ -78,7 +80,7 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
             <div key={index} className={`${bgColor} rounded-lg p-4 relative overflow-hidden`}>
               {isUpcoming && (
                 <div className="absolute top-0 right-0">
-                  <div className="bg-yellow-500 text-white text-xs px-2 py-1 rounded-bl-md font-semibold">
+                  <div className="bg-yellow-500 text-black text-xs px-2 py-1 rounded-bl-md font-semibold">
                     UPCOMING
                   </div>
                 </div>

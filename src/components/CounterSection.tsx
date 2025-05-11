@@ -86,11 +86,11 @@ const FlipCounter: React.FC<FlipCounterProps> = ({ end, label, delay = 0 }) => {
 };
 
 const CounterSection = () => {
-  // Mock data for the counters
+  // Updated data for the counters based on the provided table
   const regionsCount = 5;
-  const masjidsCount = 190;
-  const musallasCount = 87;
-  const totalCount = masjidsCount + musallasCount;
+  const masjidsCount = 174;
+  const musallasCount = 135;
+  const totalCount = 309;
 
   return (
     <section className="py-16 px-4 relative bg-[#051b16] overflow-hidden">

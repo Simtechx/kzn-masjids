@@ -58,7 +58,7 @@ const SupportNewMasjids: React.FC = () => {
             {newProjects.map((project, index) => (
               <div key={index} className="w-full flex-shrink-0">
                 <Card className="border-2 border-yellow-700/30 shadow-xl overflow-hidden">
-                  <div className={`relative ${isMobile ? 'h-96' : 'h-72 md:h-96'}`}>
+                  <div className={`relative ${isMobile ? 'h-120' : 'h-72 md:h-96'}`}>
                     <img 
                       src={project.image}
                       alt={project.name}
@@ -76,7 +76,7 @@ const SupportNewMasjids: React.FC = () => {
                       
                       <div className="mt-3">
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm text-white font-medium">Project Progress</span>
+                          <span className="text-white font-medium">Project Progress</span>
                           <span className="font-medium text-white">{project.completionPercentage}%</span>
                         </div>
                         <Progress 
@@ -85,7 +85,6 @@ const SupportNewMasjids: React.FC = () => {
                           indicatorClassName="bg-teal-600"
                         />
                         
-                        {/* Yellow Contribute Button without $ symbol */}
                         <Button className="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 mt-2">
                           Contribute
                         </Button>
@@ -94,7 +93,7 @@ const SupportNewMasjids: React.FC = () => {
                     
                     {/* Project Completion Badge */}
                     <div className="absolute top-4 left-4">
-                      <span className="bg-yellow-800 text-white text-sm font-bold px-4 py-2 rounded-full">
+                      <span className="bg-yellow-800 text-white text-xs px-4 py-2 rounded-full font-semibold">
                         {project.completionPercentage}% Complete
                       </span>
                     </div>
@@ -104,13 +103,13 @@ const SupportNewMasjids: React.FC = () => {
             ))}
           </div>
 
-          {/* Pagination indicators */}
+          {/* Pagination indicators - Updated color to match #062C25 */}
           <div className="flex justify-center mt-6 space-x-2">
             {newProjects.map((_, index) => (
               <button
                 key={index}
                 className={`h-3 rounded-full transition-all ${
-                  currentSlide === index ? "w-8 bg-gray-800" : "w-3 bg-gray-300"
+                  currentSlide === index ? "w-8 bg-yellow-500" : "w-3 bg-[#062C25]"
                 }`}
                 onClick={() => setCurrentSlide(index)}
                 aria-label={`Go to slide ${index + 1}`}

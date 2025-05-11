@@ -35,7 +35,7 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
     isha: 'text-indigo-600',
   };
 
-  // Define active block colors - now using darker shades of the same color
+  // Define active block colors - using darker shades of the same color
   const activeColors = {
     fajr: 'bg-pink-600 text-white',
     dhuhr: 'bg-amber-600 text-white',

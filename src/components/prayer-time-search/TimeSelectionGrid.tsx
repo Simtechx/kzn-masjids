@@ -110,10 +110,12 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
     return `${baseClass} ${colors.bgNormal} hover:bg-gray-200 ${colors.textNormal}`;
   };
 
-  // Always use grid with 3 columns for both mobile and desktop
+  // Use grid with 6 columns for desktop and 3 for mobile
+  const gridCols = isMobile ? "grid-cols-3" : "grid-cols-6";
+
   return (
     <div className="mt-4">
-      <div className="grid grid-cols-3 gap-2">
+      <div className={`grid ${gridCols} gap-2`}>
         {times.map((time) => (
           <div
             key={time}
@@ -121,6 +123,7 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
             onClick={() => onSelectTime(time)}
           >
             {time}
+            
             {/* Add EARLIEST badge for earliest time */}
             {earliestTime && time === earliestTime.time && (
               <div className={`mt-1 text-xs font-semibold ${colors.textEarliest}`}>EARLIEST</div>
@@ -128,7 +131,9 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
             
             {/* Add LATEST badge for latest time */}
             {latestTime && time === latestTime.time && (
-              <div className="mt-1 text-xs font-semibold text-white">LATEST</div>
+              <div className={`mt-1 text-xs font-semibold ${time === selectedTime ? 'text-black' : 'text-white'}`}>
+                LATEST
+              </div>
             )}
             
             {/* Add SELECTED badge for selected time */}

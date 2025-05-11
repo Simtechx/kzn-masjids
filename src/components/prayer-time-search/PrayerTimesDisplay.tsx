@@ -57,16 +57,23 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
     isha: 'text-indigo-600',
   };
 
+  // Generate the header title text
+  const getHeaderTitle = () => {
+    if (selectedTime && activePrayer) {
+      return `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}`;
+    } else if (selectedSubRegion) {
+      return `Salaah Times in ${selectedSubRegion}`;
+    } else {
+      return `Salaah Times in ${selectedRegion}`;
+    }
+  };
+
   // Only render the selected view type (table or block)
   if (viewMode === 'table') {
     return (
       <div className="overflow-x-auto bg-white rounded-lg shadow">
         <h3 className="text-2xl font-bold p-4 text-teal-700 text-center">
-          {selectedTime && activePrayer 
-            ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
-            : selectedSubRegion 
-              ? `Salaah Times in ${selectedSubRegion}`
-              : `Salaah Times in ${selectedRegion}`}
+          {getHeaderTitle()}
         </h3>
         
         {isMobile ? (
@@ -150,11 +157,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
     return (
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-2xl font-bold mb-4 text-teal-700 text-center">
-          {selectedTime && activePrayer 
-            ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
-            : selectedSubRegion 
-              ? `Salaah Times in ${selectedSubRegion}`
-              : `Salaah Times in ${selectedRegion}`}
+          {getHeaderTitle()}
         </h3>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
