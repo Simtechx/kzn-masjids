@@ -1,12 +1,15 @@
 
-import React, { useState } from 'react';
-import { Carousel } from '@/components/ui/carousel';
-import { CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { ChevronUp, ChevronDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const NoticesSection = () => {
   // Tab state
   const [activeTab, setActiveTab] = useState("upcoming");
+  // Carousel state
+  const [activeIndex, setActiveIndex] = useState(0);
+  // Auto-scroll interval ref
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Sample notice data with images for each category
   const noticesByCategory = {
@@ -63,6 +66,43 @@ const NoticesSection = () => {
     ],
   };
 
+  // Handle tab change
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    // Reset carousel to first image on tab change
+    setActiveIndex(0);
+  };
+
+  // Navigate carousel
+  const navigateCarousel = useCallback((direction: 'next' | 'prev') => {
+    const images = noticesByCategory[activeTab as keyof typeof noticesByCategory];
+    if (direction === 'next') {
+      setActiveIndex(prev => (prev + 1) % images.length);
+    } else {
+      setActiveIndex(prev => (prev - 1 + images.length) % images.length);
+    }
+  }, [activeTab, noticesByCategory]);
+
+  // Auto-scroll carousel
+  useEffect(() => {
+    // Clear previous interval if any
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    // Start new interval
+    intervalRef.current = setInterval(() => {
+      navigateCarousel('next');
+    }, 5000);
+
+    // Clean up interval on unmount or tab change
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [navigateCarousel, activeTab]);
+
   return (
     <section className="py-16 px-4 bg-white">
       <div className="container mx-auto">
@@ -73,67 +113,71 @@ const NoticesSection = () => {
           Stay informed about the latest events, programs, and announcements
         </p>
         
-        <Tabs defaultValue="upcoming" onValueChange={setActiveTab} className="w-full max-w-4xl mx-auto">
-          <div className="flex justify-center mb-8">
-            <TabsList className="bg-gray-100">
-              <TabsTrigger 
-                value="upcoming"
-                className={activeTab === "upcoming" ? "bg-yellow-400 text-black" : ""}
-              >
-                Upcoming
-              </TabsTrigger>
-              <TabsTrigger 
-                value="jumuah"
-                className={activeTab === "jumuah" ? "bg-yellow-400 text-black" : ""}
-              >
-                Jumuah
-              </TabsTrigger>
-              <TabsTrigger 
-                value="times"
-                className={activeTab === "times" ? "bg-yellow-400 text-black" : ""}
-              >
-                Times
-              </TabsTrigger>
-            </TabsList>
-          </div>
-          
-          {Object.keys(noticesByCategory).map((category) => (
-            <TabsContent key={category} value={category} className="focus-visible:outline-none focus-visible:ring-0">
-              <Carousel
-                opts={{
-                  align: "center",
-                  loop: true,
-                  dragFree: true,
-                }}
-                className="w-full"
-              >
-                <CarouselContent>
-                  {noticesByCategory[category].map((notice) => (
-                    <CarouselItem key={notice.id} className="basis-full md:basis-1/2 lg:basis-1/3 pl-4 md:pl-6">
-                      <div className="bg-white rounded-xl overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-[1.03]">
-                        <div className="aspect-[4/3] relative overflow-hidden">
-                          <img
-                            src={notice.imageUrl}
-                            alt={notice.title}
-                            className="object-cover w-full h-full"
-                          />
-                        </div>
-                        <div className="p-4 text-center">
-                          <h3 className="text-lg font-semibold">{notice.title}</h3>
-                        </div>
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                
-                <div className="flex justify-center mt-8 gap-4">
-                  <CarouselPrevious className="static transform-none shadow-md hover:bg-yellow-400 hover:text-black" />
-                  <CarouselNext className="static transform-none shadow-md hover:bg-yellow-400 hover:text-black" />
-                </div>
-              </Carousel>
-            </TabsContent>
+        {/* Tabs navigation */}
+        <div className="flex justify-center space-x-4 mb-6">
+          {Object.keys(noticesByCategory).map((tab) => (
+            <button
+              key={tab}
+              className={cn(
+                "px-6 py-2 rounded-lg font-medium transition-colors",
+                activeTab === tab 
+                  ? "bg-yellow-400 text-black" 
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              )}
+              onClick={() => handleTabChange(tab)}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
           ))}
-        </Tabs>
+        </div>
+        
+        {/* Vertical A4 Carousel */}
+        <div className="relative w-[350px] h-[500px] mx-auto overflow-hidden rounded-xl shadow-xl">
+          {/* Navigation Arrows */}
+          <button 
+            className="absolute top-2 left-1/2 -translate-x-1/2 z-10 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors"
+            onClick={() => navigateCarousel('prev')}
+          >
+            <ChevronUp size={24} />
+          </button>
+          <button 
+            className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors"
+            onClick={() => navigateCarousel('next')}
+          >
+            <ChevronDown size={24} />
+          </button>
+          
+          {/* Carousel Images */}
+          {noticesByCategory[activeTab as keyof typeof noticesByCategory].map((notice, index) => (
+            <div
+              key={notice.id}
+              className={cn(
+                "absolute inset-0 transition-all duration-500 ease-in-out rounded-xl overflow-hidden",
+                activeIndex === index 
+                  ? "opacity-100 translate-y-0" 
+                  : index < activeIndex 
+                    ? "opacity-0 -translate-y-full" 
+                    : "opacity-0 translate-y-full"
+              )}
+            >
+              <img 
+                src={notice.imageUrl} 
+                alt={notice.title} 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/70 to-transparent text-white">
+                <h3 className="text-lg font-medium">{notice.title}</h3>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        {/* Image counter */}
+        <div className="mt-4 text-center">
+          <p className="text-sm text-gray-500">
+            {activeIndex + 1} / {noticesByCategory[activeTab as keyof typeof noticesByCategory].length}
+          </p>
+        </div>
       </div>
     </section>
   );
