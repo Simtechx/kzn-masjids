@@ -17,7 +17,7 @@ const SupportNewMasjids: React.FC = () => {
     if (!isPaused) {
       const interval = setInterval(() => {
         setCurrentSlide(prev => (prev + 1) % newProjects.length);
-      }, 3500); // Changed to 3.5 seconds
+      }, 3500); // Keep the existing 3.5 seconds
       
       return () => clearInterval(interval);
     }
@@ -61,40 +61,46 @@ const SupportNewMasjids: React.FC = () => {
                         transformStyle: 'preserve-3d',
                         boxShadow: '0 15px 25px rgba(0, 0, 0, 0.1)'
                       }}>
-                  <div className="relative h-52 md:h-80">
+                  <div className="relative h-64 md:h-80">
                     <img 
                       src={project.image}
                       alt={project.name}
                       className="h-full w-full object-cover"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                    {/* Dark overlay for better contrast with the elements inside image area */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                    
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
                       <h3 className="text-white font-bold text-xl md:text-2xl">{project.name}</h3>
                       <p className="text-white/80 text-sm md:text-base">{project.location}</p>
+                      
+                      {/* Project progress moved inside the image area */}
+                      <div className="mt-3">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-sm text-white/90">Project Progress</span>
+                          <span className="font-medium text-white">{project.completionPercentage}%</span>
+                        </div>
+                        <Progress 
+                          value={project.completionPercentage} 
+                          className="h-2 mb-3 bg-white/20" 
+                          indicatorClassName="bg-teal-600" 
+                        />
+                        {/* Yellow Contribute Button moved inside image area */}
+                        <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 mt-2">
+                          Contribute
+                        </Button>
+                      </div>
                     </div>
-                    {/* Project Completion Badge - Orange style similar to reference image */}
+                    
+                    {/* Project Completion Badge - Darker orange style for better contrast */}
                     <div className="absolute top-4 left-4">
-                      <span className="bg-amber-500 text-white text-sm font-bold px-4 py-2 rounded-full">
+                      <span className="bg-amber-600 text-white text-sm font-bold px-4 py-2 rounded-full">
                         {project.completionPercentage}% Complete
                       </span>
                     </div>
                   </div>
                   <CardContent className="p-6">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm text-gray-600">Project Progress</span>
-                      <span className="font-medium text-gray-700">{project.completionPercentage}%</span>
-                    </div>
-                    <Progress 
-                      value={project.completionPercentage} 
-                      className="h-2 mb-6 bg-gray-200" 
-                      indicatorClassName="bg-amber-500" 
-                    />
-                    <p className="mb-4 text-gray-700">{project.description || 'Help us complete this important project for the community.'}</p>
-                    <div className="mt-6">
-                      {/* Yellow Contribute Button */}
-                      <Button className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3">
-                        Contribute
-                      </Button>
-                    </div>
+                    <p className="text-gray-700">{project.description || 'Help us complete this important project for the community.'}</p>
                   </CardContent>
                 </Card>
               </div>

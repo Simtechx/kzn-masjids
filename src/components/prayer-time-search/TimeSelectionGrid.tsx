@@ -47,12 +47,10 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
     return `${baseClass} bg-gray-100 hover:bg-gray-200 text-gray-700`;
   };
 
-  // Mobile: 3 per row, Desktop: 5 per row
-  const gridCols = isMobile ? "grid-cols-3" : "grid-cols-5";
-
+  // Always use grid with 3 columns for both mobile and desktop
   return (
     <div className="mt-4">
-      <div className={`grid ${gridCols} gap-2`}>
+      <div className="grid grid-cols-3 gap-2">
         {times.map((time) => (
           <div
             key={time}

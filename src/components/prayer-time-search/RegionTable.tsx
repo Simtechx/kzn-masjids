@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ArrowRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import regionBackgroundImages from '@/utils/regionBackgroundImages';
 
 interface RegionTableProps {
   selectedRegion: string | null;
@@ -28,7 +29,8 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
       subRegions: subRegionCount,
       masjids: masjidCount,
       musallas: musallaCount,
-      total: masjidCount + musallaCount
+      total: masjidCount + musallaCount,
+      backgroundImage: regionBackgroundImages[region as keyof typeof regionBackgroundImages] || ''
     };
   });
 
@@ -44,19 +46,29 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
             }`}
             onClick={() => onSelectRegion(regionData.name)}
           >
-            <div className="flex justify-between items-center">
-              <h3 className="font-semibold text-lg">{regionData.name}</h3>
-              <Button 
-                variant="link"
-                className="text-teal-700 hover:text-teal-900 font-medium p-0"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onSelectRegion(regionData.name);
+            <div className="flex items-center">
+              <div 
+                className="w-16 h-16 rounded-lg mr-3 bg-cover bg-center flex-shrink-0"
+                style={{
+                  backgroundImage: `url('${regionData.backgroundImage}')`
                 }}
               >
-                Explore
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </Button>
+                <div className="w-full h-full bg-black/30 rounded-lg"></div>
+              </div>
+              <div className="flex-grow">
+                <h3 className="font-semibold text-lg">{regionData.name}</h3>
+                <Button 
+                  variant="link"
+                  className="text-teal-700 hover:text-teal-900 font-medium p-0"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelectRegion(regionData.name);
+                  }}
+                >
+                  Explore
+                  <ArrowRight className="h-4 w-4 ml-1" />
+                </Button>
+              </div>
             </div>
             
             <div className="grid grid-cols-3 gap-2 mt-3 text-sm">
@@ -95,7 +107,7 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
             <div 
               className="w-1/4 h-full relative bg-cover bg-center flex items-center justify-center"
               style={{ 
-                backgroundImage: `url('https://source.unsplash.com/featured/?${regionData.name.toLowerCase().replace(' ', ',')}')`,
+                backgroundImage: `url('${regionData.backgroundImage}')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
               }}

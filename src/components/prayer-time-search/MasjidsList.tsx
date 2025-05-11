@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { MapPin } from 'lucide-react';
+import regionBackgroundImages from '@/utils/regionBackgroundImages';
 
 interface MasjidsListProps {
   selectedRegion: string;
@@ -60,6 +61,10 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
     return null;
   };
 
+  const getRegionImage = () => {
+    return regionBackgroundImages[selectedRegion as keyof typeof regionBackgroundImages] || '';
+  };
+
   const renderTableView = () => {
     if (isMobile) {
       // Mobile optimized table view - simplified with no address/actions columns
@@ -67,7 +72,17 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
         <div className="space-y-4 overflow-x-hidden">
           {filteredPrayerTimes.map((masjid, index) => (
             <div key={index} className="bg-white p-4 rounded-md shadow border border-gray-100">
-              <h3 className="font-semibold text-lg mb-2 text-teal-700">{masjid.masjid}</h3>
+              <div className="flex items-center mb-2">
+                <div 
+                  className="w-12 h-12 rounded mr-3 bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url('${getRegionImage()}')`
+                  }}
+                >
+                  <div className="w-full h-full bg-black/30 rounded"></div>
+                </div>
+                <h3 className="font-semibold text-lg text-teal-700">{masjid.masjid}</h3>
+              </div>
               
               <div className="grid grid-cols-2 gap-2 mb-3">
                 {prayerTypes.map((prayer) => {
@@ -123,13 +138,25 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
               {filteredPrayerTimes.map((masjid, index) => (
                 <TableRow 
                   key={index} 
-                  className={`hover:bg-gray-50 transition-colors ${
+                  className={`hover:bg-gray-100 transition-colors cursor-pointer ${
                     activePrayer && selectedTime && masjid[activePrayer] === selectedTime 
                       ? 'bg-gray-100' 
                       : ''
                   }`}
                 >
-                  <TableCell className="font-medium">{masjid.masjid}</TableCell>
+                  <TableCell className="font-medium">
+                    <div className="flex items-center">
+                      <div 
+                        className="w-10 h-10 rounded mr-3 bg-cover bg-center"
+                        style={{
+                          backgroundImage: `url('${getRegionImage()}')`
+                        }}
+                      >
+                        <div className="w-full h-full bg-black/30 rounded"></div>
+                      </div>
+                      {masjid.masjid}
+                    </div>
+                  </TableCell>
                   <TableCell>123 Example St, {selectedRegion}</TableCell>
                   {prayerTypes.map(prayer => {
                     const extremeType = isExtremeTime(prayer, masjid[prayer]);
@@ -175,8 +202,20 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredPrayerTimes.map((masjid, index) => (
           <div key={index} className="bg-white p-4 rounded-md shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-            <h4 className="font-semibold text-lg mb-2 text-teal-700">{masjid.masjid}</h4>
-            <p className="text-gray-600 text-sm mb-3">123 Example St, {selectedRegion}</p>
+            <div className="flex items-center mb-3">
+              <div 
+                className="w-12 h-12 rounded mr-3 bg-cover bg-center"
+                style={{
+                  backgroundImage: `url('${getRegionImage()}')`
+                }}
+              >
+                <div className="w-full h-full bg-black/30 rounded"></div>
+              </div>
+              <div>
+                <h4 className="font-semibold text-lg text-teal-700">{masjid.masjid}</h4>
+                <p className="text-gray-600 text-sm">123 Example St, {selectedRegion}</p>
+              </div>
+            </div>
             <div className="grid grid-cols-2 gap-1">
               {prayerTypes.map((prayer) => {
                 const extremeType = isExtremeTime(prayer, masjid[prayer]);
