@@ -11,7 +11,6 @@ interface NewMasjidProjectProps {
   name: string;
   location: string;
   image: string;
-  description: string;
   completionPercentage: number;
 }
 
@@ -29,7 +28,7 @@ const NewMasjidProject: React.FC<NewMasjidProjectProps> = ({
           alt={name} 
           className="w-full h-full object-cover"
         />
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-5">
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-5">
           <h3 className="text-xl font-bold mb-1 text-white">{name}</h3>
           <p className="text-gray-200 mb-4 text-sm">{location}</p>
           
@@ -50,7 +49,7 @@ const NewMasjidProject: React.FC<NewMasjidProjectProps> = ({
         </div>
         
         <div className="absolute top-3 left-3">
-          <span className="px-3 py-1 bg-amber-500 text-white rounded-full text-sm font-medium">
+          <span className="px-3 py-1 bg-amber-700 text-white rounded-full text-sm font-medium shadow-md">
             {completionPercentage}% Complete
           </span>
         </div>
@@ -71,35 +70,30 @@ const SupportNewMasjids: React.FC = () => {
       name: "Masjid Al-Noor",
       location: "Phoenix, Durban",
       image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&q=80",
-      description: "A new community masjid being built to serve the growing Muslim population in Phoenix. The masjid will include prayer halls, madrasah classrooms, and community facilities.",
       completionPercentage: 65
     },
     {
       name: "Masjid Al-Furqan",
       location: "Pietermaritzburg",
       image: "https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?auto=format&fit=crop&q=80",
-      description: "Expansion project for the existing Masjid Al-Furqan to accommodate more worshippers and add educational facilities for the community.",
       completionPercentage: 40
     },
     {
       name: "Musgrave Islamic Center",
       location: "Musgrave, Durban",
       image: "https://images.unsplash.com/photo-1551038247-3d9af20df552?auto=format&fit=crop&q=80",
-      description: "A modern Islamic center providing prayer facilities, educational programs, and community services to Muslims in the Musgrave area.",
       completionPercentage: 85
     },
     {
       name: "Juma Masjid",
       location: "Verulam",
       image: "https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&q=80",
-      description: "Renovation and expansion of the historic Juma Masjid to preserve its heritage while providing modern facilities for worshippers.",
       completionPercentage: 25
     },
     {
       name: "Masjid Al-Rahma",
       location: "Chatsworth",
       image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&q=80",
-      description: "Construction of Masjid Al-Rahma to serve as a community hub offering prayer spaces, Islamic education, and community outreach programs.",
       completionPercentage: 55
     }
   ];
@@ -146,7 +140,7 @@ const SupportNewMasjids: React.FC = () => {
           }
         }
         startAutoScroll(); // Recursively call to create a loop
-      }, 5000); // Scroll every 5 seconds
+      }, 4000); // Scroll every 4 seconds (changed from 5000 to 4000)
     };
     
     startAutoScroll();
@@ -178,12 +172,13 @@ const SupportNewMasjids: React.FC = () => {
             opts={{
               align: "center",
               loop: true,
+              dragFree: true,
             }}
             setApi={(api) => {
               api?.on("select", () => handleCarouselChange(api));
             }}
           >
-            <CarouselContent>
+            <CarouselContent className="transition-all duration-700 ease-in-out">
               {newProjects.map((project, index) => (
                 <CarouselItem 
                   key={index} 
@@ -193,7 +188,6 @@ const SupportNewMasjids: React.FC = () => {
                     name={project.name}
                     location={project.location}
                     image={project.image}
-                    description={project.description}
                     completionPercentage={project.completionPercentage}
                   />
                 </CarouselItem>
