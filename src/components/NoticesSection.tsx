@@ -99,40 +99,38 @@ const NoticesSection = () => {
           
           {Object.keys(noticesByCategory).map((category) => (
             <TabsContent key={category} value={category} className="focus-visible:outline-none focus-visible:ring-0">
-              <div className="relative">
-                <Carousel
-                  opts={{
-                    align: "center",
-                    loop: true,
-                    dragFree: true,
-                  }}
-                  className="w-full"
-                >
-                  <CarouselContent>
-                    {noticesByCategory[category].map((notice) => (
-                      <CarouselItem key={notice.id} className="basis-full md:basis-1/2 lg:basis-1/3 pl-4 md:pl-6">
-                        <div className="bg-white rounded-xl overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-[1.03]">
-                          <div className="aspect-[4/3] relative overflow-hidden">
-                            <img
-                              src={notice.imageUrl}
-                              alt={notice.title}
-                              className="object-cover w-full h-full"
-                            />
-                          </div>
-                          <div className="p-4 text-center">
-                            <h3 className="text-lg font-semibold">{notice.title}</h3>
-                          </div>
+              <Carousel
+                opts={{
+                  align: "center",
+                  loop: true,
+                  dragFree: true,
+                }}
+                className="w-full"
+              >
+                <CarouselContent>
+                  {noticesByCategory[category].map((notice) => (
+                    <CarouselItem key={notice.id} className="basis-full md:basis-1/2 lg:basis-1/3 pl-4 md:pl-6">
+                      <div className="bg-white rounded-xl overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-[1.03]">
+                        <div className="aspect-[4/3] relative overflow-hidden">
+                          <img
+                            src={notice.imageUrl}
+                            alt={notice.title}
+                            className="object-cover w-full h-full"
+                          />
                         </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                </Carousel>
+                        <div className="p-4 text-center">
+                          <h3 className="text-lg font-semibold">{notice.title}</h3>
+                        </div>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
                 
                 <div className="flex justify-center mt-8 gap-4">
                   <CarouselPrevious className="static transform-none shadow-md hover:bg-yellow-400 hover:text-black" />
                   <CarouselNext className="static transform-none shadow-md hover:bg-yellow-400 hover:text-black" />
                 </div>
-              </div>
+              </Carousel>
             </TabsContent>
           ))}
         </Tabs>
