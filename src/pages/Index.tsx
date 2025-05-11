@@ -93,8 +93,6 @@ const Index = () => {
         
         {/* Support New Masjids */}
         <SupportNewMasjids />
-        
-        {/* Hero component removed from above footer */}
       </main>
       <Footer />
     </div>

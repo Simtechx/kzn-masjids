@@ -39,7 +39,7 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
       earliest: 'bg-pink-100',
       middle: 'bg-pink-200',
       latest: 'bg-pink-300',
-      selected: 'bg-[#FEF7CD] text-pink-800 font-medium border border-pink-300',
+      selected: 'bg-gray-800 text-white font-medium',
       next: 'bg-[#FEF7CD] font-medium border border-pink-300',
     },
     dhuhr: {
@@ -48,7 +48,7 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
       earliest: 'bg-amber-100',
       middle: 'bg-amber-200',
       latest: 'bg-amber-300',
-      selected: 'bg-[#FEF7CD] text-amber-800 font-medium border border-amber-300',
+      selected: 'bg-gray-800 text-white font-medium',
       next: 'bg-[#FEF7CD] font-medium border border-amber-300',
     },
     asr: {
@@ -57,7 +57,7 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
       earliest: 'bg-teal-100',
       middle: 'bg-teal-200',
       latest: 'bg-teal-300',
-      selected: 'bg-[#FEF7CD] text-teal-800 font-medium border border-teal-300',
+      selected: 'bg-gray-800 text-white font-medium',
       next: 'bg-[#FEF7CD] font-medium border border-teal-300',
     },
     isha: {
@@ -66,7 +66,7 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
       earliest: 'bg-indigo-100',
       middle: 'bg-indigo-200',
       latest: 'bg-indigo-300',
-      selected: 'bg-[#FEF7CD] text-indigo-800 font-medium border border-indigo-300',
+      selected: 'bg-gray-800 text-white font-medium',
       next: 'bg-[#FEF7CD] font-medium border border-indigo-300',
     },
   };

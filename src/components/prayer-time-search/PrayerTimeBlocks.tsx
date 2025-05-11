@@ -32,12 +32,12 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
     isha: 'text-indigo-600',
   };
 
-  // Define active block colors - dark gray with white text
+  // Define active block colors
   const activeColors = {
-    fajr: 'bg-gray-800 text-white',
-    dhuhr: 'bg-gray-800 text-white',
-    asr: 'bg-gray-800 text-white',
-    isha: 'bg-gray-800 text-white',
+    fajr: 'bg-pink-600 text-white',
+    dhuhr: 'bg-amber-600 text-white',
+    asr: 'bg-teal-600 text-white',
+    isha: 'bg-indigo-600 text-white',
   };
 
   return (
