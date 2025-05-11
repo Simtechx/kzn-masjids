@@ -39,7 +39,7 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
           <ToggleGroupItem 
             value="block" 
             aria-label="Block View" 
-            className={regionViewMode === 'block' ? 'bg-yellow-400 text-black' : 'text-[#072c23]'}
+            className="data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black"
           >
             <LayoutGrid className="h-5 w-5" />
             <span className="ml-2">Block</span>
@@ -47,7 +47,7 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
           <ToggleGroupItem 
             value="table" 
             aria-label="Table View" 
-            className={regionViewMode === 'table' ? 'bg-yellow-400 text-black' : 'text-[#072c23]'}
+            className="data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black"
           >
             <Table2 className="h-5 w-5" />
             <span className="ml-2">Table</span>
