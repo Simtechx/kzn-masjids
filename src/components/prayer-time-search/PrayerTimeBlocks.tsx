@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { PrayerType } from '@/utils/prayerTimeUtils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface PrayerTimeBlocksProps {
   selectedRegion: string | null;
@@ -13,6 +14,8 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
   activePrayer, 
   onSelectPrayer 
 }) => {
+  const isMobile = useIsMobile();
+  
   // Exclude maghrib as per requirements
   const prayerTypes: PrayerType[] = ['fajr', 'dhuhr', 'asr', 'isha'];
 
@@ -41,26 +44,28 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
   };
 
   return (
-    <div className="flex flex-wrap gap-2 mb-4">
-      {prayerTypes.map((prayer) => {
-        const isActive = activePrayer === prayer;
-        
-        return (
-          <div 
-            key={prayer}
-            className={`p-3 rounded cursor-pointer text-center flex-1 shadow-sm ${
-              isActive 
-                ? activeColors[prayer] 
-                : `${prayerColors[prayer]}`
-            }`}
-            onClick={() => onSelectPrayer(prayer)}
-          >
-            <div className={`font-medium ${!isActive ? prayerTextColors[prayer] : ''}`}>
-              {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
+    <div className="w-full overflow-x-auto pb-2">
+      <div className={`flex ${isMobile ? 'flex-row' : 'flex-wrap'} gap-2 mb-4 ${isMobile ? 'min-w-max' : ''}`}>
+        {prayerTypes.map((prayer) => {
+          const isActive = activePrayer === prayer;
+          
+          return (
+            <div 
+              key={prayer}
+              className={`p-3 rounded cursor-pointer text-center shadow-sm ${isMobile ? 'min-w-[100px]' : 'flex-1'} ${
+                isActive 
+                  ? activeColors[prayer] 
+                  : `${prayerColors[prayer]}`
+              }`}
+              onClick={() => onSelectPrayer(prayer)}
+            >
+              <div className={`font-medium ${!isActive ? prayerTextColors[prayer] : ''}`}>
+                {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };

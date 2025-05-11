@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { PrayerType, getUniquePrayerTimes, findExtremeTime } from '@/utils/prayerTimeUtils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface TimeSelectionGridProps {
   activePrayer: PrayerType;
@@ -15,6 +16,8 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
   selectedTime,
   onSelectTime
 }) => {
+  const isMobile = useIsMobile();
+  
   // Get unique times and sort them
   const uniquePrayerTimes = getUniquePrayerTimes(activePrayer);
   
@@ -107,27 +110,53 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
 
   return (
     <div className="mb-6">
-      <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
-        {orderedTimes.map((time, index) => {
-          const isEarliest = time === earliestTime;
-          const isLatest = time === latestTime;
-          const isNext = time === nextPrayerTime && !selectedTime;
-          const timeColor = getTimeColor(time);
-          
-          return (
-            <div 
-              key={index}
-              className={`p-2 rounded text-center cursor-pointer transition-all ${timeColor} hover:opacity-90`}
-              onClick={() => onSelectTime(time)}
-            >
-              <div>{time}</div>
-              {isEarliest && <div className="text-xs mt-1 font-medium">EARLIEST</div>}
-              {isLatest && <div className="text-xs mt-1 font-medium">LATEST</div>}
-              {isNext && !isEarliest && !isLatest && <div className="text-xs mt-1 font-medium">NEXT</div>}
-            </div>
-          );
-        })}
-      </div>
+      {isMobile ? (
+        <div className="w-full overflow-x-auto pb-2">
+          <div className="flex flex-row gap-2 min-w-max">
+            {orderedTimes.map((time, index) => {
+              const isEarliest = time === earliestTime;
+              const isLatest = time === latestTime;
+              const isNext = time === nextPrayerTime && !selectedTime;
+              const timeColor = getTimeColor(time);
+              
+              return (
+                <div 
+                  key={index}
+                  className={`min-w-[80px] p-2 rounded text-center cursor-pointer transition-all ${timeColor} hover:opacity-90`}
+                  onClick={() => onSelectTime(time)}
+                >
+                  <div>{time}</div>
+                  {isEarliest && <div className="text-xs mt-1 font-medium">EARLIEST</div>}
+                  {isLatest && <div className="text-xs mt-1 font-medium">LATEST</div>}
+                  {isNext && !isEarliest && !isLatest && <div className="text-xs mt-1 font-medium">NEXT</div>}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+          {orderedTimes.map((time, index) => {
+            const isEarliest = time === earliestTime;
+            const isLatest = time === latestTime;
+            const isNext = time === nextPrayerTime && !selectedTime;
+            const timeColor = getTimeColor(time);
+            
+            return (
+              <div 
+                key={index}
+                className={`p-2 rounded text-center cursor-pointer transition-all ${timeColor} hover:opacity-90`}
+                onClick={() => onSelectTime(time)}
+              >
+                <div>{time}</div>
+                {isEarliest && <div className="text-xs mt-1 font-medium">EARLIEST</div>}
+                {isLatest && <div className="text-xs mt-1 font-medium">LATEST</div>}
+                {isNext && !isEarliest && !isLatest && <div className="text-xs mt-1 font-medium">NEXT</div>}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

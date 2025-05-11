@@ -56,7 +56,7 @@ const NoticesSection = () => {
         imageUrl: 'https://images.unsplash.com/photo-1560264234-b5618a0bfb0c',
       },
     ],
-    times: [
+    info: [
       {
         id: 7,
         title: 'Updated Salaah Times for Winter',
