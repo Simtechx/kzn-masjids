@@ -35,12 +35,12 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
     isha: 'text-indigo-600',
   };
 
-  // Define active block colors
+  // Define active block colors - now using yellow
   const activeColors = {
-    fajr: 'bg-pink-600 text-white',
-    dhuhr: 'bg-amber-600 text-white',
-    asr: 'bg-teal-600 text-white',
-    isha: 'bg-indigo-600 text-white',
+    fajr: 'bg-yellow-500 text-white',
+    dhuhr: 'bg-yellow-500 text-white',
+    asr: 'bg-yellow-500 text-white',
+    isha: 'bg-yellow-500 text-white',
   };
 
   // For mobile, use a 2x2 grid layout
@@ -55,7 +55,7 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
           return (
             <div 
               key={prayer}
-              className={`p-3 rounded cursor-pointer text-center shadow-sm ${
+              className={`p-3 rounded cursor-pointer text-center flex items-center justify-center shadow-sm ${
                 isActive 
                   ? activeColors[prayer] 
                   : prayerColors[prayer]

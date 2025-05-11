@@ -57,18 +57,11 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
     isha: 'text-indigo-600',
   };
 
-  const getLatestBadge = (prayer: PrayerType) => {
-    if (activePrayer === prayer && searchType === 'latest') {
-      return <Badge className="ml-1 bg-teal-600">LATEST</Badge>;
-    }
-    return null;
-  };
-  
   // Only render the selected view type (table or block)
   if (viewMode === 'table') {
     return (
       <div className="overflow-x-auto bg-white rounded-lg shadow">
-        <h3 className={`text-2xl font-bold p-4 text-teal-700 ${isMobile ? "text-center" : ""}`}>
+        <h3 className="text-2xl font-bold p-4 text-teal-700 text-center">
           {selectedTime && activePrayer 
             ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
             : selectedSubRegion 
@@ -136,7 +129,6 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
                     <TableCell key={prayer} className={`${prayerColors[prayer]} text-center`}>
                       <div className="flex items-center justify-center">
                         {masjid[prayer]}
-                        {getLatestBadge(prayer)}
                       </div>
                     </TableCell>
                   ))}
@@ -157,7 +149,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
     // Block view
     return (
       <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className={`text-2xl font-bold mb-4 text-teal-700 ${isMobile ? "text-center" : ""}`}>
+        <h3 className="text-2xl font-bold mb-4 text-teal-700 text-center">
           {selectedTime && activePrayer 
             ? `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime}` 
             : selectedSubRegion 
@@ -183,7 +175,6 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
                     <div className="font-bold text-center">
                       {masjid[prayer]}
                     </div>
-                    {getLatestBadge(prayer)}
                   </div>
                 ))}
               </div>

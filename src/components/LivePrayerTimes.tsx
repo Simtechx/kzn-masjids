@@ -13,6 +13,8 @@ const LivePrayerTimes = () => {
     todayPrayerTimes
   } = usePrayerTimes();
 
+  console.log('Upcoming Prayer:', upcomingPrayer); // Debug log to check upcoming prayer data
+
   return (
     <div className="bg-white text-black">
       <div className="container mx-auto px-4 py-6">

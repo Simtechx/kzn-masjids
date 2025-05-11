@@ -20,9 +20,9 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
   const isMobile = useIsMobile();
 
   return (
-    <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+    <div className={`flex flex-col ${isMobile ? 'items-center text-center' : 'md:flex-row md:justify-between md:items-center'} gap-4 mb-6`}>
       <div>
-        <h2 className="text-2xl md:text-3xl font-bold text-[#072c23] leading-tight">Salaah Time Search</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-[#062C25] leading-tight">Salaah Time Search</h2>
         <p className="text-gray-600 mt-1">
           {selectedSubRegion && selectedRegion 
             ? `Find salaah times for masjids in ${selectedSubRegion}, ${selectedRegion}`
@@ -32,7 +32,7 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
         </p>
       </div>
       
-      <div className="bg-gray-100 p-2 rounded-md self-start md:self-auto overflow-x-auto">
+      <div className="bg-gray-100 p-2 rounded-md self-center md:self-auto overflow-x-auto">
         <ToggleGroup 
           type="single" 
           value={regionViewMode} 
@@ -42,7 +42,7 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
           <ToggleGroupItem 
             value="block" 
             aria-label="Block" 
-            className="data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
+            className="data-[state=on]:!bg-yellow-500 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
           >
             <LayoutGrid className="h-5 w-5" />
             <span className="ml-2">Block</span>
@@ -50,7 +50,7 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
           <ToggleGroupItem 
             value="table" 
             aria-label="Table" 
-            className="data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
+            className="data-[state=on]:!bg-yellow-500 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
           >
             <Table2 className="h-5 w-5" />
             <span className="ml-2">Table</span>
