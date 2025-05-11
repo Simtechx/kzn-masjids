@@ -77,25 +77,37 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
         </h3>
         
         {isMobile ? (
-          // Mobile specific table layout - simplified with only essential columns
-          <div className="space-y-4 p-4">
-            {filteredPrayerTimes.map((masjid, idx) => (
-              <div key={idx} className="bg-white rounded-lg border shadow-sm p-4">
-                <h4 className="font-semibold text-lg mb-3">{masjid.masjid}</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  {prayerTypes.map((prayer) => (
-                    <div key={prayer} className={`flex flex-col justify-center items-center p-2 rounded ${prayerColors[prayer]}`}>
-                      <div className={`${prayerTextColors[prayer]} font-medium text-sm capitalize`}>
-                        {prayer}
-                      </div>
-                      <div className="font-bold text-center">
-                        {masjid[prayer]}
-                      </div>
-                    </div>
+          // Mobile specific table layout - simplified with only masjid and prayer time columns
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-[#1A1F2C] text-white">
+                  <TableHead className="font-bold text-white">Masjid</TableHead>
+                  {prayerTypes.map(prayer => (
+                    <TableHead key={prayer} className="font-bold text-white text-center whitespace-nowrap">
+                      {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
+                    </TableHead>
                   ))}
-                </div>
-              </div>
-            ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredPrayerTimes.map((masjid, idx) => (
+                  <TableRow key={idx} className="border-b hover:bg-gray-50">
+                    <TableCell className="font-medium whitespace-nowrap">{masjid.masjid}</TableCell>
+                    {prayerTypes.map((prayer) => (
+                      <TableCell 
+                        key={prayer} 
+                        className={`${prayerColors[prayer]} text-center`}
+                      >
+                        <div className="font-medium">
+                          {masjid[prayer]}
+                        </div>
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         ) : (
           // Desktop table view
@@ -108,12 +120,12 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
                 <TableHead className="font-bold text-white text-center">Dhuhr</TableHead>
                 <TableHead className="font-bold text-white text-center">Asr</TableHead>
                 <TableHead className="font-bold text-white text-center">Isha</TableHead>
-                <TableHead className="font-bold text-white text-center">Actions</TableHead>
+                <TableHead className="font-bold text-white text-center">Location</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredPrayerTimes.map((masjid, idx) => (
-                <TableRow key={idx} className="border-b">
+                <TableRow key={idx} className="border-b hover:bg-gray-100">
                   <TableCell className="font-medium">{masjid.masjid}</TableCell>
                   <TableCell className="text-gray-600">{masjid.address || `123 Example St, ${selectedRegion}`}</TableCell>
                   {prayerTypes.map((prayer) => (
@@ -138,6 +150,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
       </div>
     );
   } else {
+    // Block view
     return (
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-2xl font-bold mb-4 text-teal-700">

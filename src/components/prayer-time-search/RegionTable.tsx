@@ -40,7 +40,7 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
           <div 
             key={regionData.name}
             className={`rounded-lg border p-4 cursor-pointer transition-colors ${
-              selectedRegion === regionData.name ? "bg-[#FEF7CD] border-amber-300" : "bg-white border-gray-200 hover:bg-gray-50"
+              selectedRegion === regionData.name ? "bg-gray-200 border-gray-300" : "bg-white border-gray-200 hover:bg-gray-50"
             }`}
             onClick={() => onSelectRegion(regionData.name)}
           >
@@ -98,12 +98,21 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
             <TableRow 
               key={regionData.name} 
               className={`
-                hover:bg-gray-50 cursor-pointer transition-colors
-                ${selectedRegion === regionData.name ? "bg-[#FEF7CD]" : ""}
+                hover:bg-gray-100 cursor-pointer transition-colors
+                ${selectedRegion === regionData.name ? "bg-gray-200" : ""}
               `}
               onClick={() => onSelectRegion(regionData.name)}
             >
-              <TableCell className="font-medium">{regionData.name}</TableCell>
+              <TableCell className="font-medium">
+                <div className="flex items-center">
+                  <div className="rounded-md overflow-hidden mr-3 h-10 w-16 bg-cover bg-center"
+                       style={{ 
+                         backgroundImage: `url('https://source.unsplash.com/featured/?${regionData.name.toLowerCase().replace(' ', ',')}')` 
+                       }}>
+                  </div>
+                  <span>{regionData.name}</span>
+                </div>
+              </TableCell>
               <TableCell className="text-center">{regionData.subRegions}</TableCell>
               <TableCell className="text-center">{regionData.masjids}</TableCell>
               <TableCell className="text-center">{regionData.musallas}</TableCell>

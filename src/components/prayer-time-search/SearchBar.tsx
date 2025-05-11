@@ -37,19 +37,19 @@ const SearchBar: React.FC<SearchBarProps> = ({
           >
             <ToggleGroupItem 
               value="table" 
-              aria-label="Table View" 
+              aria-label="Table" 
               className="px-4 text-black data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black font-medium data-[state=off]:!text-gray-700"
             >
               <Table className="h-5 w-5 mr-2" />
-              <span>Table View</span>
+              <span>Table</span>
             </ToggleGroupItem>
             <ToggleGroupItem 
               value="block" 
-              aria-label="Block View" 
+              aria-label="Block" 
               className="px-4 text-black data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black font-medium data-[state=off]:!text-gray-700"
             >
               <LayoutGrid className="h-5 w-5 mr-2" />
-              <span>Block View</span>
+              <span>Block</span>
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
