@@ -1,7 +1,14 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const NoticesSection = () => {
   // Tab state
@@ -10,6 +17,8 @@ const NoticesSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   // Auto-scroll interval ref
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  // API ref
+  const apiRef = useRef<any>(null);
 
   // Sample notice data with images for each category
   const noticesByCategory = {
@@ -71,17 +80,16 @@ const NoticesSection = () => {
     setActiveTab(tab);
     // Reset carousel to first image on tab change
     setActiveIndex(0);
+    if (apiRef.current) {
+      apiRef.current.scrollTo(0);
+    }
   };
 
-  // Navigate carousel
-  const navigateCarousel = useCallback((direction: 'next' | 'prev') => {
-    const images = noticesByCategory[activeTab as keyof typeof noticesByCategory];
-    if (direction === 'next') {
-      setActiveIndex(prev => (prev + 1) % images.length);
-    } else {
-      setActiveIndex(prev => (prev - 1 + images.length) % images.length);
-    }
-  }, [activeTab, noticesByCategory]);
+  // Handle carousel change
+  const handleCarouselChange = useCallback((api: any) => {
+    const currentIndex = api.selectedScrollSnap();
+    setActiveIndex(currentIndex);
+  }, []);
 
   // Auto-scroll carousel
   useEffect(() => {
@@ -92,7 +100,12 @@ const NoticesSection = () => {
 
     // Start new interval
     intervalRef.current = setInterval(() => {
-      navigateCarousel('next');
+      if (apiRef.current) {
+        const currentIdx = apiRef.current.selectedScrollSnap();
+        const notices = noticesByCategory[activeTab as keyof typeof noticesByCategory];
+        const nextIdx = (currentIdx + 1) % notices.length;
+        apiRef.current.scrollTo(nextIdx);
+      }
     }, 5000);
 
     // Clean up interval on unmount or tab change
@@ -101,7 +114,7 @@ const NoticesSection = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [navigateCarousel, activeTab]);
+  }, [activeTab, noticesByCategory]);
 
   return (
     <section className="py-16 px-4 bg-white">
@@ -131,52 +144,60 @@ const NoticesSection = () => {
           ))}
         </div>
         
-        {/* Vertical A4 Carousel */}
-        <div className="relative w-[350px] h-[500px] mx-auto overflow-hidden rounded-xl shadow-xl">
-          {/* Navigation Arrows */}
-          <button 
-            className="absolute top-2 left-1/2 -translate-x-1/2 z-10 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors"
-            onClick={() => navigateCarousel('prev')}
+        {/* Horizontal Apple Card-style Carousel */}
+        <div className="w-full max-w-2xl mx-auto">
+          <Carousel
+            opts={{
+              align: "center",
+              loop: true,
+            }}
+            className="w-full"
+            setApi={(api) => {
+              apiRef.current = api;
+              api?.on("select", () => handleCarouselChange(api));
+            }}
           >
-            <ChevronUp size={24} />
-          </button>
-          <button 
-            className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors"
-            onClick={() => navigateCarousel('next')}
-          >
-            <ChevronDown size={24} />
-          </button>
+            <CarouselContent>
+              {noticesByCategory[activeTab as keyof typeof noticesByCategory].map((notice, index) => (
+                <CarouselItem 
+                  key={notice.id}
+                  className="md:basis-auto flex items-center justify-center"
+                >
+                  <div 
+                    className={cn(
+                      "relative w-[350px] h-[500px] transition-all duration-500 ease-out rounded-xl overflow-hidden",
+                      "transform-gpu",
+                      activeIndex === index 
+                        ? "scale-100 z-20 shadow-2xl" 
+                        : index === activeIndex - 1 || (activeIndex === 0 && index === noticesByCategory[activeTab as keyof typeof noticesByCategory].length - 1)
+                          ? "-translate-x-[40px] scale-[0.85] z-10 opacity-70 shadow-lg"
+                          : index === activeIndex + 1 || (activeIndex === noticesByCategory[activeTab as keyof typeof noticesByCategory].length - 1 && index === 0)
+                            ? "translate-x-[40px] scale-[0.85] z-10 opacity-70 shadow-lg"
+                            : "scale-[0.7] opacity-40 z-0"
+                    )}
+                  >
+                    <img 
+                      src={notice.imageUrl} 
+                      alt={notice.title} 
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/70 to-transparent text-white">
+                      <h3 className="text-lg font-medium">{notice.title}</h3>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="absolute left-1 z-30" />
+            <CarouselNext className="absolute right-1 z-30" />
+          </Carousel>
           
-          {/* Carousel Images */}
-          {noticesByCategory[activeTab as keyof typeof noticesByCategory].map((notice, index) => (
-            <div
-              key={notice.id}
-              className={cn(
-                "absolute inset-0 transition-all duration-500 ease-in-out rounded-xl overflow-hidden",
-                activeIndex === index 
-                  ? "opacity-100 translate-y-0" 
-                  : index < activeIndex 
-                    ? "opacity-0 -translate-y-full" 
-                    : "opacity-0 translate-y-full"
-              )}
-            >
-              <img 
-                src={notice.imageUrl} 
-                alt={notice.title} 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/70 to-transparent text-white">
-                <h3 className="text-lg font-medium">{notice.title}</h3>
-              </div>
-            </div>
-          ))}
-        </div>
-        
-        {/* Image counter */}
-        <div className="mt-4 text-center">
-          <p className="text-sm text-gray-500">
-            {activeIndex + 1} / {noticesByCategory[activeTab as keyof typeof noticesByCategory].length}
-          </p>
+          {/* Image counter */}
+          <div className="mt-4 text-center">
+            <p className="text-sm text-gray-500">
+              {activeIndex + 1} / {noticesByCategory[activeTab as keyof typeof noticesByCategory].length}
+            </p>
+          </div>
         </div>
       </div>
     </section>

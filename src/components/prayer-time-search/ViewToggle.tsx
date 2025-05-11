@@ -33,7 +33,7 @@ const ViewToggle: React.FC<ViewToggleProps> = ({
         <ToggleGroupItem 
           value="table" 
           aria-label="Table View" 
-          className="px-4 data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black font-medium"
+          className="px-4 text-black data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black font-medium"
         >
           <Table2 className="h-5 w-5 mr-2" />
           <span>Table View</span>
@@ -41,9 +41,9 @@ const ViewToggle: React.FC<ViewToggleProps> = ({
         <ToggleGroupItem 
           value="block" 
           aria-label="Block View" 
-          className="px-4 data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black font-medium"
+          className="px-4 text-black data-[state=on]:!bg-yellow-400 data-[state=on]:!text-black font-medium"
         >
-          <LayoutGrid className="h-5 w-5 mr-2 text-current" />
+          <LayoutGrid className="h-5 w-5 mr-2" />
           <span>Block View</span>
         </ToggleGroupItem>
       </ToggleGroup>
