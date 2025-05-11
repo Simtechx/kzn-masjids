@@ -104,7 +104,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
       );
     }
 
-    // Desktop table view
+    // Desktop table view - Remove images as requested
     return (
       <div className="overflow-x-auto">
         <div className="rounded-lg shadow-lg border border-gray-200">

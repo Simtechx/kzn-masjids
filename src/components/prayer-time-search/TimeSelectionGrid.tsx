@@ -71,17 +71,17 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
   const getTimeClass = (time: string) => {
     let baseClass = 'p-2 rounded text-center cursor-pointer';
     
-    // Selected state
+    // Selected state - gray background with white text as requested
     if (time === selectedTime) {
       return `${baseClass} ${colors.bgSelected} ${colors.textSelected}`;
     }
     
-    // Earliest time
+    // Earliest time - special styling with green border
     if (earliestTime && time === earliestTime.time) {
       return `${baseClass} ${colors.bgNormal} ${colors.textNormal} border border-green-300`;
     }
     
-    // Latest time
+    // Latest time - special styling with orange border
     if (latestTime && time === latestTime.time) {
       return `${baseClass} ${colors.bgNormal} ${colors.textNormal} border border-orange-300`;
     }
@@ -103,12 +103,12 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
             {time}
             {earliestTime && time === earliestTime.time && (
               <div className="text-xs mt-1 bg-green-600 text-white px-1 py-0.5 rounded-sm">
-                Earliest
+                EARLIEST
               </div>
             )}
             {latestTime && time === latestTime.time && (
               <div className="text-xs mt-1 bg-orange-600 text-white px-1 py-0.5 rounded-sm">
-                Latest
+                LATEST
               </div>
             )}
           </div>

@@ -28,10 +28,13 @@ const RegionCard: React.FC<RegionCardProps> = ({
       }`}
       onClick={() => onSelectRegion(region)}
     >
-      {/* Background Image */}
+      {/* Background Image - Make sure it loads correctly */}
       <div 
         className="aspect-[4/3] bg-cover bg-center"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
+        style={{ 
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundRepeat: 'no-repeat'
+        }}
       >
         {/* Overlay for text visibility */}
         <div className="absolute inset-0 bg-black/50 flex flex-col justify-end p-4">

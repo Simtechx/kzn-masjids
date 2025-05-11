@@ -50,7 +50,9 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
               <div 
                 className="w-16 h-16 rounded-lg mr-3 bg-cover bg-center flex-shrink-0"
                 style={{
-                  backgroundImage: `url('${regionData.backgroundImage}')`
+                  backgroundImage: `url('${regionData.backgroundImage}')`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: 'cover'
                 }}
               >
                 <div className="w-full h-full bg-black/30 rounded-lg"></div>
@@ -109,7 +111,8 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
               style={{ 
                 backgroundImage: `url('${regionData.backgroundImage}')`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'center'
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
               }}
             >
               {/* Overlay with region name */}

@@ -9,11 +9,18 @@ export function usePrayerTimes() {
   const [upcomingPrayer, setUpcomingPrayer] = useState<PrayerTime | null>(null);
   const [timeRemaining, setTimeRemaining] = useState<string>('');
   const [remainingPercentage, setRemainingPercentage] = useState<number>(0);
+  
+  // Make sure all timestamps are properly set for the current day
+  const getCurrentDayTimestamp = (hour: number, minute: number) => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0, 0).getTime();
+  };
+  
   const [todayPrayerTimes, setTodayPrayerTimes] = useState<PrayerTime[]>([
     { 
       name: 'Fajr', 
       time: '3:15 am', 
-      timestamp: new Date().setHours(3, 15, 0, 0), 
+      timestamp: getCurrentDayTimestamp(3, 15),
       icon: <Sunrise size={40} className="mb-2 text-amber-300" />,
       bgColor: 'bg-pink-50',
       textColor: 'text-pink-600'
@@ -21,7 +28,7 @@ export function usePrayerTimes() {
     { 
       name: 'Dhuhr', 
       time: '11:30 am', 
-      timestamp: new Date().setHours(11, 30, 0, 0), 
+      timestamp: getCurrentDayTimestamp(11, 30),
       icon: <Sun size={40} className="mb-2 text-yellow-400" />,
       bgColor: 'bg-amber-50',
       textColor: 'text-amber-600'
@@ -29,7 +36,7 @@ export function usePrayerTimes() {
     { 
       name: 'Asr (S)', 
       time: '3:30 pm', 
-      timestamp: new Date().setHours(15, 30, 0, 0), 
+      timestamp: getCurrentDayTimestamp(15, 30),
       icon: <Sun size={40} className="mb-2 text-orange-300" />,
       bgColor: 'bg-green-50',
       textColor: 'text-green-600'
@@ -37,7 +44,7 @@ export function usePrayerTimes() {
     { 
       name: 'Asr (H)', 
       time: '4:00 pm', 
-      timestamp: new Date().setHours(16, 0, 0, 0), 
+      timestamp: getCurrentDayTimestamp(16, 0),
       icon: <Sun size={40} className="mb-2 text-orange-300" />,
       bgColor: 'bg-teal-50',
       textColor: 'text-teal-600'
@@ -45,7 +52,7 @@ export function usePrayerTimes() {
     { 
       name: 'Maghrib', 
       time: '5:45 pm', 
-      timestamp: new Date().setHours(17, 45, 0, 0), 
+      timestamp: getCurrentDayTimestamp(17, 45),
       icon: <Sunset size={40} className="mb-2 text-orange-500" />,
       bgColor: 'bg-red-50',
       textColor: 'text-red-600'
@@ -53,7 +60,7 @@ export function usePrayerTimes() {
     { 
       name: 'Isha', 
       time: '6:40 pm', 
-      timestamp: new Date().setHours(18, 40, 0, 0), 
+      timestamp: getCurrentDayTimestamp(18, 40),
       icon: <Moon size={40} className="mb-2 text-blue-200" />,
       bgColor: 'bg-indigo-50',
       textColor: 'text-indigo-600'
@@ -64,10 +71,16 @@ export function usePrayerTimes() {
     // Find upcoming prayer
     const findUpcomingPrayer = () => {
       const now = new Date().getTime();
-      const sortedPrayers = [...todayPrayerTimes];
+      console.log('Current time:', new Date(now).toLocaleTimeString(), 'Timestamp:', now);
+      
+      // Debug timestamps
+      todayPrayerTimes.forEach(prayer => {
+        console.log(`Prayer: ${prayer.name}, Time: ${prayer.time}, Timestamp: ${prayer.timestamp}, Is Future: ${prayer.timestamp > now}`);
+      });
       
       // Find the next prayer time
-      const nextPrayer = sortedPrayers.find(prayer => prayer.timestamp > now);
+      const nextPrayer = todayPrayerTimes.find(prayer => prayer.timestamp > now);
+      console.log('Found next prayer:', nextPrayer?.name);
       
       if (nextPrayer) {
         setUpcomingPrayer(nextPrayer);
@@ -91,9 +104,12 @@ export function usePrayerTimes() {
         setRemainingPercentage(percentage);
       } else {
         // If all prayers for today have passed, use the first prayer of tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
         const tomorrowFajr = { 
           ...todayPrayerTimes[0],
-          timestamp: new Date(new Date().setDate(new Date().getDate() + 1)).setHours(3, 15, 0, 0)
+          timestamp: new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 3, 15, 0, 0).getTime()
         };
         
         setUpcomingPrayer(tomorrowFajr);

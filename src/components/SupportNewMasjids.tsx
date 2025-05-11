@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { DollarSign } from 'lucide-react';
 
 const SupportNewMasjids: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -17,7 +18,7 @@ const SupportNewMasjids: React.FC = () => {
     if (!isPaused) {
       const interval = setInterval(() => {
         setCurrentSlide(prev => (prev + 1) % newProjects.length);
-      }, 3500); // Keep the existing 3.5 seconds
+      }, 3500);
       
       return () => clearInterval(interval);
     }
@@ -30,21 +31,25 @@ const SupportNewMasjids: React.FC = () => {
 
   return (
     <section className="py-12 md:py-16 px-4 bg-gray-100 relative overflow-hidden">
-      {/* 3D Perspective Gallery-like Background */}
+      {/* Background pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-teal-50 opacity-70"></div>
       
       <div className="container mx-auto relative z-10">
-        <h2 className="text-center text-2xl md:text-3xl lg:text-4xl font-bold mb-10 text-gray-900">
+        <h2 className="text-center text-2xl md:text-3xl lg:text-4xl font-bold mb-3 text-gray-900">
           Support New and Upcoming Masjid Projects
         </h2>
         
+        {/* Added slogan line below header */}
+        <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
+          Help build places of worship for future generations by contributing to these ongoing projects.
+        </p>
+        
         {/* 3D Perspective Gallery-style Slider */}
         <div 
-          className="relative overflow-hidden rounded-xl w-full max-w-5xl mx-auto perspective-1000"
+          className="relative overflow-hidden rounded-xl w-full max-w-5xl mx-auto"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
           ref={sliderRef}
-          style={{perspective: '1000px'}}
         >
           {/* Carousel track with proper transform */}
           <div 
@@ -53,46 +58,43 @@ const SupportNewMasjids: React.FC = () => {
           >
             {newProjects.map((project, index) => (
               <div key={index} className="w-full flex-shrink-0">
-                <Card className="border-2 border-amber-400/30 shadow-xl overflow-hidden transform transition-all hover:scale-[1.01]" 
-                      style={{
-                        transformStyle: 'preserve-3d',
-                        boxShadow: '0 15px 25px rgba(0, 0, 0, 0.1)'
-                      }}>
+                <Card className="border-2 border-yellow-700/30 shadow-xl overflow-hidden">
                   <div className="relative h-64 md:h-80">
                     <img 
                       src={project.image}
                       alt={project.name}
                       className="h-full w-full object-cover"
                     />
-                    {/* Dark overlay for better contrast with the elements inside image area */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                    {/* Dark overlay for better contrast with text */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
                     
+                    {/* Content overlay similar to reference image */}
                     <div className="absolute bottom-0 left-0 right-0 p-4">
-                      {/* Semi-transparent light block behind text content */}
-                      <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3">
+                      <div className="bg-black/40 backdrop-blur-sm p-4 rounded-lg">
                         <h3 className="text-white font-bold text-xl md:text-2xl">{project.name}</h3>
                         <p className="text-white/80 text-sm md:text-base">{project.location}</p>
                         
-                        {/* Project progress moved inside the image area */}
                         <div className="mt-3">
                           <div className="flex justify-between items-center mb-1">
                             <span className="text-sm text-white/90">Project Progress</span>
-                            <span className="font-medium text-white">{project.completionPercentage}%</span>
+                            <span className="font-medium text-yellow-400">{project.completionPercentage}%</span>
                           </div>
                           <Progress 
                             value={project.completionPercentage} 
                             className="h-2 mb-3 bg-white/20" 
-                            indicatorClassName="bg-teal-600" 
+                            indicatorClassName="bg-yellow-600"
                           />
-                          {/* Dark Yellow Contribute Button moved inside image area */}
-                          <Button className="w-full bg-yellow-800 hover:bg-yellow-900 text-white font-bold py-2 mt-2">
+                          
+                          {/* Yellow Contribute Button */}
+                          <Button className="w-full bg-yellow-700 hover:bg-yellow-800 text-white font-bold py-2 mt-2">
+                            <DollarSign className="h-4 w-4 mr-1" />
                             Contribute
                           </Button>
                         </div>
                       </div>
                     </div>
                     
-                    {/* Project Completion Badge - Dark yellow style for better theme match */}
+                    {/* Project Completion Badge */}
                     <div className="absolute top-4 left-4">
                       <span className="bg-yellow-800 text-white text-sm font-bold px-4 py-2 rounded-full">
                         {project.completionPercentage}% Complete

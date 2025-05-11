@@ -21,21 +21,16 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
     return todayPrayerTimes.indexOf(a) - todayPrayerTimes.indexOf(b);
   });
   
-  // Get the upcoming prayer
-  const getUpcomingPrayer = () => {
-    const now = new Date().getTime();
-    return todayPrayerTimes.find(p => p.timestamp > now)?.name || null;
-  };
+  // Get the current time
+  const now = new Date().getTime();
   
-  const upcomingPrayerName = getUpcomingPrayer();
+  // Find the upcoming prayer - the next prayer after current time
+  const upcomingPrayer = todayPrayerTimes.find(p => p.timestamp > now)?.name;
 
   // Function to determine background and text color based on prayer name
-  const getPrayerColors = (prayerName: string) => {
-    // Check if this is the upcoming prayer
-    const upcoming = prayerName === upcomingPrayerName;
-    
+  const getPrayerColors = (prayerName: string, isUpcoming: boolean) => {
     // If this is the upcoming prayer, use dark background with white text
-    if (upcoming) {
+    if (isUpcoming) {
       if (prayerName === 'Fajr') {
         return { bgColor: 'bg-pink-700', textColor: 'text-white' };
       } else if (prayerName === 'Dhuhr') {
@@ -69,15 +64,24 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
     return { bgColor: 'bg-gray-50', textColor: 'text-gray-600' };
   };
 
+  console.log('Upcoming prayer name:', upcomingPrayer);
+  console.log('Times with timestamps:', todayPrayerTimes.map(p => ({ 
+    name: p.name, 
+    time: p.time,
+    timestamp: p.timestamp,
+    current: now, 
+    isUpcoming: p.timestamp > now
+  })));
+
   return (
     <div className="bg-white p-6 rounded-lg">
       <h2 className="text-xl font-medium text-gray-800 mb-4">Today's Salaah Times</h2>
       
       <div className="grid grid-cols-2 gap-4">
         {reorderedPrayers.map((prayer, index) => {
+          const isUpcoming = prayer.name === upcomingPrayer;
           // Get custom colors for prayers
-          const { bgColor, textColor } = getPrayerColors(prayer.name);
-          const isUpcoming = prayer.name === upcomingPrayerName;
+          const { bgColor, textColor } = getPrayerColors(prayer.name, isUpcoming);
             
           return (
             <div key={index} className={`${bgColor} rounded-lg p-4 relative overflow-hidden`}>
