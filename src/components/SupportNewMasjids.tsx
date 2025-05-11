@@ -34,12 +34,9 @@ const SupportNewMasjids: React.FC = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-teal-50 opacity-70"></div>
       
       <div className="container mx-auto relative z-10">
-        <h2 className="text-center text-2xl md:text-3xl lg:text-4xl font-bold mb-2 text-gray-900">
+        <h2 className="text-center text-2xl md:text-3xl lg:text-4xl font-bold mb-10 text-gray-900">
           Support New and Upcoming Masjid Projects
         </h2>
-        <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
-          Help build the future of our community by contributing to these new masjid projects.
-        </p>
         
         {/* 3D Perspective Gallery-style Slider */}
         <div 
@@ -71,37 +68,37 @@ const SupportNewMasjids: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
                     
                     <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <h3 className="text-white font-bold text-xl md:text-2xl">{project.name}</h3>
-                      <p className="text-white/80 text-sm md:text-base">{project.location}</p>
-                      
-                      {/* Project progress moved inside the image area */}
-                      <div className="mt-3">
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm text-white/90">Project Progress</span>
-                          <span className="font-medium text-white">{project.completionPercentage}%</span>
+                      {/* Semi-transparent light block behind text content */}
+                      <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3">
+                        <h3 className="text-white font-bold text-xl md:text-2xl">{project.name}</h3>
+                        <p className="text-white/80 text-sm md:text-base">{project.location}</p>
+                        
+                        {/* Project progress moved inside the image area */}
+                        <div className="mt-3">
+                          <div className="flex justify-between items-center mb-1">
+                            <span className="text-sm text-white/90">Project Progress</span>
+                            <span className="font-medium text-white">{project.completionPercentage}%</span>
+                          </div>
+                          <Progress 
+                            value={project.completionPercentage} 
+                            className="h-2 mb-3 bg-white/20" 
+                            indicatorClassName="bg-teal-600" 
+                          />
+                          {/* Dark Yellow Contribute Button moved inside image area */}
+                          <Button className="w-full bg-yellow-800 hover:bg-yellow-900 text-white font-bold py-2 mt-2">
+                            Contribute
+                          </Button>
                         </div>
-                        <Progress 
-                          value={project.completionPercentage} 
-                          className="h-2 mb-3 bg-white/20" 
-                          indicatorClassName="bg-teal-600" 
-                        />
-                        {/* Yellow Contribute Button moved inside image area */}
-                        <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 mt-2">
-                          Contribute
-                        </Button>
                       </div>
                     </div>
                     
-                    {/* Project Completion Badge - Darker orange style for better contrast */}
+                    {/* Project Completion Badge - Dark yellow style for better theme match */}
                     <div className="absolute top-4 left-4">
-                      <span className="bg-amber-600 text-white text-sm font-bold px-4 py-2 rounded-full">
+                      <span className="bg-yellow-800 text-white text-sm font-bold px-4 py-2 rounded-full">
                         {project.completionPercentage}% Complete
                       </span>
                     </div>
                   </div>
-                  <CardContent className="p-6">
-                    <p className="text-gray-700">{project.description || 'Help us complete this important project for the community.'}</p>
-                  </CardContent>
                 </Card>
               </div>
             ))}
@@ -113,7 +110,7 @@ const SupportNewMasjids: React.FC = () => {
               <button
                 key={index}
                 className={`h-3 rounded-full transition-all ${
-                  currentSlide === index ? "w-8 bg-amber-500" : "w-3 bg-gray-300"
+                  currentSlide === index ? "w-8 bg-yellow-800" : "w-3 bg-gray-300"
                 }`}
                 onClick={() => setCurrentSlide(index)}
                 aria-label={`Go to slide ${index + 1}`}

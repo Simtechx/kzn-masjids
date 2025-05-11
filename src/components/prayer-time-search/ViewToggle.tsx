@@ -1,8 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { LayoutGrid, Table2 } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Table, Image } from 'lucide-react';
 
 interface ViewToggleProps {
   viewMode: 'block' | 'table';
@@ -10,39 +9,30 @@ interface ViewToggleProps {
 }
 
 const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onViewChange }) => {
-  const isMobile = useIsMobile();
-
   return (
-    <div className={`flex items-center justify-end space-x-2 my-4 ${isMobile ? 'pr-0' : 'pr-2'}`}>
-      <span className="text-sm text-gray-500 mr-2">Display:</span>
-      <div className="flex border rounded-md overflow-hidden">
+    <div className="flex justify-end mb-4">
+      <div className="flex space-x-2">
         <Button
-          type="button"
           variant="ghost"
           size="sm"
-          className={`flex items-center px-3 py-2 ${
-            viewMode === 'block'
-              ? 'bg-gray-200 text-gray-800'
-              : 'bg-white text-gray-600 hover:bg-gray-100'
+          className={`flex items-center ${
+            viewMode === 'block' ? 'bg-yellow-100 text-yellow-800' : ''
           }`}
           onClick={() => onViewChange('block')}
         >
-          <LayoutGrid size={18} className="mr-1" />
-          {!isMobile && <span>Block</span>}
+          <Image className="h-4 w-4 mr-1" />
+          Block
         </Button>
         <Button
-          type="button"
           variant="ghost"
           size="sm"
-          className={`flex items-center px-3 py-2 ${
-            viewMode === 'table'
-              ? 'bg-gray-200 text-gray-800'
-              : 'bg-white text-gray-600 hover:bg-gray-100'
+          className={`flex items-center ${
+            viewMode === 'table' ? 'bg-yellow-100 text-yellow-800' : ''
           }`}
           onClick={() => onViewChange('table')}
         >
-          <Table2 size={18} className="mr-1" />
-          {!isMobile && <span>Table</span>}
+          <Table className="h-4 w-4 mr-1" />
+          Table
         </Button>
       </div>
     </div>

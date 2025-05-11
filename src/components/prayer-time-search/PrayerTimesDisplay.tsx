@@ -17,7 +17,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { MapPin } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import regionBackgroundImages from '@/utils/regionBackgroundImages';
 
 interface PrayerTimesDisplayProps {
   selectedRegion: string;
@@ -58,11 +57,6 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
     isha: 'text-indigo-600',
   };
 
-  // Get region background image
-  const getRegionImage = () => {
-    return regionBackgroundImages[selectedRegion as keyof typeof regionBackgroundImages] || '';
-  };
-
   const getLatestBadge = (prayer: PrayerType) => {
     if (activePrayer === prayer && searchType === 'latest') {
       return <Badge className="ml-1 bg-teal-600">LATEST</Badge>;
@@ -100,17 +94,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
                 {filteredPrayerTimes.map((masjid, idx) => (
                   <TableRow key={idx} className="border-b hover:bg-gray-100 transition-colors">
                     <TableCell className="font-medium whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div 
-                          className="w-8 h-8 rounded mr-2 bg-cover bg-center"
-                          style={{
-                            backgroundImage: `url('${getRegionImage()}')`
-                          }}
-                        >
-                          <div className="w-full h-full bg-black/30 rounded"></div>
-                        </div>
-                        {masjid.masjid}
-                      </div>
+                      {masjid.masjid}
                     </TableCell>
                     {prayerTypes.map((prayer) => (
                       <TableCell 
@@ -145,17 +129,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
               {filteredPrayerTimes.map((masjid, idx) => (
                 <TableRow key={idx} className="border-b hover:bg-gray-100 cursor-pointer transition-colors duration-150">
                   <TableCell className="font-medium">
-                    <div className="flex items-center">
-                      <div 
-                        className="w-10 h-10 rounded mr-3 bg-cover bg-center"
-                        style={{
-                          backgroundImage: `url('${getRegionImage()}')`
-                        }}
-                      >
-                        <div className="w-full h-full bg-black/30 rounded"></div>
-                      </div>
-                      {masjid.masjid}
-                    </div>
+                    {masjid.masjid}
                   </TableCell>
                   <TableCell className="text-gray-600">{masjid.address || `123 Example St, ${selectedRegion}`}</TableCell>
                   {prayerTypes.map((prayer) => (
@@ -195,14 +169,6 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
           {filteredPrayerTimes.map((masjid, idx) => (
             <div key={idx} className="p-4 bg-white rounded-lg shadow border">
               <div className="flex items-center mb-3">
-                <div 
-                  className="w-12 h-12 rounded mr-3 bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url('${getRegionImage()}')`
-                  }}
-                >
-                  <div className="w-full h-full bg-black/30 rounded"></div>
-                </div>
                 <div>
                   <div className="font-medium text-lg">{masjid.masjid}</div>
                   <div className="text-sm text-gray-600">{masjid.address || `123 Example St, ${selectedRegion}`}</div>

@@ -5,7 +5,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { MapPin } from 'lucide-react';
-import regionBackgroundImages from '@/utils/regionBackgroundImages';
 
 interface MasjidsListProps {
   selectedRegion: string;
@@ -61,10 +60,6 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
     return null;
   };
 
-  const getRegionImage = () => {
-    return regionBackgroundImages[selectedRegion as keyof typeof regionBackgroundImages] || '';
-  };
-
   const renderTableView = () => {
     if (isMobile) {
       // Mobile optimized table view - simplified with no address/actions columns
@@ -73,14 +68,6 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
           {filteredPrayerTimes.map((masjid, index) => (
             <div key={index} className="bg-white p-4 rounded-md shadow border border-gray-100">
               <div className="flex items-center mb-2">
-                <div 
-                  className="w-12 h-12 rounded mr-3 bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url('${getRegionImage()}')`
-                  }}
-                >
-                  <div className="w-full h-full bg-black/30 rounded"></div>
-                </div>
                 <h3 className="font-semibold text-lg text-teal-700">{masjid.masjid}</h3>
               </div>
               
@@ -145,17 +132,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
                   }`}
                 >
                   <TableCell className="font-medium">
-                    <div className="flex items-center">
-                      <div 
-                        className="w-10 h-10 rounded mr-3 bg-cover bg-center"
-                        style={{
-                          backgroundImage: `url('${getRegionImage()}')`
-                        }}
-                      >
-                        <div className="w-full h-full bg-black/30 rounded"></div>
-                      </div>
-                      {masjid.masjid}
-                    </div>
+                    {masjid.masjid}
                   </TableCell>
                   <TableCell>123 Example St, {selectedRegion}</TableCell>
                   {prayerTypes.map(prayer => {
@@ -203,14 +180,6 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
         {filteredPrayerTimes.map((masjid, index) => (
           <div key={index} className="bg-white p-4 rounded-md shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <div className="flex items-center mb-3">
-              <div 
-                className="w-12 h-12 rounded mr-3 bg-cover bg-center"
-                style={{
-                  backgroundImage: `url('${getRegionImage()}')`
-                }}
-              >
-                <div className="w-full h-full bg-black/30 rounded"></div>
-              </div>
               <div>
                 <h4 className="font-semibold text-lg text-teal-700">{masjid.masjid}</h4>
                 <p className="text-gray-600 text-sm">123 Example St, {selectedRegion}</p>

@@ -25,26 +25,69 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
   const earliestTime = findExtremeTime(activePrayer, 'earliest', selectedRegion);
   const latestTime = findExtremeTime(activePrayer, 'latest', selectedRegion);
 
+  // Prayer-specific colors
+  const getPrayerColors = () => {
+    switch (activePrayer) {
+      case 'fajr':
+        return {
+          bgNormal: 'bg-pink-100',
+          textNormal: 'text-pink-700',
+          bgSelected: 'bg-gray-700',
+          textSelected: 'text-white'
+        };
+      case 'dhuhr':
+        return {
+          bgNormal: 'bg-amber-100',
+          textNormal: 'text-amber-700',
+          bgSelected: 'bg-gray-700',
+          textSelected: 'text-white'
+        };
+      case 'asr':
+        return {
+          bgNormal: 'bg-teal-100',
+          textNormal: 'text-teal-700',
+          bgSelected: 'bg-gray-700',
+          textSelected: 'text-white'
+        };
+      case 'isha':
+        return {
+          bgNormal: 'bg-indigo-100',
+          textNormal: 'text-indigo-700',
+          bgSelected: 'bg-gray-700',
+          textSelected: 'text-white'
+        };
+      default:
+        return {
+          bgNormal: 'bg-gray-100',
+          textNormal: 'text-gray-700',
+          bgSelected: 'bg-gray-700',
+          textSelected: 'text-white'
+        };
+    }
+  };
+
+  const colors = getPrayerColors();
+
   const getTimeClass = (time: string) => {
     let baseClass = 'p-2 rounded text-center cursor-pointer';
     
     // Selected state
     if (time === selectedTime) {
-      return `${baseClass} bg-teal-600 text-white`;
+      return `${baseClass} ${colors.bgSelected} ${colors.textSelected}`;
     }
     
     // Earliest time
     if (earliestTime && time === earliestTime.time) {
-      return `${baseClass} bg-green-100 text-green-700 border border-green-300`;
+      return `${baseClass} ${colors.bgNormal} ${colors.textNormal} border border-green-300`;
     }
     
     // Latest time
     if (latestTime && time === latestTime.time) {
-      return `${baseClass} bg-orange-100 text-orange-700 border border-orange-300`;
+      return `${baseClass} ${colors.bgNormal} ${colors.textNormal} border border-orange-300`;
     }
     
     // Default
-    return `${baseClass} bg-gray-100 hover:bg-gray-200 text-gray-700`;
+    return `${baseClass} ${colors.bgNormal} hover:bg-gray-200 ${colors.textNormal}`;
   };
 
   // Always use grid with 3 columns for both mobile and desktop
@@ -59,10 +102,14 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
           >
             {time}
             {earliestTime && time === earliestTime.time && (
-              <div className="text-xs mt-1 bg-green-600 text-white px-1 py-0.5 rounded-sm">Earliest</div>
+              <div className="text-xs mt-1 bg-green-600 text-white px-1 py-0.5 rounded-sm">
+                Earliest
+              </div>
             )}
             {latestTime && time === latestTime.time && (
-              <div className="text-xs mt-1 bg-orange-600 text-white px-1 py-0.5 rounded-sm">Latest</div>
+              <div className="text-xs mt-1 bg-orange-600 text-white px-1 py-0.5 rounded-sm">
+                Latest
+              </div>
             )}
           </div>
         ))}

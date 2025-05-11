@@ -21,19 +21,18 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
     return todayPrayerTimes.indexOf(a) - todayPrayerTimes.indexOf(b);
   });
   
-  // Function to determine if a prayer is the upcoming prayer
-  const isUpcoming = (prayerName: string) => {
-    const upcomingPrayer = todayPrayerTimes.find(p => {
-      const now = new Date().getTime();
-      return p.timestamp > now;
-    });
-    return upcomingPrayer?.name === prayerName;
+  // Get the upcoming prayer
+  const getUpcomingPrayer = () => {
+    const now = new Date().getTime();
+    return todayPrayerTimes.find(p => p.timestamp > now)?.name || null;
   };
+  
+  const upcomingPrayerName = getUpcomingPrayer();
 
   // Function to determine background and text color based on prayer name
   const getPrayerColors = (prayerName: string) => {
     // Check if this is the upcoming prayer
-    const upcoming = isUpcoming(prayerName);
+    const upcoming = prayerName === upcomingPrayerName;
     
     // If this is the upcoming prayer, use dark background with white text
     if (upcoming) {
@@ -78,13 +77,13 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
         {reorderedPrayers.map((prayer, index) => {
           // Get custom colors for prayers
           const { bgColor, textColor } = getPrayerColors(prayer.name);
-          const upcoming = isUpcoming(prayer.name);
+          const isUpcoming = prayer.name === upcomingPrayerName;
             
           return (
             <div key={index} className={`${bgColor} rounded-lg p-4 relative overflow-hidden`}>
-              {upcoming && (
+              {isUpcoming && (
                 <div className="absolute top-0 right-0">
-                  <div className="bg-yellow-400 text-black text-xs px-2 py-1 rounded-bl-md font-semibold">
+                  <div className="bg-yellow-600 text-white text-xs px-2 py-1 rounded-bl-md font-semibold">
                     UPCOMING
                   </div>
                 </div>

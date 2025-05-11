@@ -24,7 +24,7 @@ const RegionCard: React.FC<RegionCardProps> = ({
   return (
     <div
       className={`relative overflow-hidden rounded-lg cursor-pointer transition-all duration-300 ${
-        isSelected ? "ring-4 ring-teal-700" : "hover:shadow-lg"
+        isSelected ? "ring-4 ring-yellow-600" : "hover:shadow-lg"
       }`}
       onClick={() => onSelectRegion(region)}
     >

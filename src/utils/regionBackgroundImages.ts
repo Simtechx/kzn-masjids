@@ -1,11 +1,11 @@
 
 // Region background images
 const regionBackgroundImages = {
-  "North Coast": "https://images.unsplash.com/photo-1516466723877-e4ec1d736c8a?auto=format&fit=crop&q=80",
-  "South Coast": "https://images.unsplash.com/photo-1602002418082-dd4a1f45daff?auto=format&fit=crop&q=80",
-  "Midlands": "https://images.unsplash.com/photo-1536048810607-3dc7f86981cb?auto=format&fit=crop&q=80",
-  "Northern Natal": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&q=80",
-  "Durban": "https://images.unsplash.com/photo-1618590067324-3f5135afd526?auto=format&fit=crop&q=80",
+  "North Coast": "public/lovable-uploads/85a9ce75-fa7d-4c8d-be1c-3ef931afc85e.png",
+  "South Coast": "public/lovable-uploads/b3c354e6-6771-4ae1-8bf6-44165b1fd7e2.png",
+  "Midlands": "public/lovable-uploads/9846f655-ddff-4a32-a35f-bb4c5603817a.png",
+  "Northern Natal": "public/lovable-uploads/b3d74d51-25fe-4882-8fa7-e6b76b3414dd.png",
+  "Durban": "public/lovable-uploads/3773bdc5-3c61-4a1b-a9f8-1dba25883106.png",
 };
 
 export default regionBackgroundImages;
