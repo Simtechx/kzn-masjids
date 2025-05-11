@@ -1,12 +1,9 @@
 
 import React from 'react';
 import MasjidCarousel from './masjid-projects/MasjidCarousel';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { newProjects } from '@/data/masjidProjectsData';
 
 const SupportNewMasjids: React.FC = () => {
-  const isMobile = useIsMobile();
-  
   return (
     <section className="py-12 md:py-16 px-4 bg-white">
       <div className="container mx-auto">
