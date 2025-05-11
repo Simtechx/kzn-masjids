@@ -21,6 +21,8 @@ const RegionCard: React.FC<RegionCardProps> = ({
   musallaCount,
   onSelectRegion
 }) => {
+  console.log("RegionCard: Image path -", backgroundImage);
+  
   return (
     <div
       className={`relative overflow-hidden rounded-lg cursor-pointer transition-all duration-300 ${
@@ -28,12 +30,11 @@ const RegionCard: React.FC<RegionCardProps> = ({
       }`}
       onClick={() => onSelectRegion(region)}
     >
-      {/* Background Image - Make sure it loads correctly */}
+      {/* Background Image */}
       <div 
         className="aspect-[4/3] bg-cover bg-center"
         style={{ 
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundRepeat: 'no-repeat'
+          backgroundImage: `url(${backgroundImage})` 
         }}
       >
         {/* Overlay for text visibility */}

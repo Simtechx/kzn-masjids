@@ -25,7 +25,16 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
   const now = new Date().getTime();
   
   // Find the upcoming prayer - the next prayer after current time
-  const upcomingPrayer = todayPrayerTimes.find(p => p.timestamp > now)?.name;
+  const upcomingPrayerName = todayPrayerTimes.find(p => p.timestamp > now)?.name || '';
+  
+  console.log('TodaysPrayers - Current time:', now);
+  console.log('TodaysPrayers - Upcoming prayer name:', upcomingPrayerName);
+  console.log('TodaysPrayers - All prayers:', todayPrayerTimes.map(p => ({ 
+    name: p.name, 
+    time: p.time,
+    timestamp: p.timestamp,
+    isUpcoming: p.timestamp > now
+  })));
 
   // Function to determine background and text color based on prayer name
   const getPrayerColors = (prayerName: string, isUpcoming: boolean) => {
@@ -64,22 +73,13 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
     return { bgColor: 'bg-gray-50', textColor: 'text-gray-600' };
   };
 
-  console.log('Upcoming prayer name:', upcomingPrayer);
-  console.log('Times with timestamps:', todayPrayerTimes.map(p => ({ 
-    name: p.name, 
-    time: p.time,
-    timestamp: p.timestamp,
-    current: now, 
-    isUpcoming: p.timestamp > now
-  })));
-
   return (
     <div className="bg-white p-6 rounded-lg">
       <h2 className="text-xl font-medium text-gray-800 mb-4">Today's Salaah Times</h2>
       
       <div className="grid grid-cols-2 gap-4">
         {reorderedPrayers.map((prayer, index) => {
-          const isUpcoming = prayer.name === upcomingPrayer;
+          const isUpcoming = prayer.name === upcomingPrayerName;
           // Get custom colors for prayers
           const { bgColor, textColor } = getPrayerColors(prayer.name, isUpcoming);
             

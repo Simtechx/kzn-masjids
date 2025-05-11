@@ -33,35 +33,45 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
           bgNormal: 'bg-pink-100',
           textNormal: 'text-pink-700',
           bgSelected: 'bg-gray-700',
-          textSelected: 'text-white'
+          textSelected: 'text-white',
+          bgLatest: 'bg-pink-700',
+          textLatest: 'text-white'
         };
       case 'dhuhr':
         return {
           bgNormal: 'bg-amber-100',
           textNormal: 'text-amber-700',
           bgSelected: 'bg-gray-700',
-          textSelected: 'text-white'
+          textSelected: 'text-white',
+          bgLatest: 'bg-amber-700',
+          textLatest: 'text-white'
         };
       case 'asr':
         return {
           bgNormal: 'bg-teal-100',
           textNormal: 'text-teal-700',
           bgSelected: 'bg-gray-700',
-          textSelected: 'text-white'
+          textSelected: 'text-white',
+          bgLatest: 'bg-teal-700',
+          textLatest: 'text-white'
         };
       case 'isha':
         return {
           bgNormal: 'bg-indigo-100',
           textNormal: 'text-indigo-700',
           bgSelected: 'bg-gray-700',
-          textSelected: 'text-white'
+          textSelected: 'text-white',
+          bgLatest: 'bg-indigo-700',
+          textLatest: 'text-white'
         };
       default:
         return {
           bgNormal: 'bg-gray-100',
           textNormal: 'text-gray-700',
           bgSelected: 'bg-gray-700',
-          textSelected: 'text-white'
+          textSelected: 'text-white',
+          bgLatest: 'bg-gray-700',
+          textLatest: 'text-white'
         };
     }
   };
@@ -76,14 +86,14 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
       return `${baseClass} ${colors.bgSelected} ${colors.textSelected}`;
     }
     
-    // Earliest time - special styling with green border
-    if (earliestTime && time === earliestTime.time) {
-      return `${baseClass} ${colors.bgNormal} ${colors.textNormal} border border-green-300`;
+    // Latest time - dark shade of prayer color with white text
+    if (latestTime && time === latestTime.time) {
+      return `${baseClass} ${colors.bgLatest} ${colors.textLatest}`;
     }
     
-    // Latest time - special styling with orange border
-    if (latestTime && time === latestTime.time) {
-      return `${baseClass} ${colors.bgNormal} ${colors.textNormal} border border-orange-300`;
+    // Earliest time - light gray with black text
+    if (earliestTime && time === earliestTime.time) {
+      return `${baseClass} bg-gray-200 text-black`;
     }
     
     // Default
@@ -102,7 +112,7 @@ const TimeSelectionGrid: React.FC<TimeSelectionGridProps> = ({
           >
             {time}
             {earliestTime && time === earliestTime.time && (
-              <div className="text-xs mt-1 bg-green-600 text-white px-1 py-0.5 rounded-sm">
+              <div className="text-xs mt-1 bg-green-500 text-white px-1 py-0.5 rounded-sm">
                 EARLIEST
               </div>
             )}

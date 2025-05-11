@@ -51,8 +51,6 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
                 className="w-16 h-16 rounded-lg mr-3 bg-cover bg-center flex-shrink-0"
                 style={{
                   backgroundImage: `url('${regionData.backgroundImage}')`,
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: 'cover'
                 }}
               >
                 <div className="w-full h-full bg-black/30 rounded-lg"></div>
@@ -93,7 +91,7 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
     );
   }
 
-  // Desktop view with enhanced table and image-based regions like the reference image
+  // Desktop view with enhanced table and image-based regions
   return (
     <div className="grid grid-cols-1 gap-4">
       {regionCounts.map((regionData) => (
@@ -105,19 +103,18 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
           onClick={() => onSelectRegion(regionData.name)}
         >
           <div className="flex items-center h-24">
-            {/* Region image background - styled like reference image */}
+            {/* Region image background */}
             <div 
-              className="w-1/4 h-full relative bg-cover bg-center flex items-center justify-center"
+              className="w-1/4 h-full relative bg-cover bg-center"
               style={{ 
-                backgroundImage: `url('${regionData.backgroundImage}')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat'
+                backgroundImage: `url(${regionData.backgroundImage})`,
               }}
             >
               {/* Overlay with region name */}
               <div className="absolute inset-0 bg-black/40"></div>
-              <span className="relative z-10 text-white font-bold text-xl">{regionData.name}</span>
+              <span className="relative z-10 text-white font-bold text-xl flex items-center justify-center h-full">
+                {regionData.name}
+              </span>
             </div>
             
             {/* Region stats */}

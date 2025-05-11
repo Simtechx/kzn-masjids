@@ -48,7 +48,7 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
 
   return (
     <div className="w-full">
-      <div className={`grid ${gridCols} gap-3 mb-4`}>
+      <div className={`grid ${gridCols} gap-3 mb-6`}>
         {prayerTypes.map((prayer) => {
           const isActive = activePrayer === prayer;
           
