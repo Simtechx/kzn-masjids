@@ -1,11 +1,11 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { LayoutGrid, Table2, Blocks } from 'lucide-react';
+import { LayoutGrid, Table2 } from 'lucide-react';
 
 interface ViewToggleProps {
-  viewMode: 'icons' | 'grid' | 'tiles';
-  onViewChange: (mode: 'icons' | 'grid' | 'tiles') => void;
+  viewMode: 'icons' | 'grid';
+  onViewChange: (mode: 'icons' | 'grid') => void;
 }
 
 const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onViewChange }) => {
@@ -16,18 +16,6 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onViewChange }) => {
            dir="ltr" 
            tabIndex={0} 
            style={{ outline: "none" }}>
-        <Button
-          variant="ghost"
-          size="sm"
-          className={`flex items-center ${
-            viewMode === 'grid' ? 'bg-yellow-500 text-black' : 'hover:bg-gray-100'
-          }`}
-          onClick={() => onViewChange('grid')}
-          aria-label="Grid"
-        >
-          <Table2 className="h-4 w-4 mr-1" />
-          Grid
-        </Button>
         <Button
           variant="ghost"
           size="sm"
@@ -44,13 +32,13 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onViewChange }) => {
           variant="ghost"
           size="sm"
           className={`flex items-center ${
-            viewMode === 'tiles' ? 'bg-yellow-500 text-black' : 'hover:bg-gray-100'
+            viewMode === 'grid' ? 'bg-yellow-500 text-black' : 'hover:bg-gray-100'
           }`}
-          onClick={() => onViewChange('tiles')}
-          aria-label="Tiles"
+          onClick={() => onViewChange('grid')}
+          aria-label="Grid"
         >
-          <Blocks className="h-4 w-4 mr-1" />
-          Tiles
+          <Table2 className="h-4 w-4 mr-1" />
+          Grid
         </Button>
       </div>
     </div>

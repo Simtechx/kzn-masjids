@@ -8,7 +8,7 @@ export function usePrayerTimeSearch() {
   const [searchType, setSearchType] = useState<SearchType>('earliest');
   const [activePrayer, setActivePrayer] = useState<PrayerType | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'icons' | 'grid' | 'tiles'>('grid');
+  const [viewMode, setViewMode] = useState<'icons' | 'grid'>('icons');
   const [regionViewMode, setRegionViewMode] = useState<'icons' | 'grid' | 'tiles'>('icons');
   
   const handleRegionSelection = (region: string) => {

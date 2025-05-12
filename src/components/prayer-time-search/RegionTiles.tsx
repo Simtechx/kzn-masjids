@@ -57,47 +57,49 @@ const RegionTiles: React.FC<RegionTilesProps> = ({ selectedRegion, onSelectRegio
   ];
 
   return (
-    <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4'}`}>
-      {regions.map((regionData) => (
-        <div
-          key={regionData.name}
-          className={`cursor-pointer transition-all duration-300 rounded-lg overflow-hidden ${
-            selectedRegion === regionData.name ? 'ring-4 ring-yellow-500' : 'hover:shadow-lg'
-          }`}
-          onClick={() => onSelectRegion(regionData.name)}
-        >
-          <div 
-            className="aspect-video bg-cover bg-center relative"
-            style={{ backgroundImage: `url('${regionData.backgroundImage}')` }}
+    <div className="container mx-auto px-2 mb-6">
+      <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4'}`}>
+        {regions.map((regionData) => (
+          <div
+            key={regionData.name}
+            className={`cursor-pointer transition-all duration-300 rounded-lg overflow-hidden ${
+              selectedRegion === regionData.name ? 'ring-4 ring-yellow-500' : 'hover:shadow-lg'
+            }`}
+            onClick={() => onSelectRegion(regionData.name)}
           >
-            {/* Semi-transparent overlay */}
-            <div className="absolute inset-0 bg-black/40"></div>
-            
-            {/* Region name and details */}
-            <div className="absolute inset-0 p-3 flex flex-col justify-between">
-              <h3 className="text-white text-xl font-bold drop-shadow-md">{regionData.name}</h3>
+            <div 
+              className="aspect-video bg-cover bg-center relative"
+              style={{ backgroundImage: `url('${regionData.backgroundImage}')` }}
+            >
+              {/* Semi-transparent overlay */}
+              <div className="absolute inset-0 bg-black/40"></div>
               
-              <div className="flex flex-col space-y-1">
-                <div className="flex items-center text-white/90">
-                  <MapPin className="h-4 w-4 mr-1" />
-                  <span className="text-sm">{regionData.subRegions} sub-regions</span>
-                </div>
+              {/* Region name and details */}
+              <div className="absolute inset-0 p-3 flex flex-col justify-between">
+                <h3 className="text-white text-xl font-bold drop-shadow-md">{regionData.name}</h3>
                 
-                <div className="grid grid-cols-2 gap-2 mt-1">
-                  <div className="bg-white/20 backdrop-blur-sm rounded p-1 text-center">
-                    <span className="block text-white text-xs">Masjids</span>
-                    <span className="block text-white font-bold">{regionData.masjids}</span>
+                <div className="flex flex-col space-y-1">
+                  <div className="flex items-center text-white/90">
+                    <MapPin className="h-4 w-4 mr-1" />
+                    <span className="text-sm">{regionData.subRegions} sub-regions</span>
                   </div>
-                  <div className="bg-white/20 backdrop-blur-sm rounded p-1 text-center">
-                    <span className="block text-white text-xs">Musallas</span>
-                    <span className="block text-white font-bold">{regionData.musallas}</span>
+                  
+                  <div className="grid grid-cols-2 gap-2 mt-1">
+                    <div className="bg-white/20 backdrop-blur-sm rounded p-1 text-center">
+                      <span className="block text-white text-xs">Masjids</span>
+                      <span className="block text-white font-bold">{regionData.masjids}</span>
+                    </div>
+                    <div className="bg-white/20 backdrop-blur-sm rounded p-1 text-center">
+                      <span className="block text-white text-xs">Musallas</span>
+                      <span className="block text-white font-bold">{regionData.musallas}</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Table2, LayoutGrid, Blocks } from 'lucide-react';
+import { LayoutGrid, Table2, Blocks } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface PrayerTimeHeaderProps {
@@ -42,20 +42,20 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
           dir="ltr"
         >
           <ToggleGroupItem 
-            value="grid" 
-            aria-label="Grid" 
-            className="data-[state=on]:!bg-yellow-500 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
-          >
-            <Table2 className="h-5 w-5" />
-            <span className="ml-2">Grid</span>
-          </ToggleGroupItem>
-          <ToggleGroupItem 
             value="icons" 
             aria-label="Icons" 
             className="data-[state=on]:!bg-yellow-500 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
           >
             <LayoutGrid className="h-5 w-5" />
             <span className="ml-2">Icons</span>
+          </ToggleGroupItem>
+          <ToggleGroupItem 
+            value="grid" 
+            aria-label="Grid" 
+            className="data-[state=on]:!bg-yellow-500 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
+          >
+            <Table2 className="h-5 w-5" />
+            <span className="ml-2">Grid</span>
           </ToggleGroupItem>
           <ToggleGroupItem 
             value="tiles" 
