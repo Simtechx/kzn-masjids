@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Table,
@@ -25,7 +24,7 @@ interface PrayerTimesDisplayProps {
   activePrayer: PrayerType | null;
   searchType: SearchType;
   filteredPrayerTimes: MasjidData[];
-  viewMode: 'block' | 'table' | 'tile';
+  viewMode: 'icons' | 'grid' | 'tiles';
 }
 
 const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
@@ -69,7 +68,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
   };
 
   // For the table view
-  if (viewMode === 'table') {
+  if (viewMode === 'grid') {
     return (
       <div className="overflow-x-auto bg-white rounded-lg shadow">
         <h3 className="text-2xl font-bold p-4 text-teal-700 text-center">
@@ -154,7 +153,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
     );
   } 
   // For the tile view - similar to mobile table view but with a card-based layout
-  else if (viewMode === 'tile') {
+  else if (viewMode === 'tiles') {
     return (
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-2xl font-bold mb-4 text-teal-700 text-center">
@@ -193,7 +192,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
       </div>
     );
   }
-  // Block view
+  // Icons view (formerly block view)
   else {
     return (
       <div className="bg-white p-6 rounded-lg shadow">
