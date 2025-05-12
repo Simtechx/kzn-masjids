@@ -16,7 +16,7 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onViewChange }) => {
           variant="ghost"
           size="sm"
           className={`flex items-center ${
-            viewMode === 'grid' ? 'bg-yellow-500 text-black' : 'hover:bg-gray-100'
+            viewMode === 'table' ? 'bg-yellow-500 text-black' : 'hover:bg-gray-100'
           }`}
           onClick={() => onViewChange('table')}
         >
