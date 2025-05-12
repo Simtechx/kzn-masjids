@@ -1,14 +1,14 @@
 
 import React from 'react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Table2, LayoutGrid } from 'lucide-react';
+import { Table2, LayoutGrid, Blocks } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface PrayerTimeHeaderProps {
   selectedRegion: string | null;
   selectedSubRegion: string | null;
-  regionViewMode: 'block' | 'table';
-  onRegionViewModeChange: (value: 'block' | 'table') => void;
+  regionViewMode: 'icons' | 'grid' | 'tiles';
+  onRegionViewModeChange: (value: 'icons' | 'grid' | 'tiles') => void;
 }
 
 const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
@@ -36,24 +36,34 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
         <ToggleGroup 
           type="single" 
           value={regionViewMode} 
-          onValueChange={(value) => value && onRegionViewModeChange(value as 'block' | 'table')}
+          onValueChange={(value) => value && onRegionViewModeChange(value as 'icons' | 'grid' | 'tiles')}
           className="bg-white shadow-sm rounded-md flex-nowrap whitespace-nowrap"
+          role="group"
+          dir="ltr"
         >
           <ToggleGroupItem 
-            value="block" 
-            aria-label="Block" 
-            className="data-[state=on]:!bg-yellow-500 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
-          >
-            <LayoutGrid className="h-5 w-5" />
-            <span className="ml-2">Block</span>
-          </ToggleGroupItem>
-          <ToggleGroupItem 
-            value="table" 
-            aria-label="Table" 
+            value="grid" 
+            aria-label="Grid" 
             className="data-[state=on]:!bg-yellow-500 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
           >
             <Table2 className="h-5 w-5" />
-            <span className="ml-2">Table</span>
+            <span className="ml-2">Grid</span>
+          </ToggleGroupItem>
+          <ToggleGroupItem 
+            value="icons" 
+            aria-label="Icons" 
+            className="data-[state=on]:!bg-yellow-500 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
+          >
+            <LayoutGrid className="h-5 w-5" />
+            <span className="ml-2">Icons</span>
+          </ToggleGroupItem>
+          <ToggleGroupItem 
+            value="tiles" 
+            aria-label="Tiles" 
+            className="data-[state=on]:!bg-yellow-500 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
+          >
+            <Blocks className="h-5 w-5" />
+            <span className="ml-2">Tiles</span>
           </ToggleGroupItem>
         </ToggleGroup>
       </div>

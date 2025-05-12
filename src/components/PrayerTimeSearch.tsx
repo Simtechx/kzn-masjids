@@ -6,6 +6,7 @@ import SubRegionSelector from './prayer-time-search/SubRegionSelector';
 import PrayerTimeSelection from './prayer-time-search/PrayerTimeSelection';
 import PrayerTimesDisplay from './prayer-time-search/PrayerTimesDisplay';
 import RegionTable from './prayer-time-search/RegionTable';
+import RegionTiles from './prayer-time-search/RegionTiles';
 import PrayerTimeHeader from './prayer-time-search/PrayerTimeHeader';
 import ViewToggle from './prayer-time-search/ViewToggle';
 
@@ -42,13 +43,18 @@ const PrayerTimeSearch = () => {
         
         <div className="flex flex-col space-y-6">
           {/* Region Selection - Conditionally render based on view mode */}
-          {regionViewMode === 'block' ? (
+          {regionViewMode === 'icons' ? (
             <RegionSelector 
               selectedRegion={selectedRegion}
               onSelectRegion={handleRegionSelection}
             />
-          ) : (
+          ) : regionViewMode === 'grid' ? (
             <RegionTable 
+              selectedRegion={selectedRegion}
+              onSelectRegion={handleRegionSelection}
+            />
+          ) : (
+            <RegionTiles
               selectedRegion={selectedRegion}
               onSelectRegion={handleRegionSelection}
             />
