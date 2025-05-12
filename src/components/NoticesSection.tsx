@@ -20,47 +20,47 @@ const NoticesSection = () => {
   // API ref
   const apiRef = useRef<any>(null);
 
-  // Sample notice data with images for each category
+  // Sample notice data with the new uploaded images
   const noticesByCategory = {
     upcoming: [
       {
         id: 1,
-        title: 'Programme of Hazrat Moulana Muhammad Ilyas Patel',
-        imageUrl: '/lovable-uploads/863f3c64-7246-4879-81c9-71a2dbea0c0d.png',
+        title: 'Programme of Hazrat Mufti Ebrahim Salejee Saheb',
+        imageUrl: '/lovable-uploads/1aa475c9-533e-438b-94dd-2b14888da4c6.png',
       },
       {
         id: 2,
-        title: 'Esha Program - Moulana Abdul Hamid Is\'haq Saheb',
-        imageUrl: '/lovable-uploads/57eb7a84-f403-4986-a96a-b5f642da8e82.png',
+        title: 'Overnight Programme by Moulana Dawood Seedat',
+        imageUrl: '/lovable-uploads/da845ade-e36e-4896-b02b-1df6115252f9.png',
       },
       {
         id: 3,
-        title: 'Jumu\'ah at Musjid-e-Noor',
-        imageUrl: '/lovable-uploads/9bc39627-d180-4dfd-a550-d10fac634cfc.png',
+        title: 'Qira\'ah Programme at Musjid E Fathima',
+        imageUrl: '/lovable-uploads/d34accea-4a90-4b43-a11d-57cff067fee1.png',
       },
     ],
     jumuah: [
       {
         id: 4,
-        title: 'Jumu\'ah Programme at Musjidus Salaam',
-        imageUrl: '/lovable-uploads/8dc82f4b-e6fd-47b6-bdda-06b346a66680.png',
+        title: 'Vacancy at Masjid Abu Hurairah',
+        imageUrl: '/lovable-uploads/c895f89a-c76c-4255-9197-7c34b491f0e9.png',
       },
       {
         id: 5,
-        title: 'The Rights of the Qur\'aan - Qari Hamzah Desai',
-        imageUrl: '/lovable-uploads/2ea75a4a-9396-40e6-889f-8847fb4bef2c.png',
+        title: 'Sayyidah Saarah Programme',
+        imageUrl: '/lovable-uploads/313997ac-0790-47fa-a6e0-f866759aeeaa.png',
       },
       {
         id: 6,
-        title: 'Jumu\'ah at Musjid Al Hilal',
-        imageUrl: '/lovable-uploads/df3d0962-27b7-4675-b73e-84c421ef2084.png',
+        title: 'Time to quit vaping - Islamic guidance',
+        imageUrl: '/lovable-uploads/9b13c55e-ffe1-4f98-8f3a-40c5ea3e92f8.png',
       },
     ],
     info: [
       {
         id: 7,
-        title: 'This Week\'s Salaah Times at Musjidus Salaam',
-        imageUrl: '/lovable-uploads/2c640944-0b92-4b22-bbe3-3b88e1afa1d1.png',
+        title: 'How well do you know Prophet Muhammed',
+        imageUrl: '/lovable-uploads/bedd9f31-e8a9-4c97-8e9a-1f6537102fcf.png',
       },
       {
         id: 8,
