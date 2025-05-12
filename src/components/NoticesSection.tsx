@@ -25,52 +25,67 @@ const NoticesSection = () => {
     upcoming: [
       {
         id: 1,
-        title: 'Overnight Programme of Hazrat Mufti',
-        imageUrl: 'https://images.unsplash.com/photo-1466442929976-97f336a657be',
+        title: 'Programme of Hazrat Moulana Muhammad Ilyas Patel',
+        imageUrl: '/lovable-uploads/863f3c64-7246-4879-81c9-71a2dbea0c0d.png',
       },
       {
         id: 2,
-        title: 'Programme at Musjid Fatimah',
-        imageUrl: 'https://images.unsplash.com/photo-1470813740244-df37b8c1edcb',
+        title: 'Esha Program - Moulana Abdul Hamid Is\'haq Saheb',
+        imageUrl: '/lovable-uploads/57eb7a84-f403-4986-a96a-b5f642da8e82.png',
       },
       {
         id: 3,
-        title: 'Programme of Hazrat Moulana Muhammad Ilyas Patel',
-        imageUrl: 'https://images.unsplash.com/photo-1482938289607-e9573fc25ebb',
+        title: 'Jumu\'ah at Musjid-e-Noor',
+        imageUrl: '/lovable-uploads/9bc39627-d180-4dfd-a550-d10fac634cfc.png',
       },
     ],
     jumuah: [
       {
         id: 4,
-        title: 'Jumuah at Westville Masjid',
-        imageUrl: 'https://images.unsplash.com/photo-1500673922987-e212871fec22',
+        title: 'Jumu\'ah Programme at Musjidus Salaam',
+        imageUrl: '/lovable-uploads/8dc82f4b-e6fd-47b6-bdda-06b346a66680.png',
       },
       {
         id: 5,
-        title: 'Jumuah Talk at Grey Street Masjid',
-        imageUrl: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07',
+        title: 'The Rights of the Qur\'aan - Qari Hamzah Desai',
+        imageUrl: '/lovable-uploads/2ea75a4a-9396-40e6-889f-8847fb4bef2c.png',
       },
       {
         id: 6,
-        title: 'Special Jumuah Programme',
-        imageUrl: 'https://images.unsplash.com/photo-1560264234-b5618a0bfb0c',
+        title: 'Jumu\'ah at Musjid Al Hilal',
+        imageUrl: '/lovable-uploads/df3d0962-27b7-4675-b73e-84c421ef2084.png',
       },
     ],
     info: [
       {
         id: 7,
-        title: 'Updated Salaah Times for Winter',
-        imageUrl: 'https://images.unsplash.com/photo-1519817650390-64a93db51149',
+        title: 'This Week\'s Salaah Times at Musjidus Salaam',
+        imageUrl: '/lovable-uploads/2c640944-0b92-4b22-bbe3-3b88e1afa1d1.png',
       },
       {
         id: 8,
-        title: 'Taraweeh Times Announcement',
-        imageUrl: 'https://images.unsplash.com/photo-1551038247-3d9af20df552',
+        title: 'Live Q&A with Mufti AK Hoosen',
+        imageUrl: '/lovable-uploads/82c4aa87-c484-4be2-971b-29c13813209f.png',
       },
       {
         id: 9,
-        title: 'New Fajr Time Schedule',
-        imageUrl: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e',
+        title: 'Mufti AK Hoosen North West Lecture Program',
+        imageUrl: '/lovable-uploads/b7d90975-0a6e-455a-93ad-7cc9c0bbc832.png',
+      },
+      {
+        id: 10,
+        title: 'Dua for the Hujjaaj',
+        imageUrl: '/lovable-uploads/cc46818d-f28a-4053-b8d2-2c0cfb3c55c4.png',
+      },
+      {
+        id: 11,
+        title: 'A Nikah of Sunnah & Simplicity',
+        imageUrl: '/lovable-uploads/4c0618ff-2ece-4fd1-8dde-4143093b3f17.png',
+      },
+      {
+        id: 12,
+        title: 'Programme at Musjid Fatimah',
+        imageUrl: '/lovable-uploads/4cdb470c-43c1-4810-9a5d-253b4183dda4.png',
       },
     ],
   };

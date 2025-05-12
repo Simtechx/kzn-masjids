@@ -37,10 +37,10 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
 
   // Define active block colors - using darker shades of the same color
   const activeColors = {
-    fajr: 'bg-pink-600 text-white',
-    dhuhr: 'bg-amber-600 text-white',
-    asr: 'bg-teal-600 text-white',
-    isha: 'bg-indigo-600 text-white',
+    fajr: 'bg-pink-700 text-white',
+    dhuhr: 'bg-amber-700 text-white',
+    asr: 'bg-teal-700 text-white',
+    isha: 'bg-indigo-700 text-white',
   };
 
   // For mobile, use a 2x2 grid layout

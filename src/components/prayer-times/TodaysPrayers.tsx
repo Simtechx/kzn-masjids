@@ -77,7 +77,12 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
           const { bgColor, textColor } = getPrayerColors(prayer.name, isUpcoming);
             
           return (
-            <div key={index} className={`${bgColor} rounded-lg p-4 relative overflow-hidden`}>
+            <div key={index} className={`${bgColor} rounded-lg p-4 relative overflow-hidden flex items-center`}>
+              {/* Time is now on the left */}
+              <div className={`${textColor} text-2xl font-semibold mr-4`}>{prayer.time}</div>
+              <div className={`${textColor} flex-grow`}>{prayer.name}</div>
+              
+              {/* UPCOMING badge on right top */}
               {isUpcoming && (
                 <div className="absolute top-0 right-0">
                   <div className="bg-yellow-500 text-black text-xs px-2 py-1 rounded-bl-md font-semibold">
@@ -85,8 +90,6 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
                   </div>
                 </div>
               )}
-              <div className={`${textColor} text-center`}>{prayer.name}</div>
-              <div className={`text-2xl font-semibold ${textColor} text-center`}>{prayer.time}</div>
             </div>
           );
         })}

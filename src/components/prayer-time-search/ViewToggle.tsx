@@ -1,11 +1,11 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { LayoutGrid, Table } from 'lucide-react';
+import { LayoutGrid, Table2, Grid2X2 } from 'lucide-react';
 
 interface ViewToggleProps {
-  viewMode: 'block' | 'table';
-  onViewChange: (mode: 'block' | 'table') => void;
+  viewMode: 'block' | 'table' | 'tile';
+  onViewChange: (mode: 'block' | 'table' | 'tile') => void;
 }
 
 const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onViewChange }) => {
@@ -16,12 +16,23 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onViewChange }) => {
           variant="ghost"
           size="sm"
           className={`flex items-center ${
-            viewMode === 'table' ? 'bg-yellow-500 text-black' : 'hover:bg-gray-100'
+            viewMode === 'grid' ? 'bg-yellow-500 text-black' : 'hover:bg-gray-100'
           }`}
           onClick={() => onViewChange('table')}
         >
-          <Table className="h-4 w-4 mr-1" />
-          Table
+          <Grid2X2 className="h-4 w-4 mr-1" />
+          Grid
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className={`flex items-center ${
+            viewMode === 'tile' ? 'bg-yellow-500 text-black' : 'hover:bg-gray-100'
+          }`}
+          onClick={() => onViewChange('tile')}
+        >
+          <Table2 className="h-4 w-4 mr-1" />
+          Tiles
         </Button>
         <Button
           variant="ghost"

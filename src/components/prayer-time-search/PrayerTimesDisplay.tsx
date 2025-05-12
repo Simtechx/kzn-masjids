@@ -25,7 +25,7 @@ interface PrayerTimesDisplayProps {
   activePrayer: PrayerType | null;
   searchType: SearchType;
   filteredPrayerTimes: MasjidData[];
-  viewMode: 'block' | 'table';
+  viewMode: 'block' | 'table' | 'tile';
 }
 
 const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
@@ -68,7 +68,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
     }
   };
 
-  // Only render the selected view type (table or block)
+  // For the table view
   if (viewMode === 'table') {
     return (
       <div className="overflow-x-auto bg-white rounded-lg shadow">
@@ -152,8 +152,49 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
         )}
       </div>
     );
-  } else {
-    // Block view
+  } 
+  // For the tile view - similar to mobile table view but with a card-based layout
+  else if (viewMode === 'tile') {
+    return (
+      <div className="bg-white p-6 rounded-lg shadow">
+        <h3 className="text-2xl font-bold mb-4 text-teal-700 text-center">
+          {getHeaderTitle()}
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredPrayerTimes.map((masjid, idx) => (
+            <div key={idx} className="bg-white rounded-lg border shadow-sm p-4">
+              <div className="mb-3">
+                <h3 className="font-bold text-lg">{masjid.masjid}</h3>
+                <p className="text-gray-600 text-sm">{masjid.address || `123 Example St, ${selectedRegion}`}</p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                {prayerTypes.map(prayer => (
+                  <div 
+                    key={prayer}
+                    className={`${prayerColors[prayer]} p-2 rounded flex justify-between items-center`}
+                  >
+                    <span className={`${prayerTextColors[prayer]} font-medium`}>{prayer.charAt(0).toUpperCase() + prayer.slice(1)}</span>
+                    <span className="font-bold">{masjid[prayer]}</span>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-3">
+                <Button variant="default" size="sm" className="w-full bg-teal-600 hover:bg-teal-700">
+                  <MapPin className="mr-1 h-4 w-4" />
+                  Directions
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  // Block view
+  else {
     return (
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-2xl font-bold mb-4 text-teal-700 text-center">

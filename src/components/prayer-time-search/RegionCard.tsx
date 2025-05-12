@@ -37,9 +37,9 @@ const RegionCard: React.FC<RegionCardProps> = ({
           backgroundImage: `url(${backgroundImage})` 
         }}
       >
-        {/* Improved darker overlay for better text visibility */}
-        <div className="absolute inset-0 bg-black/60 flex flex-col justify-center items-center text-center p-4">
-          <h3 className="text-white text-2xl font-bold mb-1">{region}</h3>
+        {/* Darker overlay for better text visibility */}
+        <div className="absolute inset-0 bg-black/70 flex flex-col justify-center items-center text-center p-4">
+          <h3 className={`text-white font-bold mb-1 ${region.length > 12 ? 'text-xl' : 'text-2xl'}`}>{region}</h3>
           <div className="flex items-center justify-center text-white/90 mb-1">
             <MapPin size={16} className="mr-1" />
             <span>{subRegionCount} sub-regions</span>
