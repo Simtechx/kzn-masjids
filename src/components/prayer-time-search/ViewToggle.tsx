@@ -43,7 +43,7 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onViewChange }) => {
           onClick={() => onViewChange('block')}
         >
           <LayoutGrid className="h-4 w-4 mr-1" />
-          Block
+          Icons
         </Button>
       </div>
     </div>
