@@ -79,6 +79,11 @@ const MasjidCarousel: React.FC<MasjidCarouselProps> = ({ projects }) => {
                 location={project.location}
                 image={project.image}
                 completionPercentage={project.completionPercentage}
+                description={project.description}
+                district={project.district}
+                region={project.region}
+                country={project.country}
+                bankingDetails={project.bankingDetails}
               />
             </CarouselItem>
           ))}

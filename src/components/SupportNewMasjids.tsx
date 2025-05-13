@@ -6,7 +6,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { LayoutGrid, List } from 'lucide-react';
+import { LayoutGrid, List, Info } from 'lucide-react';
+import NewMasjidProject from './masjid-projects/NewMasjidProject';
 
 const SupportNewMasjids: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -89,49 +90,18 @@ const SupportNewMasjids: React.FC = () => {
                 style={transformStyle}
               >
                 {newProjects.map((project, index) => (
-                  <div key={index} className="w-full flex-shrink-0">
-                    <Card className="border-2 border-yellow-700/30 shadow-xl overflow-hidden">
-                      <div className={`relative ${isMobile ? 'h-120' : 'h-72 md:h-96'}`}>
-                        <img 
-                          src={project.image}
-                          alt={project.name}
-                          className="h-full w-full object-cover"
-                        />
-                        {/* Dark overlay with transparency only on text area */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                        
-                        {/* Content overlay */}
-                        <div className="absolute bottom-0 left-0 right-0 p-4">
-                          <div className="bg-black/30 backdrop-blur-sm p-4 rounded-lg inline-block">
-                            <h3 className="text-white font-bold text-xl md:text-2xl">{project.name}</h3>
-                            <p className="text-white/80 text-sm md:text-base">{project.location}</p>
-                          </div>
-                          
-                          <div className="mt-3">
-                            <div className="flex justify-between items-center mb-1">
-                              <span className="text-white font-medium">Project Progress</span>
-                              <span className="font-medium text-white">{project.completionPercentage}%</span>
-                            </div>
-                            <Progress 
-                              value={project.completionPercentage} 
-                              className="h-2 mb-3 bg-white/20" 
-                              indicatorClassName="bg-teal-600"
-                            />
-                            
-                            <Button className="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 mt-2">
-                              Contribute
-                            </Button>
-                          </div>
-                        </div>
-                        
-                        {/* Project Completion Badge */}
-                        <div className="absolute top-4 left-4">
-                          <span className="bg-yellow-800 text-white text-xs px-4 py-2 rounded-full font-semibold">
-                            {project.completionPercentage}% Complete
-                          </span>
-                        </div>
-                      </div>
-                    </Card>
+                  <div key={index} className="w-full flex-shrink-0 px-4 md:px-8">
+                    <NewMasjidProject 
+                      name={project.name}
+                      location={project.location}
+                      image={project.image}
+                      completionPercentage={project.completionPercentage}
+                      description={project.description}
+                      district={project.district}
+                      region={project.region}
+                      country={project.country}
+                      bankingDetails={project.bankingDetails}
+                    />
                   </div>
                 ))}
               </div>
@@ -161,6 +131,7 @@ const SupportNewMasjids: React.FC = () => {
                   <TableRow className="bg-[#062C25]">
                     <TableHead className="text-white">Project Name</TableHead>
                     <TableHead className="text-white">Location</TableHead>
+                    <TableHead className="text-white">District</TableHead>
                     <TableHead className="text-white text-center">Progress</TableHead>
                     <TableHead className="text-white text-right">Action</TableHead>
                   </TableRow>
@@ -170,6 +141,7 @@ const SupportNewMasjids: React.FC = () => {
                     <TableRow key={index} className="hover:bg-gray-50">
                       <TableCell className="font-medium">{project.name}</TableCell>
                       <TableCell>{project.location}</TableCell>
+                      <TableCell>{project.district}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Progress 
@@ -181,7 +153,8 @@ const SupportNewMasjids: React.FC = () => {
                       </TableCell>
                       <TableCell className="text-right">
                         <Button size="sm" className="bg-yellow-600 hover:bg-yellow-700">
-                          Contribute
+                          <Info className="h-4 w-4 mr-1" />
+                          More Info
                         </Button>
                       </TableCell>
                     </TableRow>
