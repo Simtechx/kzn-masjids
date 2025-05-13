@@ -25,7 +25,7 @@ interface PrayerTimesDisplayProps {
   activePrayer: PrayerType | null;
   searchType: SearchType;
   filteredPrayerTimes: MasjidData[];
-  viewMode: 'icons' | 'grid';
+  viewMode: 'block' | 'table';
 }
 
 const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
@@ -68,8 +68,8 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
     }
   };
 
-  // Grid view (formerly table view)
-  if (viewMode === 'grid') {
+  // Table view
+  if (viewMode === 'table') {
     return (
       <div className="overflow-x-auto bg-white rounded-lg shadow">
         <h3 className="text-2xl font-bold p-4 text-teal-700 text-center">
@@ -153,7 +153,7 @@ const PrayerTimesDisplay: React.FC<PrayerTimesDisplayProps> = ({
       </div>
     );
   } 
-  // Icons view (formerly block view)
+  // Block view
   else {
     return (
       <div className="bg-white p-6 rounded-lg shadow">

@@ -9,3 +9,11 @@ export interface PrayerTime {
   bgColor: string;
   textColor: string;
 }
+
+export interface ViewModeProps {
+  viewMode: 'block' | 'table';
+}
+
+export interface RegionViewModeProps {
+  regionViewMode: 'icons' | 'grid' | 'tiles';
+}
