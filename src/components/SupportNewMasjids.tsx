@@ -8,6 +8,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { LayoutGrid, List, Info } from 'lucide-react';
 import NewMasjidProject from './masjid-projects/NewMasjidProject';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 const SupportNewMasjids: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -77,31 +78,37 @@ const SupportNewMasjids: React.FC = () => {
         
         {viewMode === 'projects' ? (
           <>
-            {/* 3D Perspective Gallery-style Slider */}
+            {/* Responsive Gallery-style Slider */}
             <div 
               className="relative overflow-hidden rounded-xl w-full max-w-5xl mx-auto"
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
+              onTouchStart={() => setIsPaused(true)}
+              onTouchEnd={() => setIsPaused(false)}
               ref={sliderRef}
             >
               {/* Carousel track with proper transform */}
               <div 
-                className="flex transition-transform duration-700 ease-in-out"
+                className="flex transition-transform duration-700 ease-in-out w-full"
                 style={transformStyle}
               >
                 {newProjects.map((project, index) => (
                   <div key={index} className="w-full flex-shrink-0 px-4 md:px-8">
-                    <NewMasjidProject 
-                      name={project.name}
-                      location={project.location}
-                      image={project.image}
-                      completionPercentage={project.completionPercentage}
-                      description={project.description}
-                      district={project.district}
-                      region={project.region}
-                      country={project.country}
-                      bankingDetails={project.bankingDetails}
-                    />
+                    <div className="relative h-full">
+                      <AspectRatio ratio={16/10} className="bg-muted overflow-hidden rounded-md">
+                        <NewMasjidProject 
+                          name={project.name}
+                          location={project.location}
+                          image={project.image}
+                          completionPercentage={project.completionPercentage}
+                          description={project.description}
+                          district={project.district}
+                          region={project.region}
+                          country={project.country}
+                          bankingDetails={project.bankingDetails}
+                        />
+                      </AspectRatio>
+                    </div>
                   </div>
                 ))}
               </div>

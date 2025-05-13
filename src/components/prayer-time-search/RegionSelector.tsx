@@ -14,31 +14,31 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({ selectedRegion, onSelec
   const regions = [
     {
       name: 'Durban',
-      subRegions: 5,
+      subRegions: 8,
       masjids: 79,
       musallas: 59
     },
     {
       name: 'Midlands',
-      subRegions: 4,
+      subRegions: 5,
       masjids: 39,
       musallas: 22
     },
     {
       name: 'North Coast',
-      subRegions: 4,
+      subRegions: 7,
       masjids: 37,
       musallas: 26
     },
     {
       name: 'South Coast',
-      subRegions: 4,
+      subRegions: 6,
       masjids: 19,
       musallas: 15
     },
     {
       name: 'Northern Natal',
-      subRegions: 5,
+      subRegions: 6,
       masjids: 20,
       musallas: 13
     }
@@ -47,13 +47,13 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({ selectedRegion, onSelec
   const isMobile = useIsMobile();
   
   return (
-    <div className={`${isMobile ? 'overflow-x-auto -mx-4 px-4' : ''} mb-6`}>
-      <div className={`${isMobile ? 'flex flex-row min-w-max gap-4' : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4'}`}>
+    <div className="overflow-x-auto -mx-4 px-4 pb-2 scrollbar-hide">
+      <div className={`flex flex-row ${!isMobile ? 'flex-wrap justify-center gap-4' : 'min-w-max gap-4'}`}>
         {regions.map((region) => {
           const isSelected = selectedRegion === region.name;
           
           return (
-            <div key={region.name} className={isMobile ? 'min-w-[180px] max-w-[220px]' : ''}>
+            <div key={region.name} className={`${isMobile ? 'min-w-[180px] max-w-[220px]' : 'w-auto md:max-w-[220px] lg:max-w-[240px]'}`}>
               <RegionCard
                 region={region.name}
                 isSelected={isSelected}

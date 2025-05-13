@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DollarSign, Info, X } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 export interface NewMasjidProjectProps {
   name: string;
@@ -36,12 +37,13 @@ const NewMasjidProject: React.FC<NewMasjidProjectProps> = ({
   const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <Card className="h-[420px] rounded-xl overflow-hidden border-2 border-amber-500 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] flex flex-col relative">
+    <Card className="h-full rounded-xl overflow-hidden border-2 border-amber-500 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] flex flex-col relative">
       <div className="relative h-full overflow-hidden">
         <img 
           src={image} 
           alt={name} 
           className="w-full h-full object-cover"
+          loading="lazy"
         />
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-5">
           {/* Semi-transparent light block behind content for better visibility */}
@@ -57,7 +59,7 @@ const NewMasjidProject: React.FC<NewMasjidProjectProps> = ({
               <Progress value={completionPercentage} className="h-2 bg-gray-600/50" />
             </div>
             
-            {/* Changed from Contribute to More Info */}
+            {/* More Info button */}
             <Button 
               className="w-full mt-2 bg-yellow-700 hover:bg-yellow-800 text-white font-semibold"
               onClick={() => setShowDetails(true)}
@@ -77,8 +79,8 @@ const NewMasjidProject: React.FC<NewMasjidProjectProps> = ({
         
         {/* Project Details Modal */}
         {showDetails && (
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-md z-10 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg w-full max-w-md p-5 relative max-h-[90%] overflow-y-auto">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg w-full max-w-md p-5 relative max-h-[90vh] overflow-y-auto">
               <Button 
                 variant="ghost" 
                 size="icon" 
@@ -89,6 +91,13 @@ const NewMasjidProject: React.FC<NewMasjidProjectProps> = ({
               </Button>
               
               <h3 className="text-xl font-bold mb-3 text-gray-900">{name}</h3>
+              
+              {/* Project image in modal */}
+              <div className="mb-4 rounded-md overflow-hidden">
+                <AspectRatio ratio={16/9}>
+                  <img src={image} alt={name} className="w-full h-full object-cover" />
+                </AspectRatio>
+              </div>
               
               <div className="space-y-4">
                 <div>
