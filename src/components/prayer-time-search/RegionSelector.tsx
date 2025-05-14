@@ -48,12 +48,12 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({ selectedRegion, onSelec
   
   return (
     <div className="overflow-x-auto -mx-4 px-4 pb-2 scrollbar-hide">
-      <div className={`flex flex-row ${!isMobile ? 'flex-wrap justify-center gap-4' : 'min-w-max gap-4'}`}>
+      <div className="flex flex-row gap-4 min-w-max">
         {regions.map((region) => {
           const isSelected = selectedRegion === region.name;
           
           return (
-            <div key={region.name} className={`${isMobile ? 'min-w-[180px] max-w-[220px]' : 'w-auto md:max-w-[220px] lg:max-w-[240px]'}`}>
+            <div key={region.name} className="min-w-[180px] max-w-[220px]">
               <RegionCard
                 region={region.name}
                 isSelected={isSelected}

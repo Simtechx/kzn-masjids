@@ -6,14 +6,25 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { LayoutGrid, List, Info } from 'lucide-react';
+import { LayoutGrid, List, Info, CreditCard } from 'lucide-react';
 import NewMasjidProject from './masjid-projects/NewMasjidProject';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const SupportNewMasjids: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [viewMode, setViewMode] = useState<'projects' | 'list'>('projects');
+  const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const isMobile = useIsMobile();
   const sliderRef = useRef<HTMLDivElement>(null);
 
@@ -31,6 +42,10 @@ const SupportNewMasjids: React.FC = () => {
   // Set transform style direct on container
   const transformStyle = {
     transform: `translateX(-${currentSlide * 100}%)`
+  };
+
+  const handleOpenProjectDetails = (projectIndex: number) => {
+    setSelectedProject(projectIndex);
   };
 
   return (
@@ -106,6 +121,7 @@ const SupportNewMasjids: React.FC = () => {
                           region={project.region}
                           country={project.country}
                           bankingDetails={project.bankingDetails}
+                          onMoreInfo={() => handleOpenProjectDetails(index)}
                         />
                       </AspectRatio>
                     </div>
@@ -159,7 +175,11 @@ const SupportNewMasjids: React.FC = () => {
                         </div>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button size="sm" className="bg-yellow-600 hover:bg-yellow-700">
+                        <Button 
+                          size="sm" 
+                          className="bg-yellow-600 hover:bg-yellow-700"
+                          onClick={() => handleOpenProjectDetails(index)}
+                        >
                           <Info className="h-4 w-4 mr-1" />
                           More Info
                         </Button>
@@ -171,6 +191,141 @@ const SupportNewMasjids: React.FC = () => {
             </div>
           </div>
         )}
+        
+        {/* Project Details Dialog */}
+        <AlertDialog open={selectedProject !== null} onOpenChange={() => setSelectedProject(null)}>
+          <AlertDialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+            {selectedProject !== null && (
+              <>
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="text-2xl text-[#062C25]">{newProjects[selectedProject].name}</AlertDialogTitle>
+                  <AlertDialogDescription className="text-base text-gray-700">
+                    {newProjects[selectedProject].location}, {newProjects[selectedProject].district}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+                  <div>
+                    <img 
+                      src={newProjects[selectedProject].image} 
+                      alt={newProjects[selectedProject].name} 
+                      className="w-full h-auto rounded-md object-cover max-h-[300px]" 
+                    />
+                    
+                    <div className="mt-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="font-medium">Project Progress</span>
+                        <span className="font-medium text-amber-600">{newProjects[selectedProject].completionPercentage}%</span>
+                      </div>
+                      <Progress value={newProjects[selectedProject].completionPercentage} className="h-2" />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {newProjects[selectedProject].description && (
+                      <div>
+                        <h4 className="font-medium text-gray-900 mb-1">About this project</h4>
+                        <p className="text-gray-700">{newProjects[selectedProject].description}</p>
+                      </div>
+                    )}
+                    
+                    {newProjects[selectedProject].name === "Berea West Musjid and Madrasah Project" && (
+                      <div className="bg-teal-50 border border-teal-100 p-3 rounded-md">
+                        <h4 className="font-medium text-gray-900 mb-2">PHASE 5 BEREA WEST MUSJID AND MADRASAH PROJECT</h4>
+                        <p className="text-sm text-gray-700 mb-2">
+                          Alhamdulillah with Grace and Mercy of ALLAH TA'ALA we are now nearing completion of the Project.
+                        </p>
+                        <h5 className="font-medium text-gray-900 mb-1">Scope of work to be completed:</h5>
+                        <p className="text-sm text-gray-700 mb-2">
+                          Musjid and Madrasah: Balustrades, Metalworks incl Gates, Final Fix Plumbing and Electrical, 
+                          HVAC, Ceilings, Joinery, Painting.
+                          Completion of Minaret, Boundary Wall, Paving.
+                        </p>
+                        <p className="text-sm text-gray-700 mb-1">
+                          <span className="font-medium">Phase 5 Target:</span> R2,500,000
+                        </p>
+                        <p className="text-sm text-gray-700 mb-2">
+                          <span className="font-medium">5000 Shares Available @ R500 each.</span>
+                        </p>
+                        <p className="text-sm text-gray-700">
+                          During this Mubarak month of Ramadaan when rewards are multiplied manifold maximize your rewards 
+                          by spending generously for this noble cause.
+                        </p>
+                        <p className="text-sm text-gray-700 mt-2">
+                          Open your heart and spend in the Path of Allah, this could possibly be your last golden 
+                          opportunity as the project nears the end.
+                        </p>
+                      </div>
+                    )}
+                    
+                    {newProjects[selectedProject].bankingDetails && (
+                      <div className="border border-yellow-200 bg-yellow-50 rounded-md p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <CreditCard className="h-5 w-5 text-yellow-700" />
+                          <h4 className="font-bold text-gray-900">Banking Details</h4>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          {newProjects[selectedProject].name === "Berea West Musjid and Madrasah Project" ? (
+                            <>
+                              <p className="text-sm"><span className="font-medium">Name of Account:</span> Berea West Educational Trust</p>
+                              <p className="text-sm"><span className="font-medium">Bank:</span> HBZ Bank Limited</p>
+                              <p className="text-sm"><span className="font-medium">Type of Account:</span> Current</p>
+                              <p className="text-sm"><span className="font-medium">Account Number:</span> 18 901 314636</p>
+                              <p className="text-sm"><span className="font-medium">Branch Code:</span> 570226</p>
+                              <p className="text-sm"><span className="font-medium">Reference:</span> BWMM Your Cell NO.</p>
+                            </>
+                          ) : (
+                            <>
+                              {newProjects[selectedProject].bankingDetails.bankName && (
+                                <p className="text-sm">
+                                  <span className="font-medium">Bank:</span> {newProjects[selectedProject].bankingDetails.bankName}
+                                </p>
+                              )}
+                              {newProjects[selectedProject].bankingDetails.accountNumber && (
+                                <p className="text-sm">
+                                  <span className="font-medium">Account Number:</span> {newProjects[selectedProject].bankingDetails.accountNumber}
+                                </p>
+                              )}
+                              {newProjects[selectedProject].bankingDetails.branchCode && (
+                                <p className="text-sm">
+                                  <span className="font-medium">Branch Code:</span> {newProjects[selectedProject].bankingDetails.branchCode}
+                                </p>
+                              )}
+                              {newProjects[selectedProject].bankingDetails.reference && (
+                                <p className="text-sm">
+                                  <span className="font-medium">Reference:</span> {newProjects[selectedProject].bankingDetails.reference}
+                                </p>
+                              )}
+                            </>
+                          )}
+                        </div>
+                        
+                        {newProjects[selectedProject].name === "Berea West Musjid and Madrasah Project" && (
+                          <div className="mt-4 border-t pt-3 border-yellow-200">
+                            <p className="text-sm font-medium mb-1">For more information, contact:</p>
+                            <p className="text-sm">Zahed Mahomedy: 072 118 7700</p>
+                            <p className="text-sm">Abdul Hafiz Mirza: 072 428 9621</p>
+                            <p className="text-sm">Hajee Yusuf Lockhat: 083 790 7773</p>
+                            <p className="text-sm mt-2">
+                              Please email proof of payment to: <span className="text-blue-600">bereawestmm@gmail.com</span>
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <AlertDialogFooter>
+                  <AlertDialogAction className="bg-yellow-600 hover:bg-yellow-700 text-white">
+                    Close
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </>
+            )}
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </section>
   );

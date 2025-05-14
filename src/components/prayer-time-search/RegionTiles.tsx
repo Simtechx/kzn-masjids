@@ -12,7 +12,7 @@ interface RegionTilesProps {
 const RegionTiles: React.FC<RegionTilesProps> = ({ selectedRegion, onSelectRegion }) => {
   const isMobile = useIsMobile();
   
-  // Updated region data with correct counts
+  // Updated region data with correct counts from the uploaded image
   const regions = [
     {
       name: 'Durban',
