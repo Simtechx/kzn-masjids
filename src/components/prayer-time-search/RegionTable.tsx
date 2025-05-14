@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -58,7 +57,7 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
     }
   ];
 
-  // Updated mobile view to match the desktop grid/table style
+  // Updated mobile view to be more compact, without images
   if (isMobile) {
     return (
       <div className="overflow-x-auto">
@@ -66,10 +65,10 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
           <Table>
             <TableHeader>
               <TableRow className="bg-[#1A1F2C] !border-b-0">
-                <TableHead className="font-bold text-white">Region</TableHead>
-                <TableHead className="font-bold text-white text-center">Sub-Regions</TableHead>
-                <TableHead className="font-bold text-white text-center">Masjids</TableHead>
-                <TableHead className="font-bold text-white text-center">Musallas</TableHead>
+                <TableHead className="font-bold text-white p-2 text-xs">Region</TableHead>
+                <TableHead className="font-bold text-white text-center p-2 text-xs">Sub</TableHead>
+                <TableHead className="font-bold text-white text-center p-2 text-xs">Masjids</TableHead>
+                <TableHead className="font-bold text-white text-center p-2 text-xs">Mus.</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -81,20 +80,12 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
                   }`}
                   onClick={() => onSelectRegion(region.name)}
                 >
-                  <TableCell className="font-medium">
-                    <div className="flex items-center gap-2">
-                      <div 
-                        className="w-10 h-10 rounded-md bg-cover bg-center"
-                        style={{ backgroundImage: `url('${region.backgroundImage}')` }}
-                      >
-                        <div className="w-full h-full bg-black/30 rounded-md"></div>
-                      </div>
-                      <span>{region.name}</span>
-                    </div>
+                  <TableCell className="font-medium p-2 text-xs">
+                    <span>{region.name}</span>
                   </TableCell>
-                  <TableCell className="text-center font-medium text-blue-700">{region.subRegions}</TableCell>
-                  <TableCell className="text-center font-medium text-green-700">{region.masjids}</TableCell>
-                  <TableCell className="text-center font-medium text-amber-700">{region.musallas}</TableCell>
+                  <TableCell className="text-center font-medium text-blue-700 p-2 text-xs">{region.subRegions}</TableCell>
+                  <TableCell className="text-center font-medium text-green-700 p-2 text-xs">{region.masjids}</TableCell>
+                  <TableCell className="text-center font-medium text-amber-700 p-2 text-xs">{region.musallas}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -104,7 +95,7 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
     );
   }
 
-  // Desktop view with enhanced table and image-based regions
+  // Desktop view remains the same
   return (
     <div className="grid grid-cols-1 gap-4">
       {regions.map((regionData) => (
