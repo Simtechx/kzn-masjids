@@ -61,45 +61,64 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
   };
 
   const renderTableView = () => {
+    // Updated mobile table view to match desktop view
     if (isMobile) {
-      // Mobile optimized table view - simplified with no address/actions columns
       return (
-        <div className="space-y-4 overflow-x-hidden">
-          {filteredPrayerTimes.map((masjid, index) => (
-            <div key={index} className="bg-white p-4 rounded-md shadow border border-gray-100">
-              <div className="flex items-center mb-2">
-                <h3 className="font-semibold text-lg text-teal-700">{masjid.masjid}</h3>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                {prayerTypes.map((prayer) => {
-                  const extremeType = isExtremeTime(prayer, masjid[prayer]);
-                  const isSelected = activePrayer === prayer && masjid[prayer] === selectedTime;
-                  
-                  return (
-                    <div 
-                      key={prayer} 
-                      className={`p-2 rounded text-center ${
-                        isSelected 
-                          ? 'bg-gray-700 text-white' 
-                          : prayerColors[prayer]
-                      }`}
-                    >
-                      <div className={`text-xs font-medium capitalize ${isSelected ? 'text-white' : prayerTextColors[prayer]}`}>
-                        {prayer}
-                      </div>
-                      <div className="text-base font-medium">{masjid[prayer]}</div>
-                      {extremeType && !isSelected && (
-                        <div className="text-xs mt-1 bg-gray-800 text-white px-1.5 py-0.5 rounded-full mx-auto inline-block">
-                          {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+        <div className="overflow-x-auto">
+          <div className="rounded-lg shadow-lg border border-gray-200">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-[#1A1F2C] !border-b-0">
+                  <TableHead className="font-bold text-white">Masjid</TableHead>
+                  {prayerTypes.map(prayer => (
+                    <TableHead key={prayer} className="font-bold text-white text-center">
+                      {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredPrayerTimes.map((masjid, index) => (
+                  <TableRow 
+                    key={index} 
+                    className={`hover:bg-gray-100 transition-colors cursor-pointer ${
+                      activePrayer && selectedTime && masjid[activePrayer] === selectedTime 
+                        ? 'bg-gray-100' 
+                        : ''
+                    }`}
+                  >
+                    <TableCell className="font-medium">
+                      {masjid.masjid}
+                    </TableCell>
+                    {prayerTypes.map(prayer => {
+                      const extremeType = isExtremeTime(prayer, masjid[prayer]);
+                      const isSelected = activePrayer === prayer && masjid[prayer] === selectedTime;
+                      
+                      return (
+                        <TableCell 
+                          key={prayer} 
+                          className={
+                            isSelected
+                              ? 'bg-gray-700 text-white font-bold text-center' 
+                              : `${prayerColors[prayer]} text-center`
+                          }
+                        >
+                          <div className="flex flex-col items-center justify-center">
+                            <span>{masjid[prayer]}</span>
+                            {extremeType && !isSelected && (
+                              <div className="text-xs mt-1 bg-gray-800 text-white px-1.5 py-0.5 rounded-full">
+                                {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
+                              </div>
+                            )}
+                          </div>
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       );
     }

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -83,8 +84,13 @@ const NoticesSection = () => {
       },
       {
         id: 12,
-        title: 'Programme at Musjid Fatimah',
-        imageUrl: '/lovable-uploads/4cdb470c-43c1-4810-9a5d-253b4183dda4.png',
+        title: 'Jumuah at Musjid-e-Noor',
+        imageUrl: '/lovable-uploads/519bdaab-60ab-4d89-ab90-c74908a062f7.png',
+      },
+      {
+        id: 13,
+        title: 'This Week\'s Salah Times at Musjidus Salaam',
+        imageUrl: '/lovable-uploads/d60b7fe3-2bd1-4d28-ac12-6d656397fb6c.png',
       },
     ],
   };
@@ -158,7 +164,7 @@ const NoticesSection = () => {
           ))}
         </div>
         
-        {/* Horizontal Apple Card-style Carousel */}
+        {/* Adaptive Image Carousel - Adjusts to image dimensions */}
         <div className="w-full max-w-2xl mx-auto">
           <Carousel
             opts={{
@@ -179,7 +185,7 @@ const NoticesSection = () => {
                 >
                   <div 
                     className={cn(
-                      "relative w-[350px] h-[500px] transition-all duration-500 ease-out rounded-xl overflow-hidden",
+                      "relative w-[350px] max-h-[600px] min-h-[350px] transition-all duration-500 ease-out rounded-xl overflow-hidden",
                       "transform-gpu",
                       activeIndex === index 
                         ? "scale-100 z-20 shadow-2xl" 
@@ -193,7 +199,16 @@ const NoticesSection = () => {
                     <img 
                       src={notice.imageUrl} 
                       alt={notice.title} 
-                      className="w-full h-full object-cover"
+                      className="w-full h-auto max-w-full"
+                      onLoad={(e) => {
+                        // Adjust container height based on aspect ratio
+                        const img = e.target as HTMLImageElement;
+                        const container = img.parentElement;
+                        if (container) {
+                          container.style.height = 'auto';
+                          container.style.minHeight = `${img.height}px`;
+                        }
+                      }}
                     />
                     <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/70 to-transparent text-white">
                       <h3 className="text-lg font-medium">{notice.title}</h3>

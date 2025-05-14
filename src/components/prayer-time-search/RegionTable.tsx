@@ -58,59 +58,48 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
     }
   ];
 
-  // For mobile view, we'll show a simplified card-based layout
+  // Updated mobile view to match the desktop grid/table style
   if (isMobile) {
     return (
-      <div className="space-y-4">
-        {regions.map((regionData) => (
-          <div 
-            key={regionData.name}
-            className={`rounded-lg border p-4 cursor-pointer transition-colors ${
-              selectedRegion === regionData.name ? "bg-gray-200 border-gray-300" : "bg-white border-gray-200 hover:bg-gray-50"
-            }`}
-            onClick={() => onSelectRegion(regionData.name)}
-          >
-            <div className="flex items-center">
-              <div 
-                className="w-16 h-16 rounded-lg mr-3 bg-cover bg-center flex-shrink-0"
-                style={{
-                  backgroundImage: `url('${regionData.backgroundImage}')`,
-                }}
-              >
-                <div className="w-full h-full bg-black/30 rounded-lg"></div>
-              </div>
-              <div className="flex-grow">
-                <h3 className="font-semibold text-lg">{regionData.name}</h3>
-                <Button 
-                  variant="link"
-                  className="text-teal-700 hover:text-teal-900 font-medium p-0"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onSelectRegion(regionData.name);
-                  }}
+      <div className="overflow-x-auto">
+        <div className="rounded-lg shadow-lg border border-gray-200">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-[#1A1F2C] !border-b-0">
+                <TableHead className="font-bold text-white">Region</TableHead>
+                <TableHead className="font-bold text-white text-center">Sub-Regions</TableHead>
+                <TableHead className="font-bold text-white text-center">Masjids</TableHead>
+                <TableHead className="font-bold text-white text-center">Musallas</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {regions.map((region, index) => (
+                <TableRow 
+                  key={index} 
+                  className={`hover:bg-gray-100 transition-colors cursor-pointer ${
+                    selectedRegion === region.name ? "bg-gray-100" : ""
+                  }`}
+                  onClick={() => onSelectRegion(region.name)}
                 >
-                  Explore
-                  <ArrowRight className="h-4 w-4 ml-1" />
-                </Button>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-3 gap-2 mt-3 text-sm">
-              <div className="bg-blue-50 p-2 rounded text-center">
-                <span className="block font-medium text-blue-700">{regionData.subRegions}</span>
-                <span className="text-xs text-gray-600">Sub-regions</span>
-              </div>
-              <div className="bg-green-50 p-2 rounded text-center">
-                <span className="block font-medium text-green-700">{regionData.masjids}</span>
-                <span className="text-xs text-gray-600">Masjids</span>
-              </div>
-              <div className="bg-amber-50 p-2 rounded text-center">
-                <span className="block font-medium text-amber-700">{regionData.musallas}</span>
-                <span className="text-xs text-gray-600">Musallas</span>
-              </div>
-            </div>
-          </div>
-        ))}
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-2">
+                      <div 
+                        className="w-10 h-10 rounded-md bg-cover bg-center"
+                        style={{ backgroundImage: `url('${region.backgroundImage}')` }}
+                      >
+                        <div className="w-full h-full bg-black/30 rounded-md"></div>
+                      </div>
+                      <span>{region.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-center font-medium text-blue-700">{region.subRegions}</TableCell>
+                  <TableCell className="text-center font-medium text-green-700">{region.masjids}</TableCell>
+                  <TableCell className="text-center font-medium text-amber-700">{region.musallas}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     );
   }

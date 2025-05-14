@@ -93,7 +93,7 @@ const SupportNewMasjids: React.FC = () => {
         
         {viewMode === 'projects' ? (
           <>
-            {/* Responsive Gallery-style Slider */}
+            {/* Full-sized Project Card Slider for both mobile and desktop */}
             <div 
               className="relative overflow-hidden rounded-xl w-full max-w-5xl mx-auto"
               onMouseEnter={() => setIsPaused(true)}
@@ -109,7 +109,7 @@ const SupportNewMasjids: React.FC = () => {
               >
                 {newProjects.map((project, index) => (
                   <div key={index} className="w-full flex-shrink-0 px-4 md:px-8">
-                    <div className="relative h-full">
+                    <div className="relative">
                       <AspectRatio ratio={16/10} className="bg-muted overflow-hidden rounded-md">
                         <NewMasjidProject 
                           name={project.name}
@@ -129,7 +129,7 @@ const SupportNewMasjids: React.FC = () => {
                 ))}
               </div>
 
-              {/* Pagination indicators - Updated color to match #062C25 */}
+              {/* Pagination indicators */}
               <div className="flex justify-center mt-6 space-x-2">
                 {newProjects.map((_, index) => (
                   <button
