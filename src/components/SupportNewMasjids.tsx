@@ -93,7 +93,7 @@ const SupportNewMasjids: React.FC = () => {
         
         {viewMode === 'projects' ? (
           <>
-            {/* Full-sized Project Card Slider for both mobile and desktop */}
+            {/* Mobile and Desktop Project Card Slider with different designs */}
             <div 
               className="relative overflow-hidden rounded-xl w-full max-w-5xl mx-auto"
               onMouseEnter={() => setIsPaused(true)}
@@ -109,22 +109,61 @@ const SupportNewMasjids: React.FC = () => {
               >
                 {newProjects.map((project, index) => (
                   <div key={index} className="w-full flex-shrink-0 px-4 md:px-8">
-                    <div className="relative">
-                      <AspectRatio ratio={16/10} className="bg-muted overflow-hidden rounded-md">
-                        <NewMasjidProject 
-                          name={project.name}
-                          location={project.location}
-                          image={project.image}
-                          completionPercentage={project.completionPercentage}
-                          description={project.description}
-                          district={project.district}
-                          region={project.region}
-                          country={project.country}
-                          bankingDetails={project.bankingDetails}
-                          onMoreInfo={() => handleOpenProjectDetails(index)}
-                        />
-                      </AspectRatio>
-                    </div>
+                    {isMobile ? (
+                      // Mobile view: A4-style sliding card for better visual appearance
+                      <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-amber-500 transform transition-all duration-300 hover:shadow-xl">
+                        <div className="aspect-[3/4] relative">
+                          <img 
+                            src={project.image} 
+                            alt={project.name} 
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute top-3 left-3">
+                            <span className="px-3 py-1 bg-[#094941] text-white rounded-full text-sm font-medium shadow-md">
+                              {project.completionPercentage}% Complete
+                            </span>
+                          </div>
+                        </div>
+                        <div className="p-5">
+                          <h3 className="text-lg font-bold mb-1 text-gray-900">{project.name}</h3>
+                          <p className="text-gray-700 text-sm mb-3">{project.location}, {project.district}</p>
+                          
+                          <div className="mb-3">
+                            <div className="flex justify-between items-center mb-1">
+                              <span className="text-sm font-medium">Project Progress</span>
+                              <span className="text-sm font-medium text-amber-600">{project.completionPercentage}%</span>
+                            </div>
+                            <Progress value={project.completionPercentage} className="h-2" />
+                          </div>
+                          
+                          <Button 
+                            className="w-full bg-yellow-700 hover:bg-yellow-800 text-white font-semibold"
+                            onClick={() => handleOpenProjectDetails(index)}
+                          >
+                            <Info className="h-5 w-5 mr-2" />
+                            More Info
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      // Desktop view: Existing card design
+                      <div className="relative">
+                        <AspectRatio ratio={16/10} className="bg-muted overflow-hidden rounded-md">
+                          <NewMasjidProject 
+                            name={project.name}
+                            location={project.location}
+                            image={project.image}
+                            completionPercentage={project.completionPercentage}
+                            description={project.description}
+                            district={project.district}
+                            region={project.region}
+                            country={project.country}
+                            bankingDetails={project.bankingDetails}
+                            onMoreInfo={() => handleOpenProjectDetails(index)}
+                          />
+                        </AspectRatio>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

@@ -1,55 +1,54 @@
-
 // Extended data structure with specific times for filtering
 export const prayerTimesData = {
   'Northern Natal': [
-    { fajr: '06:05', dhuhr: '12:35', asr: '16:15', maghrib: '17:45', isha: '19:15', masjid: 'Darul Quran Masjid', address: 'Daisy Ave, Ladysmith' },
-    { fajr: '05:50', dhuhr: '13:20', asr: '16:15', maghrib: '17:50', isha: '19:30', masjid: 'Masjid Abu Huraira', address: '242 Boeren St, Vryheid' },
-    { fajr: '06:00', dhuhr: '13:20', asr: '16:15', maghrib: '17:55', isha: '19:00', masjid: 'Masjid Al-Kibriya', address: '12 Dromedaris St, Ladysmith' },
-    { fajr: '05:45', dhuhr: '13:15', asr: '16:00', maghrib: '17:50', isha: '19:15', masjid: 'Newcastle Masjid', address: '28 Murchison St, Newcastle' },
-    { fajr: '06:00', dhuhr: '13:15', asr: '16:30', maghrib: '18:00', isha: '19:05', masjid: 'Masjid Al Qaseehullah', address: '15 Egpore Rd, Ladysmith' },
-    { fajr: '05:45', dhuhr: '13:00', asr: '16:30', maghrib: '18:05', isha: '19:15', masjid: 'Masjid Rabia', address: '11 Brokensha Rd, Estcourt' },
-    { fajr: '06:00', dhuhr: '13:00', asr: '16:30', maghrib: '17:45', isha: '19:15', masjid: 'Bergville Musallah', address: '47 Tathum Rd, Bergville' },
+    { fajr: '06:05', dhuhr: '12:35', asr: '16:15', maghrib: '17:45', isha: '19:15', masjid: 'Darul Quran Masjid', address: 'Daisy Ave, Ladysmith', district: 'Ladysmith', type: 'MASJID' },
+    { fajr: '05:50', dhuhr: '13:20', asr: '16:15', maghrib: '17:50', isha: '19:30', masjid: 'Masjid Abu Huraira', address: '242 Boeren St, Vryheid', district: 'Vryheid', type: 'MASJID' },
+    { fajr: '06:00', dhuhr: '13:20', asr: '16:15', maghrib: '17:55', isha: '19:00', masjid: 'Masjid Al-Kibriya', address: '12 Dromedaris St, Ladysmith', district: 'Ladysmith', type: 'MASJID' },
+    { fajr: '05:45', dhuhr: '13:15', asr: '16:00', maghrib: '17:50', isha: '19:15', masjid: 'Newcastle Masjid', address: '28 Murchison St, Newcastle', district: 'Newcastle', type: 'MASJID' },
+    { fajr: '06:00', dhuhr: '13:15', asr: '16:30', maghrib: '18:00', isha: '19:05', masjid: 'Masjid Al Qaseehullah', address: '15 Egpore Rd, Ladysmith', district: 'Ladysmith', type: 'MASJID' },
+    { fajr: '05:45', dhuhr: '13:00', asr: '16:30', maghrib: '18:05', isha: '19:15', masjid: 'Masjid Rabia', address: '11 Brokensha Rd, Estcourt', district: 'Estcourt', type: 'MASJID' },
+    { fajr: '06:00', dhuhr: '13:00', asr: '16:30', maghrib: '17:45', isha: '19:15', masjid: 'Bergville Musallah', address: '47 Tathum Rd, Bergville', district: 'Bergville', type: 'MUSALLA' },
   ],
   'South Coast': [
-    { fajr: '06:00', dhuhr: '13:20', asr: '16:15', maghrib: '17:55', isha: '19:00', masjid: 'Harding Jumuah Masjid', address: '4 Musgrove St, Harding' },
-    { fajr: '06:00', dhuhr: '13:15', asr: '16:15', maghrib: '17:45', isha: '19:15', masjid: 'Matafal Musalla', address: 'shop 1 Jappers st, Maraisvale' },
-    { fajr: '06:00', dhuhr: '13:15', asr: '16:15', maghrib: '17:50', isha: '19:15', masjid: 'Port Shepstone Juma Masjid', address: '41 Reynolds St, Port Shepstone' },
-    { fajr: '06:00', dhuhr: '13:15', asr: '16:00', maghrib: '18:00', isha: '19:00', masjid: 'Umzinto Jaame Masjid', address: 'Nelson Mandela Road, Umzinto' },
-    { fajr: '06:00', dhuhr: '13:10', asr: '16:00', maghrib: '18:05', isha: '19:00', masjid: 'Masjid Ayesha', address: '15 Ufo Rd, Grosvenor, Port Shepstone' },
-    { fajr: '06:00', dhuhr: '13:15', asr: '16:00', maghrib: '17:50', isha: '19:00', masjid: 'Shelly Beach Musalla', address: '53 Marine Drive Windsor on Sea, Shelly Beach' },
-    { fajr: '06:00', dhuhr: '13:00', asr: '16:00', maghrib: '18:00', isha: '19:00', masjid: 'Amooti Zanzaibari Musalla', address: '12014J St, Etafuleni, Amooti' },
+    { fajr: '06:00', dhuhr: '13:20', asr: '16:15', maghrib: '17:55', isha: '19:00', masjid: 'Harding Jumuah Masjid', address: '4 Musgrove St, Harding', district: 'Harding', type: 'MASJID' },
+    { fajr: '06:00', dhuhr: '13:15', asr: '16:15', maghrib: '17:45', isha: '19:15', masjid: 'Matafal Musalla', address: 'shop 1 Jappers st, Maraisvale', district: 'Transkei', type: 'MUSALLA' },
+    { fajr: '06:00', dhuhr: '13:15', asr: '16:15', maghrib: '17:50', isha: '19:15', masjid: 'Port Shepstone Juma Masjid', address: '41 Reynolds St, Port Shepstone', district: 'Port Shepstone', type: 'MASJID' },
+    { fajr: '06:00', dhuhr: '13:15', asr: '16:00', maghrib: '18:00', isha: '19:00', masjid: 'Umzinto Jaame Masjid', address: 'Nelson Mandela Road, Umzinto', district: 'Umzinto', type: 'MASJID' },
+    { fajr: '06:00', dhuhr: '13:10', asr: '16:00', maghrib: '18:05', isha: '19:00', masjid: 'Masjid Ayesha', address: '15 Ufo Rd, Grosvenor, Port Shepstone', district: 'Port Shepstone', type: 'MASJID' },
+    { fajr: '06:00', dhuhr: '13:15', asr: '16:00', maghrib: '17:50', isha: '19:00', masjid: 'Shelly Beach Musalla', address: '53 Marine Drive Windsor on Sea, Shelly Beach', district: 'Port Shepstone', type: 'MUSALLA' },
+    { fajr: '06:00', dhuhr: '13:00', asr: '16:00', maghrib: '18:00', isha: '19:00', masjid: 'Amooti Zanzaibari Musalla', address: '12014J St, Etafuleni, Amooti', district: 'Verulam', type: 'MUSALLA' },
   ],
   'Durban': [
-    { fajr: '05:45', dhuhr: '12:45', asr: '16:30', maghrib: '17:50', isha: '19:15', masjid: 'Asherville - Masjid Noor', address: '123 Mallinson Road, Asherville' },
-    { fajr: '05:30', dhuhr: '12:40', asr: '16:30', maghrib: '17:45', isha: '19:00', masjid: 'Avondale - Hillcrest Masjid', address: '7 Emser road, Avondale' },
-    { fajr: '05:45', dhuhr: '12:45', asr: '16:30', maghrib: '18:00', isha: '19:15', masjid: 'Berea - Alcock Musallah', address: '4 Robinson Place' },
-    { fajr: '05:10', dhuhr: '11:37', asr: '15:35', maghrib: '17:40', isha: '18:34', masjid: 'Bonela - Masjid Al Quba', address: '44 Bonela Rd' },
-    { fajr: '06:00', dhuhr: '13:00', asr: '16:15', maghrib: '17:55', isha: '19:15', masjid: 'Bonela - Masjid Umar Farooq', address: '17 Jubilee Crescent, Bonela' },
-    { fajr: '05:40', dhuhr: '13:00', asr: '16:00', maghrib: '17:45', isha: '19:15', masjid: 'Chatsworth - Chisti Sabri Masjid', address: '112 Woodhurst Dr' },
-    { fajr: '05:50', dhuhr: '13:10', asr: '16:00', maghrib: '17:45', isha: '19:00', masjid: 'Durban Central - Broad Street Musalla', address: '10 Anul Dadoo Street' },
-    { fajr: '05:45', dhuhr: '12:30', asr: '15:50', maghrib: '17:40', isha: '19:00', masjid: 'Durban Central - Incoama Shadi Musalla', address: '143A Fishmarket Street, Durban 4001' },
-    { fajr: '05:50', dhuhr: '13:10', asr: '16:15', maghrib: '18:00', isha: '19:00', masjid: 'Durban Central - Juma Masjid Grey Street', address: 'Dr Yusuf Dadoo Street' },
-    { fajr: '05:30', dhuhr: '13:15', asr: '16:15', maghrib: '17:45', isha: '19:00', masjid: 'Durban Central - Masjid Maryam', address: '48 Simon Mzoleli Street' },
+    { fajr: '05:45', dhuhr: '12:45', asr: '16:30', maghrib: '17:50', isha: '19:15', masjid: 'Asherville - Masjid Noor', address: '123 Mallinson Road, Asherville', district: 'Asherville', type: 'MASJID' },
+    { fajr: '05:30', dhuhr: '12:40', asr: '16:30', maghrib: '17:45', isha: '19:00', masjid: 'Avondale - Hillcrest Masjid', address: '7 Emser road, Avondale', district: 'Avondale', type: 'MASJID' },
+    { fajr: '05:45', dhuhr: '12:45', asr: '16:30', maghrib: '18:00', isha: '19:15', masjid: 'Berea - Alcock Musallah', address: '4 Robinson Place', district: 'Berea', type: 'MUSALLA' },
+    { fajr: '05:10', dhuhr: '11:37', asr: '15:35', maghrib: '17:40', isha: '18:34', masjid: 'Bonela - Masjid Al Quba', address: '44 Bonela Rd', district: 'Bonela', type: 'MASJID' },
+    { fajr: '06:00', dhuhr: '13:00', asr: '16:15', maghrib: '17:55', isha: '19:15', masjid: 'Bonela - Masjid Umar Farooq', address: '17 Jubilee Crescent, Bonela', district: 'Bonela', type: 'MASJID' },
+    { fajr: '05:40', dhuhr: '13:00', asr: '16:00', maghrib: '17:45', isha: '19:15', masjid: 'Chatsworth - Chisti Sabri Masjid', address: '112 Woodhurst Dr', district: 'Chatsworth', type: 'MASJID' },
+    { fajr: '05:50', dhuhr: '13:10', asr: '16:00', maghrib: '17:45', isha: '19:00', masjid: 'Durban Central - Broad Street Musalla', address: '10 Anul Dadoo Street', district: 'City', type: 'MUSALLA' },
+    { fajr: '05:45', dhuhr: '12:30', asr: '15:50', maghrib: '17:40', isha: '19:00', masjid: 'Durban Central - Incoama Shadi Musalla', address: '143A Fishmarket Street, Durban 4001', district: 'City', type: 'MUSALLA' },
+    { fajr: '05:50', dhuhr: '13:10', asr: '16:15', maghrib: '18:00', isha: '19:00', masjid: 'Durban Central - Juma Masjid Grey Street', address: 'Dr Yusuf Dadoo Street', district: 'City', type: 'MASJID' },
+    { fajr: '05:30', dhuhr: '13:15', asr: '16:15', maghrib: '17:45', isha: '19:00', masjid: 'Durban Central - Masjid Maryam', address: '48 Simon Mzoleli Street', district: 'City', type: 'MASJID' },
   ],
   'Midlands': [
-    { fajr: '06:00', dhuhr: '13:15', asr: '16:30', maghrib: '17:55', isha: '19:00', masjid: 'Jalisvery Masjid', address: '487 Church St, Pietermaritzburg' },
-    { fajr: '06:00', dhuhr: '13:15', asr: '16:30', maghrib: '18:00', isha: '19:15', masjid: 'Qopa Jumuah Masjid', address: '103 Chapel St, eXobho' },
-    { fajr: '06:00', dhuhr: '13:15', asr: '16:15', maghrib: '17:50', isha: '19:00', masjid: 'Mountain Rise Masjid', address: '104 Royston Rd, Mountain Rise, Pietermaritzburg' },
-    { fajr: '05:45', dhuhr: '13:15', asr: '16:15', maghrib: '17:45', isha: '19:15', masjid: 'Northern Park Masjid', address: '63 Lincraft Rd, Northern Park, Pietermaritzburg' },
-    { fajr: '05:50', dhuhr: '13:15', asr: '16:15', maghrib: '17:50', isha: '19:15', masjid: 'Richmond Masjid', address: 'Russel St, Richmond' },
-    { fajr: '05:45', dhuhr: '13:15', asr: '16:15', maghrib: '17:55', isha: '19:15', masjid: 'Masjidue Sawliheen', address: '480 Prince Alfred St, Pietermaritzburg' },
-    { fajr: '05:30', dhuhr: '12:40', asr: '16:15', maghrib: '17:40', isha: '19:15', masjid: 'Masjid Khadijatul Kubra', address: '11 Corbis Rd, Scottsville, Pietermaritzburg' },
-    { fajr: '06:00', dhuhr: '12:45', asr: '16:30', maghrib: '17:45', isha: '19:15', masjid: 'Musallah Umar', address: '43 Dykes Rd, Montrose, Pietermaritzburg' },
+    { fajr: '06:00', dhuhr: '13:15', asr: '16:30', maghrib: '17:55', isha: '19:00', masjid: 'Jalisvery Masjid', address: '487 Church St, Pietermaritzburg', district: 'Pietermaritzburg', type: 'MASJID' },
+    { fajr: '06:00', dhuhr: '13:15', asr: '16:30', maghrib: '18:00', isha: '19:15', masjid: 'Qopa Jumuah Masjid', address: '103 Chapel St, eXobho', district: 'Ixopo', type: 'MASJID' },
+    { fajr: '06:00', dhuhr: '13:15', asr: '16:15', maghrib: '17:50', isha: '19:00', masjid: 'Mountain Rise Masjid', address: '104 Royston Rd, Mountain Rise, Pietermaritzburg', district: 'Pietermaritzburg', type: 'MASJID' },
+    { fajr: '05:45', dhuhr: '13:15', asr: '16:15', maghrib: '17:45', isha: '19:15', masjid: 'Northern Park Masjid', address: '63 Lincraft Rd, Northern Park, Pietermaritzburg', district: 'Pietermaritzburg', type: 'MASJID' },
+    { fajr: '05:50', dhuhr: '13:15', asr: '16:15', maghrib: '17:50', isha: '19:15', masjid: 'Richmond Masjid', address: 'Russel St, Richmond', district: 'Richmond', type: 'MASJID' },
+    { fajr: '05:45', dhuhr: '13:15', asr: '16:15', maghrib: '17:55', isha: '19:15', masjid: 'Masjidue Sawliheen', address: '480 Prince Alfred St, Pietermaritzburg', district: 'Pietermaritzburg', type: 'MASJID' },
+    { fajr: '05:30', dhuhr: '12:40', asr: '16:15', maghrib: '17:40', isha: '19:15', masjid: 'Masjid Khadijatul Kubra', address: '11 Corbis Rd, Scottsville, Pietermaritzburg', district: 'Pietermaritzburg', type: 'MASJID' },
+    { fajr: '06:00', dhuhr: '12:45', asr: '16:30', maghrib: '17:45', isha: '19:15', masjid: 'Musallah Umar', address: '43 Dykes Rd, Montrose, Pietermaritzburg', district: 'Pietermaritzburg', type: 'MUSALLA' },
   ],
   'North Coast': [
-    { fajr: '06:00', dhuhr: '13:15', asr: '16:15', maghrib: '17:55', isha: '19:15', masjid: 'Anjuman Islam Juma Masjid', address: '18 Railway St, Tongaat' },
-    { fajr: '05:50', dhuhr: '13:15', asr: '16:15', maghrib: '17:50', isha: '19:00', masjid: 'Empangeni Jumu\'ah Masjid', address: '26 North Rd, Empangeni Central, Empangeni' },
-    { fajr: '05:45', dhuhr: '13:15', asr: '16:30', maghrib: '18:00', isha: '19:00', masjid: 'La Mercy Masjid', address: '2 Cauli Dr, La Mercy' },
-    { fajr: '05:45', dhuhr: '13:15', asr: '16:15', maghrib: '17:45', isha: '19:15', masjid: 'Raisetville Masjid', address: '78 Treeveen Rd, Valdin Heights, Verulam' },
-    { fajr: '05:50', dhuhr: '13:15', asr: '16:15', maghrib: '17:50', isha: '19:00', masjid: 'Masjid-un-Nur', address: 'Lovapierre Dr, Stanger Ext 25, KwaDukuza' },
-    { fajr: '05:45', dhuhr: '13:15', asr: '16:15', maghrib: '17:45', isha: '19:15', masjid: 'Quwwatul Islam Jaame Masjid', address: '150 Wick St, Verulam' },
-    { fajr: '05:45', dhuhr: '13:15', asr: '16:15', maghrib: '17:50', isha: '19:15', masjid: 'Riyodh Musallah', address: '34 As-Safa Way, Riyodh, Verulam' },
-    { fajr: '05:40', dhuhr: '13:15', asr: '16:15', maghrib: '17:45', isha: '19:15', masjid: 'Stanger Jaamia Masjid', address: 'Mahatma Ghandi St, KwaDukuza Central, Stanger' },
+    { fajr: '06:00', dhuhr: '13:15', asr: '16:15', maghrib: '17:55', isha: '19:15', masjid: 'Anjuman Islam Juma Masjid', address: '18 Railway St, Tongaat', district: 'Tongaat', type: 'MASJID' },
+    { fajr: '05:50', dhuhr: '13:15', asr: '16:15', maghrib: '17:50', isha: '19:00', masjid: 'Empangeni Jumu\'ah Masjid', address: '26 North Rd, Empangeni Central, Empangeni', district: 'Empangeni', type: 'MASJID' },
+    { fajr: '05:45', dhuhr: '13:15', asr: '16:30', maghrib: '18:00', isha: '19:00', masjid: 'La Mercy Masjid', address: '2 Cauli Dr, La Mercy', district: 'La Mercy', type: 'MASJID' },
+    { fajr: '05:45', dhuhr: '13:15', asr: '16:15', maghrib: '17:45', isha: '19:15', masjid: 'Raisetville Masjid', address: '78 Treeveen Rd, Valdin Heights, Verulam', district: 'Verulam', type: 'MASJID' },
+    { fajr: '05:50', dhuhr: '13:15', asr: '16:15', maghrib: '17:50', isha: '19:00', masjid: 'Masjid-un-Nur', address: 'Lovapierre Dr, Stanger Ext 25, KwaDukuza', district: 'Stanger', type: 'MASJID' },
+    { fajr: '05:45', dhuhr: '13:15', asr: '16:15', maghrib: '17:45', isha: '19:15', masjid: 'Quwwatul Islam Jaame Masjid', address: '150 Wick St, Verulam', district: 'Verulam', type: 'MASJID' },
+    { fajr: '05:45', dhuhr: '13:15', asr: '16:15', maghrib: '17:50', isha: '19:15', masjid: 'Riyodh Musallah', address: '34 As-Safa Way, Riyodh, Verulam', district: 'Verulam', type: 'MUSALLA' },
+    { fajr: '05:40', dhuhr: '13:15', asr: '16:15', maghrib: '17:45', isha: '19:15', masjid: 'Stanger Jaamia Masjid', address: 'Mahatma Ghandi St, KwaDukuza Central, Stanger', district: 'Stanger', type: 'MASJID' },
   ]
 };
 
@@ -63,6 +62,8 @@ export type MasjidData = {
   isha: string; 
   masjid: string;
   address?: string;
+  district?: string;
+  type?: string;
 };
 
 // Updated subregion data to reflect the five main regions with Transkei as a sub-region

@@ -61,69 +61,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
   };
 
   const renderTableView = () => {
-    // Updated mobile table view to match desktop view
-    if (isMobile) {
-      return (
-        <div className="overflow-x-auto">
-          <div className="rounded-lg shadow-lg border border-gray-200">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-[#1A1F2C] !border-b-0">
-                  <TableHead className="font-bold text-white">Masjid</TableHead>
-                  {prayerTypes.map(prayer => (
-                    <TableHead key={prayer} className="font-bold text-white text-center">
-                      {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredPrayerTimes.map((masjid, index) => (
-                  <TableRow 
-                    key={index} 
-                    className={`hover:bg-gray-100 transition-colors cursor-pointer ${
-                      activePrayer && selectedTime && masjid[activePrayer] === selectedTime 
-                        ? 'bg-gray-100' 
-                        : ''
-                    }`}
-                  >
-                    <TableCell className="font-medium">
-                      {masjid.masjid}
-                    </TableCell>
-                    {prayerTypes.map(prayer => {
-                      const extremeType = isExtremeTime(prayer, masjid[prayer]);
-                      const isSelected = activePrayer === prayer && masjid[prayer] === selectedTime;
-                      
-                      return (
-                        <TableCell 
-                          key={prayer} 
-                          className={
-                            isSelected
-                              ? 'bg-gray-700 text-white font-bold text-center' 
-                              : `${prayerColors[prayer]} text-center`
-                          }
-                        >
-                          <div className="flex flex-col items-center justify-center">
-                            <span>{masjid[prayer]}</span>
-                            {extremeType && !isSelected && (
-                              <div className="text-xs mt-1 bg-gray-800 text-white px-1.5 py-0.5 rounded-full">
-                                {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
-                              </div>
-                            )}
-                          </div>
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-      );
-    }
-
-    // Desktop table view - Remove images as requested
+    // Use table view for both mobile and desktop, but with different columns
     return (
       <div className="overflow-x-auto">
         <div className="rounded-lg shadow-lg border border-gray-200">
@@ -137,7 +75,14 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
                     {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
                   </TableHead>
                 ))}
-                <TableHead className="font-bold text-white text-center">Location</TableHead>
+                {!isMobile && (
+                  <>
+                    <TableHead className="font-bold text-white">Region</TableHead>
+                    <TableHead className="font-bold text-white">Sub-Region</TableHead>
+                    <TableHead className="font-bold text-white">Type</TableHead>
+                    <TableHead className="font-bold text-white text-center">Location</TableHead>
+                  </>
+                )}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -153,7 +98,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
                   <TableCell className="font-medium">
                     {masjid.masjid}
                   </TableCell>
-                  <TableCell>123 Example St, {selectedRegion}</TableCell>
+                  <TableCell>{masjid.address || `123 Example St, ${selectedRegion}`}</TableCell>
                   {prayerTypes.map(prayer => {
                     const extremeType = isExtremeTime(prayer, masjid[prayer]);
                     const isSelected = activePrayer === prayer && masjid[prayer] === selectedTime;
@@ -178,12 +123,24 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
                       </TableCell>
                     );
                   })}
-                  <TableCell className="text-center">
-                    <Button variant="outline" size="sm" className="bg-teal-600 text-white border-teal-700 hover:bg-teal-700">
-                      <MapPin className="mr-1 h-4 w-4" />
-                      Directions
-                    </Button>
-                  </TableCell>
+
+                  {!isMobile && (
+                    <>
+                      <TableCell className="uppercase text-xs font-medium">{selectedRegion}</TableCell>
+                      <TableCell className="text-sm">
+                        {masjid.district || masjid.masjid.split(' ').pop() || 'Central'}
+                      </TableCell>
+                      <TableCell className="text-xs font-medium">
+                        {masjid.type || 'MASJID'}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Button variant="outline" size="sm" className="bg-teal-600 text-white border-teal-700 hover:bg-teal-700">
+                          <MapPin className="mr-1 h-4 w-4" />
+                          Directions
+                        </Button>
+                      </TableCell>
+                    </>
+                  )}
                 </TableRow>
               ))}
             </TableBody>
@@ -201,7 +158,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
             <div className="flex items-center mb-3">
               <div>
                 <h4 className="font-semibold text-lg text-teal-700">{masjid.masjid}</h4>
-                <p className="text-gray-600 text-sm">123 Example St, {selectedRegion}</p>
+                <p className="text-gray-600 text-sm">{masjid.address || `123 Example St, ${selectedRegion}`}</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-1">
