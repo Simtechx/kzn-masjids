@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { MapPin } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 interface MasjidsTableViewProps {
   selectedRegion: string;
@@ -93,12 +94,6 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                   <TableHead className="font-bold text-white text-center">Location</TableHead>
                 </>
               )}
-              {isMobile && (
-                <>
-                  <TableHead className="font-bold text-white text-xs py-2 px-2">Area</TableHead>
-                  <TableHead className="font-bold text-white text-xs py-2 px-2">Type</TableHead>
-                </>
-              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -111,18 +106,20 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                     : ''
                 }`}
               >
-                <TableCell className={`font-medium ${isMobile ? 'text-xs py-2 px-2 max-w-[80px] truncate' : ''}`}>
-                  {isMobile ? masjid.masjid.split(' ')[0] : masjid.masjid}
+                <TableCell className={`font-medium ${isMobile ? 'text-xs py-2 px-2' : ''}`}>
+                  {masjid.masjid}
                 </TableCell>
                 {!isMobile && <TableCell>{masjid.address || `123 Example St, ${selectedRegion}`}</TableCell>}
                 
                 {/* Prayer times cells - show all for desktop, only selected prayer for mobile */}
                 {isMobile && activePrayer ? (
                   <TableCell 
-                    className={`bg-gray-700 text-white font-bold text-center text-xs py-2 px-2`}
+                    className={`text-center text-xs py-2 px-2`}
                   >
                     <div className="flex flex-col items-center justify-center">
-                      <span>{masjid[activePrayer]}</span>
+                      <span className="bg-gray-700 text-white font-semibold px-3 py-1 rounded-full">
+                        {masjid[activePrayer]}
+                      </span>
                     </div>
                   </TableCell>
                 ) : (
@@ -142,9 +139,9 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                         <div className="flex flex-col items-center justify-center">
                           <span>{masjid[prayer]}</span>
                           {extremeType && !isSelected && (
-                            <div className="text-xs mt-1 bg-gray-800 text-white px-1.5 py-0.5 rounded-full">
+                            <Badge variant={extremeType === 'earliest' ? 'secondary' : 'default'} className="mt-1 text-[10px] px-2 py-0">
                               {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
-                            </div>
+                            </Badge>
                           )}
                         </div>
                       </TableCell>
@@ -154,12 +151,20 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
 
                 {!isMobile && (
                   <>
-                    <TableCell className="uppercase text-xs font-medium">{selectedRegion}</TableCell>
-                    <TableCell className="text-sm">
-                      {masjid.district || masjid.masjid.split(' ').pop() || 'Central'}
+                    <TableCell>
+                      <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
+                        {selectedRegion}
+                      </Badge>
                     </TableCell>
-                    <TableCell className="text-xs font-medium">
-                      {masjid.type || 'MASJID'}
+                    <TableCell>
+                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                        {masjid.district || masjid.masjid.split(' ').pop() || 'Central'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={masjid.type === 'MASJID' ? 'default' : 'secondary'} className={masjid.type === 'MASJID' ? 'bg-green-600' : 'bg-amber-600'}>
+                        {masjid.type || 'MASJID'}
+                      </Badge>
                     </TableCell>
                     <TableCell className="text-center">
                       <Button variant="outline" size="sm" className="bg-teal-600 text-white border-teal-700 hover:bg-teal-700">
@@ -167,13 +172,6 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                         Directions
                       </Button>
                     </TableCell>
-                  </>
-                )}
-                
-                {isMobile && (
-                  <>
-                    <TableCell className="text-xs py-2 px-2 max-w-[50px] truncate">{masjid.district || 'Central'}</TableCell>
-                    <TableCell className="text-xs py-2 px-2">{masjid.type === 'MASJID' ? 'M' : 'MU'}</TableCell>
                   </>
                 )}
               </TableRow>

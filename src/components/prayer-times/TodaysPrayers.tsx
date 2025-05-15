@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { PrayerTime } from '@/components/prayer-times/types';
+import { Badge } from '@/components/ui/badge';
 
 interface TodaysPrayersProps {
   todayPrayerTimes: PrayerTime[];
@@ -26,8 +27,6 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
   
   // Find the upcoming prayer - the next prayer after current time
   const upcomingPrayer = todayPrayerTimes.find(p => p.timestamp > now)?.name || '';
-  
-  console.log("Upcoming prayer found:", upcomingPrayer);
   
   // Function to determine background and text color based on prayer name
   const getPrayerColors = (prayerName: string, isUpcoming: boolean) => {
@@ -77,7 +76,7 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
           const { bgColor, textColor } = getPrayerColors(prayer.name, isUpcoming);
             
           return (
-            <div key={index} className={`${bgColor} rounded-lg p-4 relative overflow-hidden`}>
+            <div key={index} className={`${bgColor} rounded-lg p-4 relative overflow-hidden shadow-sm`}>
               {/* Prayer name now at top left */}
               <div className={`${textColor} font-medium mb-1`}>{prayer.name}</div>
               
@@ -87,9 +86,9 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
               {/* UPCOMING badge on right top */}
               {isUpcoming && (
                 <div className="absolute top-0 right-0">
-                  <div className="bg-yellow-500 text-black text-xs px-2 py-1 rounded-bl-md font-semibold">
+                  <Badge className="bg-yellow-500 text-black rounded-bl-md font-semibold">
                     UPCOMING
-                  </div>
+                  </Badge>
                 </div>
               )}
             </div>
@@ -99,7 +98,7 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
         <div className="col-span-2 mt-2">
           <div className="text-sm text-gray-500">Calculation Method: Umm Al-Qura</div>
           <div className="text-sm text-gray-500">Juristic Method: Hanafi</div>
-          <button className="text-[#072c23] text-sm mt-2">Change Settings</button>
+          <button className="text-[#072c23] text-sm mt-2 font-medium hover:underline">Change Settings</button>
         </div>
       </div>
     </div>

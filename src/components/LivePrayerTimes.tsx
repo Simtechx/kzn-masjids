@@ -1,8 +1,9 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import UpcomingPrayer from './prayer-times/UpcomingPrayer';
 import TodaysPrayers from './prayer-times/TodaysPrayers';
 import { usePrayerTimes } from './prayer-times/usePrayerTimes';
+import { Loader2 } from 'lucide-react';
 
 const LivePrayerTimes = () => {
   const {
@@ -10,21 +11,24 @@ const LivePrayerTimes = () => {
     upcomingPrayer,
     timeRemaining,
     remainingPercentage,
-    todayPrayerTimes
+    todayPrayerTimes,
+    isLoading
   } = usePrayerTimes();
 
-  // Extra logging to help debug upcoming prayer issues
-  useEffect(() => {
-    console.log('LivePrayerTimes - Upcoming Prayer:', upcomingPrayer); 
-    console.log('Today Prayer Times:', todayPrayerTimes);
-    console.log('Current time:', new Date().toLocaleTimeString());
-    
-    // Log each prayer's timestamp compared to now
-    const now = new Date().getTime();
-    todayPrayerTimes.forEach(prayer => {
-      console.log(`Prayer: ${prayer.name}, Time: ${prayer.time}, Is Future: ${prayer.timestamp > now}`);
-    });
-  }, [upcomingPrayer, todayPrayerTimes]);
+  if (isLoading) {
+    return (
+      <div className="bg-white text-black">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex justify-center items-center h-48">
+            <div className="flex flex-col items-center">
+              <Loader2 className="h-10 w-10 text-teal-600 animate-spin mb-4" />
+              <p className="text-gray-600">Loading prayer times...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white text-black">

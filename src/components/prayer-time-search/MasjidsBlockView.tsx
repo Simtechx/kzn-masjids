@@ -3,6 +3,7 @@ import React from 'react';
 import { MasjidData, PrayerType, findExtremeTime } from '@/utils/prayerTimeUtils';
 import { Button } from '@/components/ui/button';
 import { MapPin } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 interface MasjidsBlockViewProps {
   selectedRegion: string;
@@ -70,10 +71,16 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
             <div>
               <h4 className="font-semibold text-lg text-teal-700">{masjid.masjid}</h4>
               <p className="text-gray-600 text-sm">{masjid.address || `123 Example St, ${selectedRegion}`}</p>
-              <div className="text-xs mt-1">
-                <span className="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full mr-2">{selectedRegion}</span>
-                <span className="bg-blue-200 text-blue-700 px-2 py-0.5 rounded-full mr-2">{masjid.district || 'Central'}</span>
-                <span className="bg-green-200 text-green-700 px-2 py-0.5 rounded-full">{masjid.type || 'MASJID'}</span>
+              <div className="flex flex-wrap gap-1 mt-1">
+                <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
+                  {selectedRegion}
+                </Badge>
+                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                  {masjid.district || 'Central'}
+                </Badge>
+                <Badge variant={masjid.type === 'MASJID' ? 'default' : 'secondary'} className={masjid.type === 'MASJID' ? 'bg-green-600' : 'bg-amber-600'}>
+                  {masjid.type || 'MASJID'}
+                </Badge>
               </div>
             </div>
           </div>
@@ -94,11 +101,11 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
                   <div className={`text-xs font-medium ${isSelected ? 'text-white' : prayerTextColors[prayer]}`}>
                     {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
                   </div>
-                  <div className="text-center">{masjid[prayer]}</div>
+                  <div className="text-center font-medium">{masjid[prayer]}</div>
                   {extremeType && !isSelected && (
-                    <div className="text-xs mt-1 bg-gray-800 text-white px-1 py-0.5 rounded-full mx-auto inline-block">
+                    <Badge variant={extremeType === 'earliest' ? 'secondary' : 'default'} className="mt-1 text-[10px] px-2 py-0 mx-auto">
                       {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
-                    </div>
+                    </Badge>
                   )}
                 </div>
               );
