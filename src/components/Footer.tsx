@@ -1,10 +1,41 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Mail, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { toast } from './ui/use-toast';
 
 const Footer = () => {
+  const [isContributeDialogOpen, setIsContributeDialogOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    masjidName: '',
+    address: '',
+    whatsapp: ''
+  });
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmitForm = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Information Received",
+      description: "Thank you for contributing to our database.",
+    });
+    setFormData({
+      masjidName: '',
+      address: '',
+      whatsapp: ''
+    });
+    setIsContributeDialogOpen(false);
+  };
+
   return (
     <footer className="bg-[#072c23] text-white py-6 px-4">
       <div className="container mx-auto">        
@@ -17,7 +48,10 @@ const Footer = () => {
               </p>
             </div>
             <div className="mt-4">
-              <Button className="bg-amber-500 hover:bg-amber-600 text-black py-1 px-3 rounded-md text-sm">
+              <Button 
+                className="bg-amber-500 hover:bg-amber-600 text-black py-1 px-3 rounded-md text-sm"
+                onClick={() => setIsContributeDialogOpen(true)}
+              >
                 Contribute Information
               </Button>
             </div>
@@ -61,6 +95,57 @@ const Footer = () => {
           <p>© 2025 kznmasjid.co.za by Simtech W. All Rights Reserved</p>
         </div>
       </div>
+
+      {/* Contribution Form Dialog */}
+      <Dialog open={isContributeDialogOpen} onOpenChange={setIsContributeDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Contribute Masjid Information</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmitForm}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-1 gap-2">
+                <label htmlFor="masjidName" className="text-sm font-medium">Masjid Name</label>
+                <Input
+                  id="masjidName"
+                  name="masjidName"
+                  value={formData.masjidName}
+                  onChange={handleFormChange}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                <label htmlFor="address" className="text-sm font-medium">Address</label>
+                <Input
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleFormChange}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                <label htmlFor="whatsapp" className="text-sm font-medium">WhatsApp Number</label>
+                <Input
+                  id="whatsapp"
+                  name="whatsapp"
+                  value={formData.whatsapp}
+                  onChange={handleFormChange}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit" className="bg-teal-600 text-white hover:bg-teal-700">
+                Submit Information
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </footer>
   );
 };
