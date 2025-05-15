@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { prayerTimesData, PrayerType, SearchType, MasjidData } from '@/utils/prayerTimeUtils';
 
 export function usePrayerTimeSearch() {
@@ -10,6 +10,14 @@ export function usePrayerTimeSearch() {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'block' | 'table'>('block');
   const [regionViewMode, setRegionViewMode] = useState<'icons' | 'grid' | 'tiles'>('icons');
+  const [prayerData, setPrayerData] = useState<Record<string, MasjidData[]>>(prayerTimesData);
+  
+  // This effect would be used to fetch data from Google Sheets when implemented
+  useEffect(() => {
+    // In the future, this is where we'd fetch from Google Sheets
+    // For now, we're using the local data
+    setPrayerData(prayerTimesData);
+  }, []);
   
   const handleRegionSelection = (region: string) => {
     setSelectedRegion(region);
@@ -36,14 +44,14 @@ export function usePrayerTimeSearch() {
   const getFilteredPrayerTimes = (): MasjidData[] => {
     if (!selectedRegion) return [];
     
-    const regionData = prayerTimesData[selectedRegion as keyof typeof prayerTimesData] || [];
+    const regionData = prayerData[selectedRegion as keyof typeof prayerData] || [];
     
     let filteredData = [...regionData];
     
     // Filter by sub-region if selected
     if (selectedSubRegion) {
       filteredData = filteredData.filter(masjid => 
-        masjid.masjid.includes(selectedSubRegion)
+        masjid.district === selectedSubRegion || masjid.masjid.includes(selectedSubRegion)
       );
     }
     
@@ -72,6 +80,7 @@ export function usePrayerTimeSearch() {
     getFilteredPrayerTimes,
     setSearchType,
     setViewMode,
-    setRegionViewMode
+    setRegionViewMode,
+    prayerData
   };
 }

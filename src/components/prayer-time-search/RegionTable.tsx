@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -65,10 +66,10 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
           <Table>
             <TableHeader>
               <TableRow className="bg-[#1A1F2C] !border-b-0">
-                <TableHead className="font-bold text-white p-2 text-xs">Region</TableHead>
-                <TableHead className="font-bold text-white text-center p-2 text-xs">Sub</TableHead>
-                <TableHead className="font-bold text-white text-center p-2 text-xs">Masjids</TableHead>
-                <TableHead className="font-bold text-white text-center p-2 text-xs">Mus.</TableHead>
+                <TableHead className="font-bold text-white p-1 text-xs">Region</TableHead>
+                <TableHead className="font-bold text-white text-center p-1 text-xs">Sub</TableHead>
+                <TableHead className="font-bold text-white text-center p-1 text-xs">Masjids</TableHead>
+                <TableHead className="font-bold text-white text-center p-1 text-xs">Mus.</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -80,12 +81,12 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
                   }`}
                   onClick={() => onSelectRegion(region.name)}
                 >
-                  <TableCell className="font-medium p-2 text-xs">
-                    <span>{region.name}</span>
+                  <TableCell className="font-medium p-1 text-xs">
+                    {region.name}
                   </TableCell>
-                  <TableCell className="text-center font-medium text-blue-700 p-2 text-xs">{region.subRegions}</TableCell>
-                  <TableCell className="text-center font-medium text-green-700 p-2 text-xs">{region.masjids}</TableCell>
-                  <TableCell className="text-center font-medium text-amber-700 p-2 text-xs">{region.musallas}</TableCell>
+                  <TableCell className="text-center font-medium text-blue-700 p-1 text-xs">{region.subRegions}</TableCell>
+                  <TableCell className="text-center font-medium text-green-700 p-1 text-xs">{region.masjids}</TableCell>
+                  <TableCell className="text-center font-medium text-amber-700 p-1 text-xs">{region.musallas}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

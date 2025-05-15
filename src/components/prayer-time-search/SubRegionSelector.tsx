@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { subRegionsData } from '@/utils/prayerTimeUtils';
+import React, { useEffect, useState } from 'react';
+import { prayerTimesData } from '@/utils/prayerTimeUtils';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SubRegionSelectorProps {
@@ -15,49 +15,40 @@ const SubRegionSelector: React.FC<SubRegionSelectorProps> = ({
   onSelectSubRegion 
 }) => {
   const isMobile = useIsMobile();
+  const [subRegions, setSubRegions] = useState<string[]>([]);
+  
+  useEffect(() => {
+    if (!selectedRegion) return;
+    
+    // Dynamically extract unique sub-regions from the prayerTimesData
+    const regionData = prayerTimesData[selectedRegion as keyof typeof prayerTimesData] || [];
+    const uniqueSubRegions = new Set<string>();
+    
+    regionData.forEach(masjid => {
+      if (masjid.district) {
+        uniqueSubRegions.add(masjid.district);
+      }
+    });
+    
+    // Convert Set to array and sort alphabetically
+    const sortedSubRegions = Array.from(uniqueSubRegions).sort();
+    
+    // Add Transkei as a sub-region of South Coast if selected region is South Coast
+    if (selectedRegion === 'South Coast' && !sortedSubRegions.includes('Transkei')) {
+      sortedSubRegions.push('Transkei');
+    }
+    
+    setSubRegions(sortedSubRegions);
+  }, [selectedRegion]);
   
   if (!selectedRegion) return null;
   
-  // Add Transkei as a sub-region of South Coast if selected region is South Coast
-  let subRegions = subRegionsData[selectedRegion as keyof typeof subRegionsData] || [];
-  if (selectedRegion === 'South Coast') {
-    subRegions = [...subRegions, 'Transkei'];
-  }
-  
   // Mock masjid counts for each sub-region
-  const masjidCounts = {
-    // North Coast
-    "Stanger": 5,
-    "Ballito": 3,
-    "Tongaat": 6,
-    "Verulam": 7,
+  const getMasjidCount = (subRegion: string): number => {
+    if (!selectedRegion) return 0;
     
-    // South Coast
-    "Port Shepstone": 4,
-    "Margate": 3,
-    "Scottburgh": 5,
-    "Umkomaas": 3,
-    "Transkei": 4,
-    
-    // Durban
-    "North": 15,
-    "South": 12,
-    "City": 10,
-    "Overport": 8,
-    "Suburbs": 14,
-    
-    // Midlands
-    "Pietermaritzburg": 6,
-    "Richmond": 2,
-    "Howick": 3,
-    "Other": 4,
-    
-    // Northern Natal
-    "Newcastle": 5,
-    "Ladysmith": 4,
-    "Dundee": 3,
-    "Vryheid": 4,
-    "Utrecht": 3,
+    const regionData = prayerTimesData[selectedRegion as keyof typeof prayerTimesData] || [];
+    return regionData.filter(masjid => masjid.district === subRegion).length || 3;
   };
 
   return (
@@ -80,7 +71,7 @@ const SubRegionSelector: React.FC<SubRegionSelectorProps> = ({
           >
             <div className="font-medium text-md">{subRegion}</div>
             <div className="text-xs mt-1">
-              {masjidCounts[subRegion as keyof typeof masjidCounts] || 3} Masjids
+              {getMasjidCount(subRegion)} Masjids
             </div>
           </div>
         ))}
