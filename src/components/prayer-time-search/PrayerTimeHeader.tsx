@@ -28,7 +28,9 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
             ? `Find salaah times for masjids in ${selectedSubRegion}, ${selectedRegion}`
             : selectedRegion 
               ? `Find salaah times for masjids in ${selectedRegion}` 
-              : "Find salaah times across different masjids in KwaZulu-Natal regions"}
+              : isMobile 
+                ? "Discover Salaah Times\nin KwaZulu-Natal\nSelect a Region to View Details"
+                : "Discover Salaah Times in KwaZulu-Natal – Select a Region to View Details"}
         </p>
       </div>
       

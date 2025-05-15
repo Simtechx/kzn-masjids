@@ -65,18 +65,6 @@ const PrayerTimeSearch = () => {
             />
           )}
           
-          {/* Instructional Text */}
-          <div className="text-center text-gray-700">
-            {isMobile ? (
-              <>
-                <p className="text-base font-medium">Discover Salaah Times in KwaZulu-Natal</p>
-                <p className="text-base font-medium">Select a Region to View Details</p>
-              </>
-            ) : (
-              <p className="text-lg font-medium">Discover Salaah Times in KwaZulu-Natal – Select a Region to View Details</p>
-            )}
-          </div>
-          
           {/* Sub-region Selection */}
           {selectedRegion && (
             <SubRegionSelector

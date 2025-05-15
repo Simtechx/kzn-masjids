@@ -105,7 +105,7 @@ const Footer = () => {
           <form onSubmit={handleSubmitForm}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-1 gap-2">
-                <label htmlFor="masjidName" className="text-sm font-medium">Masjid Name</label>
+                <label htmlFor="masjidName" className="text-sm font-medium">Masjid or Musalla Name</label>
                 <Input
                   id="masjidName"
                   name="masjidName"
@@ -116,7 +116,7 @@ const Footer = () => {
                 />
               </div>
               <div className="grid grid-cols-1 gap-2">
-                <label htmlFor="address" className="text-sm font-medium">Address</label>
+                <label htmlFor="address" className="text-sm font-medium">Address or Location</label>
                 <Input
                   id="address"
                   name="address"
@@ -139,7 +139,7 @@ const Footer = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" className="bg-teal-600 text-white hover:bg-teal-700">
+              <Button type="submit" className="bg-amber-500 text-black hover:bg-amber-600">
                 Submit Information
               </Button>
             </DialogFooter>
