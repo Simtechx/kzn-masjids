@@ -10,6 +10,7 @@ import RegionTiles from './prayer-time-search/RegionTiles';
 import PrayerTimeHeader from './prayer-time-search/PrayerTimeHeader';
 import ViewToggle from './prayer-time-search/ViewToggle';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Loader2 } from 'lucide-react';
 
 const PrayerTimeSearch = () => {
   const {
@@ -20,6 +21,7 @@ const PrayerTimeSearch = () => {
     selectedTime,
     viewMode,
     regionViewMode,
+    isLoading,
     handleRegionSelection,
     handleSubRegionSelection,
     handlePrayerSelection,
@@ -46,64 +48,71 @@ const PrayerTimeSearch = () => {
           />
         </div>
         
-        <div className="flex flex-col space-y-6">
-          {/* Region Selection - Conditionally render based on view mode */}
-          {regionViewMode === 'icons' ? (
-            <RegionSelector 
-              selectedRegion={selectedRegion}
-              onSelectRegion={handleRegionSelection}
-            />
-          ) : regionViewMode === 'grid' ? (
-            <RegionTable 
-              selectedRegion={selectedRegion}
-              onSelectRegion={handleRegionSelection}
-            />
-          ) : (
-            <RegionTiles
-              selectedRegion={selectedRegion}
-              onSelectRegion={handleRegionSelection}
-            />
-          )}
-          
-          {/* Sub-region Selection */}
-          {selectedRegion && (
-            <SubRegionSelector
-              selectedRegion={selectedRegion}
-              selectedSubRegion={selectedSubRegion}
-              onSelectSubRegion={handleSubRegionSelection}
-            />
-          )}
-          
-          {/* Salaah Time Blocks */}
-          {selectedRegion && (
-            <div className="bg-gray-100 p-4 rounded-lg">
-              <PrayerTimeSelection
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center h-64">
+            <Loader2 className="h-10 w-10 text-teal-600 animate-spin mb-4" />
+            <p className="text-gray-600">Loading prayer times data...</p>
+          </div>
+        ) : (
+          <div className="flex flex-col space-y-6">
+            {/* Region Selection - Conditionally render based on view mode */}
+            {regionViewMode === 'icons' ? (
+              <RegionSelector 
                 selectedRegion={selectedRegion}
-                activePrayer={activePrayer}
-                selectedTime={selectedTime}
-                onSelectPrayer={handlePrayerSelection}
-                onSelectTime={handleTimeSelection}
+                onSelectRegion={handleRegionSelection}
               />
-              
-              {/* Salaah Time View Toggle */}
-              <ViewToggle 
-                viewMode={viewMode} 
-                onViewChange={setViewMode} 
+            ) : regionViewMode === 'grid' ? (
+              <RegionTable 
+                selectedRegion={selectedRegion}
+                onSelectRegion={handleRegionSelection}
               />
-              
-              {/* Salaah Times Display */}
-              <PrayerTimesDisplay
+            ) : (
+              <RegionTiles
+                selectedRegion={selectedRegion}
+                onSelectRegion={handleRegionSelection}
+              />
+            )}
+            
+            {/* Sub-region Selection */}
+            {selectedRegion && (
+              <SubRegionSelector
                 selectedRegion={selectedRegion}
                 selectedSubRegion={selectedSubRegion}
-                selectedTime={selectedTime}
-                activePrayer={activePrayer}
-                searchType={searchType}
-                filteredPrayerTimes={getFilteredPrayerTimes()}
-                viewMode={viewMode}
+                onSelectSubRegion={handleSubRegionSelection}
               />
-            </div>
-          )}
-        </div>
+            )}
+            
+            {/* Salaah Time Blocks */}
+            {selectedRegion && (
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <PrayerTimeSelection
+                  selectedRegion={selectedRegion}
+                  activePrayer={activePrayer}
+                  selectedTime={selectedTime}
+                  onSelectPrayer={handlePrayerSelection}
+                  onSelectTime={handleTimeSelection}
+                />
+                
+                {/* Salaah Time View Toggle */}
+                <ViewToggle 
+                  viewMode={viewMode} 
+                  onViewChange={setViewMode} 
+                />
+                
+                {/* Salaah Times Display */}
+                <PrayerTimesDisplay
+                  selectedRegion={selectedRegion}
+                  selectedSubRegion={selectedSubRegion}
+                  selectedTime={selectedTime}
+                  activePrayer={activePrayer}
+                  searchType={searchType}
+                  filteredPrayerTimes={getFilteredPrayerTimes()}
+                  viewMode={viewMode}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );
