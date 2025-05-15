@@ -51,20 +51,28 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
     return null;
   };
 
+  if (filteredPrayerTimes.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-gray-500">No masjids found matching your criteria.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="overflow-x-auto">
       <div className="rounded-lg shadow-lg border border-gray-200">
         <Table>
           <TableHeader>
             <TableRow className="bg-[#1A1F2C] !border-b-0">
-              <TableHead className={`font-bold text-white ${isMobile ? 'text-xs py-1 px-0.5' : ''}`}>
+              <TableHead className={`font-bold text-white ${isMobile ? 'text-xs py-2 px-2' : ''}`}>
                 Masjid
               </TableHead>
               {!isMobile && <TableHead className="font-bold text-white">Address</TableHead>}
               {prayerTypes.map(prayer => (
                 <TableHead 
                   key={prayer} 
-                  className={`font-bold text-white text-center ${isMobile ? 'text-xs py-1 px-0.5' : ''}`}>
+                  className={`font-bold text-white text-center ${isMobile ? 'text-xs py-2 px-2' : ''}`}>
                   {prayer.charAt(0).toUpperCase() + (isMobile ? '' : prayer.slice(1))}
                 </TableHead>
               ))}
@@ -78,8 +86,8 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
               )}
               {isMobile && (
                 <>
-                  <TableHead className="font-bold text-white text-xs py-1 px-0.5">Area</TableHead>
-                  <TableHead className="font-bold text-white text-xs py-1 px-0.5">Type</TableHead>
+                  <TableHead className="font-bold text-white text-xs py-2 px-2">Area</TableHead>
+                  <TableHead className="font-bold text-white text-xs py-2 px-2">Type</TableHead>
                 </>
               )}
             </TableRow>
@@ -94,7 +102,7 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                     : ''
                 }`}
               >
-                <TableCell className={`font-medium ${isMobile ? 'text-xs py-1 px-0.5 max-w-[80px] truncate' : ''}`}>
+                <TableCell className={`font-medium ${isMobile ? 'text-xs py-2 px-2 max-w-[80px] truncate' : ''}`}>
                   {isMobile ? masjid.masjid.split(' ')[0] : masjid.masjid}
                 </TableCell>
                 {!isMobile && <TableCell>{masjid.address || `123 Example St, ${selectedRegion}`}</TableCell>}
@@ -107,8 +115,8 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                       key={prayer} 
                       className={
                         isSelected
-                          ? `bg-gray-700 text-white font-bold text-center ${isMobile ? 'text-xs py-1 px-0.5' : ''}` 
-                          : `${prayerColors[prayer]} text-center ${isMobile ? 'text-xs py-1 px-0.5' : ''}`
+                          ? `bg-gray-700 text-white font-bold text-center ${isMobile ? 'text-xs py-2 px-2' : ''}` 
+                          : `${prayerColors[prayer]} text-center ${isMobile ? 'text-xs py-2 px-2' : ''}`
                       }
                     >
                       <div className="flex flex-col items-center justify-center">
@@ -143,8 +151,8 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                 
                 {isMobile && (
                   <>
-                    <TableCell className="text-xs py-1 px-0.5 max-w-[50px] truncate">{masjid.district || 'Central'}</TableCell>
-                    <TableCell className="text-xs py-1 px-0.5">{masjid.type === 'MASJID' ? 'M' : 'MU'}</TableCell>
+                    <TableCell className="text-xs py-2 px-2 max-w-[50px] truncate">{masjid.district || 'Central'}</TableCell>
+                    <TableCell className="text-xs py-2 px-2">{masjid.type === 'MASJID' ? 'M' : 'MU'}</TableCell>
                   </>
                 )}
               </TableRow>

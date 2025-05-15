@@ -11,6 +11,7 @@ export function usePrayerTimeSearch() {
   const [viewMode, setViewMode] = useState<'block' | 'table'>('block');
   const [regionViewMode, setRegionViewMode] = useState<'icons' | 'grid' | 'tiles'>('icons');
   const [prayerData, setPrayerData] = useState<Record<string, MasjidData[]>>(prayerTimesData);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   
   // This effect would be used to fetch data from Google Sheets when implemented
   useEffect(() => {
@@ -48,6 +49,16 @@ export function usePrayerTimeSearch() {
     
     let filteredData = [...regionData];
     
+    // Filter by search query if present
+    if (searchQuery.trim() !== '') {
+      const query = searchQuery.toLowerCase().trim();
+      filteredData = filteredData.filter(masjid => 
+        masjid.masjid.toLowerCase().includes(query) || 
+        (masjid.district && masjid.district.toLowerCase().includes(query)) ||
+        (masjid.address && masjid.address.toLowerCase().includes(query))
+      );
+    }
+    
     // Filter by sub-region if selected
     if (selectedSubRegion) {
       filteredData = filteredData.filter(masjid => 
@@ -73,6 +84,7 @@ export function usePrayerTimeSearch() {
     selectedTime,
     viewMode,
     regionViewMode,
+    searchQuery,
     handleRegionSelection,
     handleSubRegionSelection,
     handlePrayerSelection,
@@ -81,6 +93,7 @@ export function usePrayerTimeSearch() {
     setSearchType,
     setViewMode,
     setRegionViewMode,
+    setSearchQuery,
     prayerData
   };
 }

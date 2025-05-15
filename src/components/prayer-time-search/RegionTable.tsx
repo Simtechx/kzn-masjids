@@ -58,7 +58,7 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
     }
   ];
 
-  // Updated mobile view to be more compact, without images
+  // Return to previous mobile view style without images
   if (isMobile) {
     return (
       <div className="overflow-x-auto">
@@ -66,10 +66,10 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
           <Table>
             <TableHeader>
               <TableRow className="bg-[#1A1F2C] !border-b-0">
-                <TableHead className="font-bold text-white p-1 text-xs">Region</TableHead>
-                <TableHead className="font-bold text-white text-center p-1 text-xs">Sub</TableHead>
-                <TableHead className="font-bold text-white text-center p-1 text-xs">Masjids</TableHead>
-                <TableHead className="font-bold text-white text-center p-1 text-xs">Mus.</TableHead>
+                <TableHead className="font-bold text-white p-2 text-sm">Region</TableHead>
+                <TableHead className="font-bold text-white text-center p-2 text-sm">Sub</TableHead>
+                <TableHead className="font-bold text-white text-center p-2 text-sm">Masjids</TableHead>
+                <TableHead className="font-bold text-white text-center p-2 text-sm">Mus.</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -81,12 +81,12 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
                   }`}
                   onClick={() => onSelectRegion(region.name)}
                 >
-                  <TableCell className="font-medium p-1 text-xs">
+                  <TableCell className="font-medium p-2 text-sm">
                     {region.name}
                   </TableCell>
-                  <TableCell className="text-center font-medium text-blue-700 p-1 text-xs">{region.subRegions}</TableCell>
-                  <TableCell className="text-center font-medium text-green-700 p-1 text-xs">{region.masjids}</TableCell>
-                  <TableCell className="text-center font-medium text-amber-700 p-1 text-xs">{region.musallas}</TableCell>
+                  <TableCell className="text-center font-medium text-blue-700 p-2 text-sm">{region.subRegions}</TableCell>
+                  <TableCell className="text-center font-medium text-green-700 p-2 text-sm">{region.masjids}</TableCell>
+                  <TableCell className="text-center font-medium text-amber-700 p-2 text-sm">{region.musallas}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
