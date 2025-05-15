@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { prayerTimesData, PrayerType, SearchType, MasjidData } from '@/utils/prayerTimeUtils';
 import { toast } from 'sonner';
@@ -25,15 +26,56 @@ export function usePrayerTimeSearch() {
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
         }
+        
         const data = await response.json();
+        console.log('Raw API response:', data);
         
         // Check if the data has the expected structure
-        if (data && typeof data === 'object') {
-          console.log('Live prayer times data loaded successfully', data);
-          setPrayerData(data);
+        if (data && data.data && Array.isArray(data.data)) {
+          // Transform the API data to match our application's expected structure
+          const transformedData: Record<string, MasjidData[]> = {};
+          
+          data.data.forEach((item: any) => {
+            // Convert region name to title case for consistency
+            const region = item.REGION ? formatRegionName(item.REGION) : "Unknown Region";
+            
+            if (!transformedData[region]) {
+              transformedData[region] = [];
+            }
+            
+            // Convert API datetime format to time string (HH:MM)
+            const formatTimeFromAPI = (dateTime: string | null) => {
+              if (!dateTime) return '';
+              try {
+                const date = new Date(dateTime);
+                return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+              } catch (e) {
+                console.error('Error parsing time:', dateTime, e);
+                return '';
+              }
+            };
+            
+            // Map API fields to our data model
+            const masjidData: MasjidData = {
+              masjid: item.Masjid || 'Unknown',
+              address: item.Address || '',
+              district: item['Sub-Region'] || '',
+              type: item.TYPE || 'MASJID',
+              fajr: formatTimeFromAPI(item.Fajr),
+              dhuhr: formatTimeFromAPI(item.Zuhr), // Note the field name difference
+              asr: formatTimeFromAPI(item.Asr),
+              maghrib: '17:45', // Default value as it's not in the API
+              isha: formatTimeFromAPI(item.Isha)
+            };
+            
+            transformedData[region].push(masjidData);
+          });
+          
+          console.log('Transformed prayer times data:', transformedData);
+          setPrayerData(transformedData);
           toast.success('Live prayer times data loaded successfully');
         } else {
-          console.error('Invalid data format received from API');
+          console.error('Invalid data format received from API', data);
           toast.error('Could not load live prayer times - invalid data format');
         }
       } catch (error) {
@@ -47,6 +89,15 @@ export function usePrayerTimeSearch() {
 
     fetchLivePrayerTimes();
   }, []);
+  
+  // Format region name to title case (e.g., "NORTH COAST" -> "North Coast")
+  const formatRegionName = (name: string): string => {
+    return name
+      .toLowerCase()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
   
   const handleRegionSelection = (region: string) => {
     setSelectedRegion(region);

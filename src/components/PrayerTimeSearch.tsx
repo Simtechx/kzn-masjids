@@ -11,6 +11,7 @@ import PrayerTimeHeader from './prayer-time-search/PrayerTimeHeader';
 import ViewToggle from './prayer-time-search/ViewToggle';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Loader2 } from 'lucide-react';
+import { SearchInput } from './prayer-time-search/SearchBar';
 
 const PrayerTimeSearch = () => {
   const {
@@ -80,6 +81,18 @@ const PrayerTimeSearch = () => {
                 selectedSubRegion={selectedSubRegion}
                 onSelectSubRegion={handleSubRegionSelection}
               />
+            )}
+            
+            {/* Search bar for mobile */}
+            {selectedRegion && isMobile && (
+              <div className="mb-4">
+                <SearchInput 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onClear={() => setSearchQuery('')}
+                  placeholder="Search masjids..."
+                />
+              </div>
             )}
             
             {/* Salaah Time Blocks */}

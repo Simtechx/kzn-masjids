@@ -76,11 +76,11 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                   {activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)}
                 </TableHead>
               ) : (
-                prayerTypes.map(prayer => (
+                !isMobile && prayerTypes.map(prayer => (
                   <TableHead 
                     key={prayer} 
-                    className={`font-bold text-white text-center ${isMobile ? 'text-xs py-2 px-2' : ''}`}>
-                    {prayer.charAt(0).toUpperCase() + (isMobile ? '' : prayer.slice(1))}
+                    className="font-bold text-white text-center">
+                    {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
                   </TableHead>
                 ))
               )}
@@ -126,7 +126,7 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                     </div>
                   </TableCell>
                 ) : (
-                  prayerTypes.map(prayer => {
+                  !isMobile && prayerTypes.map(prayer => {
                     const extremeType = isExtremeTime(prayer, masjid[prayer]);
                     const isSelected = activePrayer === prayer && masjid[prayer] === selectedTime;
                     
@@ -135,13 +135,13 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                         key={prayer} 
                         className={
                           isSelected
-                            ? `bg-gray-700 text-white font-bold text-center ${isMobile ? 'text-xs py-2 px-2' : ''}` 
-                            : `${prayerColors[prayer]} text-center ${isMobile ? 'text-xs py-2 px-2' : ''}`
+                            ? `bg-gray-700 text-white font-bold text-center` 
+                            : `${prayerColors[prayer]} text-center`
                         }
                       >
                         <div className="flex flex-col items-center justify-center">
                           <span>{masjid[prayer]}</span>
-                          {!isMobile && extremeType && !isSelected && (
+                          {extremeType && !isSelected && (
                             <div className="text-xs mt-1 bg-gray-800 text-white px-1.5 py-0.5 rounded-full">
                               {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                             </div>
