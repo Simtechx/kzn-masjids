@@ -11,7 +11,7 @@ import PrayerTimeHeader from './prayer-time-search/PrayerTimeHeader';
 import ViewToggle from './prayer-time-search/ViewToggle';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Loader2 } from 'lucide-react';
-import { SearchInput } from './prayer-time-search/SearchBar';
+import SearchBar, { SearchInput } from './prayer-time-search/SearchBar';
 
 const PrayerTimeSearch = () => {
   const {

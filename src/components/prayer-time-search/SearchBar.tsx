@@ -2,9 +2,38 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Table, LayoutGrid } from 'lucide-react';
+import { Table, LayoutGrid, Search, X } from 'lucide-react';
 import { SearchType } from '@/utils/prayerTimeUtils';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Input } from '@/components/ui/input';
+
+// Export the SearchInput component
+export const SearchInput: React.FC<{
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClear: () => void;
+  placeholder?: string;
+}> = ({ value, onChange, onClear, placeholder = "Search..." }) => {
+  return (
+    <div className="relative">
+      <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+      <Input
+        value={value}
+        onChange={onChange}
+        className="pl-8 pr-8 bg-gray-50 border-gray-200"
+        placeholder={placeholder}
+      />
+      {value && (
+        <button 
+          onClick={onClear}
+          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      )}
+    </div>
+  );
+};
 
 interface SearchBarProps {
   searchType: SearchType;
