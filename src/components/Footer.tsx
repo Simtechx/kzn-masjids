@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Mail, Phone } from 'lucide-react';
@@ -92,14 +91,19 @@ const Footer = () => {
         </div>
         
         <div className="mt-6 pt-4 border-t border-white/20 text-center text-white/60 text-sm">
-          <p>© 2025 kznmasjid.co.za by Simtech W. All Rights Reserved</p>
+          <p className="md:block hidden">© 2025 kznmasjid.co.za by Simtech W. All Rights Reserved</p>
+          {/* Split into two lines for mobile */}
+          <div className="md:hidden flex flex-col">
+            <span>© 2025 kznmasjid.co.za by Simtech W</span>
+            <span>All Rights Reserved</span>
+          </div>
         </div>
       </div>
 
       {/* Contribution Form Dialog */}
       <Dialog open={isContributeDialogOpen} onOpenChange={setIsContributeDialogOpen}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader>
+          <DialogHeader className="bg-[#072c23] text-white p-4 -mt-4 -mx-4 rounded-t-lg">
             <DialogTitle>Contribute Masjid Information</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmitForm}>

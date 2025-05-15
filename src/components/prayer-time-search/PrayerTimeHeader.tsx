@@ -25,9 +25,9 @@ const PrayerTimeHeader: React.FC<PrayerTimeHeaderProps> = ({
         <h2 className="text-2xl md:text-3xl font-bold text-[#062C25] leading-tight">Salaah Time Search</h2>
         <p className="text-gray-600 mt-1">
           {selectedSubRegion && selectedRegion 
-            ? `Find salaah times for masjids in ${selectedSubRegion}, ${selectedRegion}`
+            ? `Discover Salaah Times in ${selectedSubRegion}, ${selectedRegion}`
             : selectedRegion 
-              ? `Find salaah times for masjids in ${selectedRegion}` 
+              ? `Discover Salaah Times in ${selectedRegion}` 
               : isMobile 
                 ? "Discover Salaah Times\nin KwaZulu-Natal\nSelect a Region to View Details"
                 : "Discover Salaah Times in KwaZulu-Natal – Select a Region to View Details"}
