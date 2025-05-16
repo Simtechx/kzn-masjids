@@ -64,7 +64,7 @@ const NoticesSection = () => {
     <section className="py-12 px-4 bg-[#F7F8FA]">
       <div className="container mx-auto">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-2 text-gray-800">NOTICES</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-2 text-gray-800">NOTICES</h2>
           <p className="text-center text-gray-600 mb-6">Stay informed about the latest events, programs, and announcements</p>
           
           <div className="flex justify-center mb-6">
