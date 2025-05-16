@@ -83,7 +83,8 @@ const NoticesSection = () => {
     <section className="py-12 px-4 bg-[#F7F8FA]">
       <div className="container mx-auto">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-semibold text-center mb-8 text-gray-800">Latest Notices & Announcements</h2>
+          <h2 className="text-2xl font-semibold text-center mb-2 text-gray-800">NOTICES</h2>
+          <p className="text-center text-gray-600 mb-6">Stay informed about the latest events, programs, and announcements</p>
           
           <div className="flex justify-center mb-6">
             <div className="flex space-x-2 bg-white shadow-sm rounded-full overflow-x-auto p-1">
@@ -93,8 +94,8 @@ const NoticesSection = () => {
                   variant={activeTab === tab ? "default" : "ghost"}
                   className={`rounded-full px-6 ${
                     activeTab === tab 
-                      ? 'bg-yellow-500 text-black' 
-                      : 'text-gray-600 hover:text-gray-800'
+                      ? 'bg-yellow-500 text-black hover:bg-yellow-600' 
+                      : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
                   }`}
                   onClick={() => {
                     setActiveTab(tab);

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Sunrise, Sun, Sunset, Moon } from 'lucide-react';
 import { PrayerTime } from '@/components/prayer-times/types';
@@ -17,12 +16,6 @@ export function usePrayerTimes() {
     const fetchPrayerTimes = async () => {
       setIsLoading(true);
       try {
-        // Get current date
-        const today = new Date();
-        const day = today.getDate();
-        const month = today.getMonth() + 1;
-        const year = today.getFullYear();
-
         // Use the specific Durban API URL
         const response = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=Durban&country=South Africa&method=2`);
         
