@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -9,6 +8,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { toast } from 'sonner';
+
+interface NoticeItem {
+  id: number;
+  title: string;
+  imageUrl: string;
+  category: string;
+}
 
 const NoticesSection = () => {
   // Tab state
@@ -19,81 +26,165 @@ const NoticesSection = () => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   // API ref
   const apiRef = useRef<any>(null);
+  // Notices state
+  const [noticesByCategory, setNoticesByCategory] = useState<Record<string, NoticeItem[]>>({
+    upcoming: [],
+    jumuah: [],
+    info: []
+  });
+  // Loading state
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Sample notice data with the new uploaded images
-  const noticesByCategory = {
-    upcoming: [
-      {
-        id: 1,
-        title: 'Programme of Hazrat Mufti Ebrahim Salejee Saheb',
-        imageUrl: '/lovable-uploads/1aa475c9-533e-438b-94dd-2b14888da4c6.png',
-      },
-      {
-        id: 2,
-        title: 'Overnight Programme by Moulana Dawood Seedat',
-        imageUrl: '/lovable-uploads/da845ade-e36e-4896-b02b-1df6115252f9.png',
-      },
-      {
-        id: 3,
-        title: 'Qira\'ah Programme at Musjid E Fathima',
-        imageUrl: '/lovable-uploads/d34accea-4a90-4b43-a11d-57cff067fee1.png',
-      },
-    ],
-    jumuah: [
-      {
-        id: 4,
-        title: 'Vacancy at Masjid Abu Hurairah',
-        imageUrl: '/lovable-uploads/c895f89a-c76c-4255-9197-7c34b491f0e9.png',
-      },
-      {
-        id: 5,
-        title: 'Sayyidah Saarah Programme',
-        imageUrl: '/lovable-uploads/313997ac-0790-47fa-a6e0-f866759aeeaa.png',
-      },
-      {
-        id: 6,
-        title: 'Time to quit vaping - Islamic guidance',
-        imageUrl: '/lovable-uploads/9b13c55e-ffe1-4f98-8f3a-40c5ea3e92f8.png',
-      },
-    ],
-    info: [
-      {
-        id: 7,
-        title: 'How well do you know Prophet Muhammed',
-        imageUrl: '/lovable-uploads/bedd9f31-e8a9-4c97-8e9a-1f6537102fcf.png',
-      },
-      {
-        id: 8,
-        title: 'Live Q&A with Mufti AK Hoosen',
-        imageUrl: '/lovable-uploads/82c4aa87-c484-4be2-971b-29c13813209f.png',
-      },
-      {
-        id: 9,
-        title: 'Mufti AK Hoosen North West Lecture Program',
-        imageUrl: '/lovable-uploads/b7d90975-0a6e-455a-93ad-7cc9c0bbc832.png',
-      },
-      {
-        id: 10,
-        title: 'Dua for the Hujjaaj',
-        imageUrl: '/lovable-uploads/cc46818d-f28a-4053-b8d2-2c0cfb3c55c4.png',
-      },
-      {
-        id: 11,
-        title: 'A Nikah of Sunnah & Simplicity',
-        imageUrl: '/lovable-uploads/4c0618ff-2ece-4fd1-8dde-4143093b3f17.png',
-      },
-      {
-        id: 12,
-        title: 'Jumuah at Musjid-e-Noor',
-        imageUrl: '/lovable-uploads/519bdaab-60ab-4d89-ab90-c74908a062f7.png',
-      },
-      {
-        id: 13,
-        title: 'This Week\'s Salah Times at Musjidus Salaam',
-        imageUrl: '/lovable-uploads/d60b7fe3-2bd1-4d28-ac12-6d656397fb6c.png',
-      },
-    ],
-  };
+  // Fetch notices data from the API
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        setIsLoading(true);
+        
+        // Replace with your actual notices API URL
+        const response = await fetch('https://api-endpoint-for-notices.com');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch notices');
+        }
+        
+        const data = await response.json();
+        
+        // Process and organize notices by category
+        const categorizedNotices: Record<string, NoticeItem[]> = {
+          upcoming: [],
+          jumuah: [],
+          info: []
+        };
+        
+        // Assuming data has an array of notice items with category field
+        if (data && Array.isArray(data)) {
+          data.forEach((notice: any, index: number) => {
+            const category = notice.category?.toLowerCase() || 'info';
+            
+            // Only add to valid categories
+            if (['upcoming', 'jumuah', 'info'].includes(category)) {
+              categorizedNotices[category].push({
+                id: notice.id || index + 1,
+                title: notice.title || 'Notice',
+                imageUrl: notice.imageUrl || '/placeholder.svg',
+                category: category
+              });
+            }
+          });
+          
+          setNoticesByCategory(categorizedNotices);
+          toast.success('Notices loaded successfully');
+        } else {
+          console.error('Invalid notices data format');
+          // Fallback to sample notices
+          setFallbackNotices();
+        }
+      } catch (error) {
+        console.error('Error fetching notices:', error);
+        // Fallback to sample notices
+        setFallbackNotices();
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    // Fallback function to set sample notices
+    const setFallbackNotices = () => {
+      // Sample notice data with the uploaded images
+      const fallbackNotices = {
+        upcoming: [
+          {
+            id: 1,
+            title: 'Programme of Hazrat Mufti Ebrahim Salejee Saheb',
+            imageUrl: '/lovable-uploads/1aa475c9-533e-438b-94dd-2b14888da4c6.png',
+            category: 'upcoming'
+          },
+          {
+            id: 2,
+            title: 'Overnight Programme by Moulana Dawood Seedat',
+            imageUrl: '/lovable-uploads/da845ade-e36e-4896-b02b-1df6115252f9.png',
+            category: 'upcoming'
+          },
+          {
+            id: 3,
+            title: 'Qira\'ah Programme at Musjid E Fathima',
+            imageUrl: '/lovable-uploads/d34accea-4a90-4b43-a11d-57cff067fee1.png',
+            category: 'upcoming'
+          },
+        ],
+        jumuah: [
+          {
+            id: 4,
+            title: 'Vacancy at Masjid Abu Hurairah',
+            imageUrl: '/lovable-uploads/c895f89a-c76c-4255-9197-7c34b491f0e9.png',
+            category: 'jumuah'
+          },
+          {
+            id: 5,
+            title: 'Sayyidah Saarah Programme',
+            imageUrl: '/lovable-uploads/313997ac-0790-47fa-a6e0-f866759aeeaa.png',
+            category: 'jumuah'
+          },
+          {
+            id: 6,
+            title: 'Time to quit vaping - Islamic guidance',
+            imageUrl: '/lovable-uploads/9b13c55e-ffe1-4f98-8f3a-40c5ea3e92f8.png',
+            category: 'jumuah'
+          },
+        ],
+        info: [
+          {
+            id: 7,
+            title: 'How well do you know Prophet Muhammed',
+            imageUrl: '/lovable-uploads/bedd9f31-e8a9-4c97-8e9a-1f6537102fcf.png',
+            category: 'info'
+          },
+          {
+            id: 8,
+            title: 'Live Q&A with Mufti AK Hoosen',
+            imageUrl: '/lovable-uploads/82c4aa87-c484-4be2-971b-29c13813209f.png',
+            category: 'info'
+          },
+          {
+            id: 9,
+            title: 'Mufti AK Hoosen North West Lecture Program',
+            imageUrl: '/lovable-uploads/b7d90975-0a6e-455a-93ad-7cc9c0bbc832.png',
+            category: 'info'
+          },
+          {
+            id: 10,
+            title: 'Dua for the Hujjaaj',
+            imageUrl: '/lovable-uploads/cc46818d-f28a-4053-b8d2-2c0cfb3c55c4.png',
+            category: 'info'
+          },
+          {
+            id: 11,
+            title: 'A Nikah of Sunnah & Simplicity',
+            imageUrl: '/lovable-uploads/4c0618ff-2ece-4fd1-8dde-4143093b3f17.png',
+            category: 'info'
+          },
+          {
+            id: 12,
+            title: 'Jumuah at Musjid-e-Noor',
+            imageUrl: '/lovable-uploads/519bdaab-60ab-4d89-ab90-c74908a062f7.png',
+            category: 'info'
+          },
+          {
+            id: 13,
+            title: 'This Week\'s Salah Times at Musjidus Salaam',
+            imageUrl: '/lovable-uploads/d60b7fe3-2bd1-4d28-ac12-6d656397fb6c.png',
+            category: 'info'
+          },
+        ],
+      };
+      
+      setNoticesByCategory(fallbackNotices);
+    };
+    
+    // Call the fetch function
+    fetchNotices();
+  }, []);
 
   // Handle tab change
   const handleTabChange = (tab: string) => {
@@ -123,8 +214,10 @@ const NoticesSection = () => {
       if (apiRef.current) {
         const currentIdx = apiRef.current.selectedScrollSnap();
         const notices = noticesByCategory[activeTab as keyof typeof noticesByCategory];
-        const nextIdx = (currentIdx + 1) % notices.length;
-        apiRef.current.scrollTo(nextIdx);
+        if (notices && notices.length > 0) {
+          const nextIdx = (currentIdx + 1) % notices.length;
+          apiRef.current.scrollTo(nextIdx);
+        }
       }
     }, 5000);
 
@@ -164,70 +257,80 @@ const NoticesSection = () => {
           ))}
         </div>
         
-        {/* Adaptive Image Carousel - Adjusts to image dimensions */}
-        <div className="w-full max-w-2xl mx-auto">
-          <Carousel
-            opts={{
-              align: "center",
-              loop: true,
-            }}
-            className="w-full"
-            setApi={(api) => {
-              apiRef.current = api;
-              api?.on("select", () => handleCarouselChange(api));
-            }}
-          >
-            <CarouselContent>
-              {noticesByCategory[activeTab as keyof typeof noticesByCategory].map((notice, index) => (
-                <CarouselItem 
-                  key={notice.id}
-                  className="md:basis-auto flex items-center justify-center"
-                >
-                  <div 
-                    className={cn(
-                      "relative w-[350px] max-h-[600px] min-h-[350px] transition-all duration-500 ease-out rounded-xl overflow-hidden",
-                      "transform-gpu",
-                      activeIndex === index 
-                        ? "scale-100 z-20 shadow-2xl" 
-                        : index === activeIndex - 1 || (activeIndex === 0 && index === noticesByCategory[activeTab as keyof typeof noticesByCategory].length - 1)
-                          ? "-translate-x-[40px] scale-[0.85] z-10 opacity-70 shadow-lg"
-                          : index === activeIndex + 1 || (activeIndex === noticesByCategory[activeTab as keyof typeof noticesByCategory].length - 1 && index === 0)
-                            ? "translate-x-[40px] scale-[0.85] z-10 opacity-70 shadow-lg"
-                            : "scale-[0.7] opacity-40 z-0"
-                    )}
-                  >
-                    <img 
-                      src={notice.imageUrl} 
-                      alt={notice.title} 
-                      className="w-full h-auto max-w-full"
-                      onLoad={(e) => {
-                        // Adjust container height based on aspect ratio
-                        const img = e.target as HTMLImageElement;
-                        const container = img.parentElement;
-                        if (container) {
-                          container.style.height = 'auto';
-                          container.style.minHeight = `${img.height}px`;
-                        }
-                      }}
-                    />
-                    <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/70 to-transparent text-white">
-                      <h3 className="text-lg font-medium">{notice.title}</h3>
-                    </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="absolute left-1 z-30" />
-            <CarouselNext className="absolute right-1 z-30" />
-          </Carousel>
-          
-          {/* Image counter */}
-          <div className="mt-4 text-center">
-            <p className="text-sm text-gray-500">
-              {activeIndex + 1} / {noticesByCategory[activeTab as keyof typeof noticesByCategory].length}
-            </p>
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-600"></div>
           </div>
-        </div>
+        ) : noticesByCategory[activeTab]?.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-lg text-gray-500">No notices available in this category</p>
+          </div>
+        ) : (
+          /* Adaptive Image Carousel - Adjusts to image dimensions */
+          <div className="w-full max-w-2xl mx-auto">
+            <Carousel
+              opts={{
+                align: "center",
+                loop: true,
+              }}
+              className="w-full"
+              setApi={(api) => {
+                apiRef.current = api;
+                api?.on("select", () => handleCarouselChange(api));
+              }}
+            >
+              <CarouselContent>
+                {noticesByCategory[activeTab as keyof typeof noticesByCategory].map((notice, index) => (
+                  <CarouselItem 
+                    key={notice.id}
+                    className="md:basis-auto flex items-center justify-center"
+                  >
+                    <div 
+                      className={cn(
+                        "relative w-[350px] max-h-[600px] min-h-[350px] transition-all duration-500 ease-out rounded-xl overflow-hidden",
+                        "transform-gpu",
+                        activeIndex === index 
+                          ? "scale-100 z-20 shadow-2xl" 
+                          : index === activeIndex - 1 || (activeIndex === 0 && index === noticesByCategory[activeTab as keyof typeof noticesByCategory].length - 1)
+                            ? "-translate-x-[40px] scale-[0.85] z-10 opacity-70 shadow-lg"
+                            : index === activeIndex + 1 || (activeIndex === noticesByCategory[activeTab as keyof typeof noticesByCategory].length - 1 && index === 0)
+                              ? "translate-x-[40px] scale-[0.85] z-10 opacity-70 shadow-lg"
+                              : "scale-[0.7] opacity-40 z-0"
+                      )}
+                    >
+                      <img 
+                        src={notice.imageUrl} 
+                        alt={notice.title} 
+                        className="w-full h-auto max-w-full"
+                        onLoad={(e) => {
+                          // Adjust container height based on aspect ratio
+                          const img = e.target as HTMLImageElement;
+                          const container = img.parentElement;
+                          if (container) {
+                            container.style.height = 'auto';
+                            container.style.minHeight = `${img.height}px`;
+                          }
+                        }}
+                      />
+                      <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/70 to-transparent text-white">
+                        <h3 className="text-lg font-medium">{notice.title}</h3>
+                      </div>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute left-1 z-30" />
+              <CarouselNext className="absolute right-1 z-30" />
+            </Carousel>
+            
+            {/* Image counter */}
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-500">
+                {activeIndex + 1} / {noticesByCategory[activeTab as keyof typeof noticesByCategory].length}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

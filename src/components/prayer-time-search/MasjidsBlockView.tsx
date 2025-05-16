@@ -35,6 +35,14 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
     asr: 'text-emerald-600',
     isha: 'text-indigo-600',
   };
+
+  // Define darker colors for badges
+  const badgeColors = {
+    fajr: 'bg-pink-600 text-white',
+    dhuhr: 'bg-amber-600 text-white',
+    asr: 'bg-emerald-600 text-white',
+    isha: 'bg-indigo-600 text-white',
+  };
   
   // Find the earliest and latest times for each prayer type
   const earliestTimes = prayerTypes.reduce((acc, prayer) => {
@@ -78,7 +86,7 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
                 <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
                   {masjid.district || 'Central'}
                 </Badge>
-                <Badge variant={masjid.type === 'MASJID' ? 'default' : 'secondary'} className={masjid.type === 'MASJID' ? 'bg-green-600' : 'bg-amber-600'}>
+                <Badge className={masjid.type === 'MASJID' ? 'bg-green-600 text-white' : 'bg-amber-600 text-white'}>
                   {masjid.type || 'MASJID'}
                 </Badge>
               </div>
@@ -94,16 +102,16 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
                   key={prayer}
                   className={`p-2 rounded text-center ${
                     isSelected
-                      ? 'bg-gray-700 text-white' 
+                      ? 'bg-yellow-500 text-black' 
                       : prayerColors[prayer]
                   }`}
                 >
-                  <div className={`text-xs font-medium ${isSelected ? 'text-white' : prayerTextColors[prayer]}`}>
+                  <div className={`text-xs font-medium ${isSelected ? 'text-black' : prayerTextColors[prayer]}`}>
                     {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
                   </div>
                   <div className="text-center font-medium">{masjid[prayer]}</div>
                   {extremeType && !isSelected && (
-                    <Badge variant={extremeType === 'earliest' ? 'secondary' : 'default'} className="mt-1 text-[10px] px-2 py-0 mx-auto">
+                    <Badge className={`mt-1 text-[10px] px-2 py-0 mx-auto ${badgeColors[prayer]}`}>
                       {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                     </Badge>
                   )}

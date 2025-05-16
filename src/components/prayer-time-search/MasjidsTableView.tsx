@@ -32,6 +32,14 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
     asr: 'bg-emerald-50',
     isha: 'bg-indigo-50',
   };
+
+  // Define darker colors for badges
+  const badgeColors = {
+    fajr: 'bg-pink-600 text-white',
+    dhuhr: 'bg-amber-600 text-white', 
+    asr: 'bg-emerald-600 text-white',
+    isha: 'bg-indigo-600 text-white',
+  };
   
   // Find the earliest and latest times for each prayer type
   const earliestTimes = prayerTypes.reduce((acc, prayer) => {
@@ -69,9 +77,8 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
               <TableHead className={`font-bold text-white ${isMobile ? 'text-xs py-2 px-2' : ''}`}>
                 Masjid
               </TableHead>
-              {!isMobile && <TableHead className="font-bold text-white">Address</TableHead>}
               
-              {/* Prayer times columns - show all for desktop, only selected prayer for mobile */}
+              {/* Prayer times columns - show only selected prayer for mobile */}
               {isMobile && activePrayer ? (
                 <TableHead className="font-bold text-white text-center text-xs py-2 px-2">
                   {activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)}
@@ -88,9 +95,6 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
               
               {!isMobile && (
                 <>
-                  <TableHead className="font-bold text-white">Region</TableHead>
-                  <TableHead className="font-bold text-white">Sub-Region</TableHead>
-                  <TableHead className="font-bold text-white">Type</TableHead>
                   <TableHead className="font-bold text-white text-center">Location</TableHead>
                 </>
               )}
@@ -102,22 +106,21 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                 key={index} 
                 className={`hover:bg-gray-100 transition-colors ${
                   activePrayer && selectedTime && masjid[activePrayer] === selectedTime 
-                    ? 'bg-gray-100' 
+                    ? 'bg-yellow-50' 
                     : ''
                 }`}
               >
                 <TableCell className={`font-medium ${isMobile ? 'text-xs py-2 px-2' : ''}`}>
                   {masjid.masjid}
                 </TableCell>
-                {!isMobile && <TableCell>{masjid.address || `123 Example St, ${selectedRegion}`}</TableCell>}
                 
-                {/* Prayer times cells - show all for desktop, only selected prayer for mobile */}
+                {/* Prayer times cells - show only selected prayer for mobile */}
                 {isMobile && activePrayer ? (
                   <TableCell 
                     className={`text-center text-xs py-2 px-2`}
                   >
                     <div className="flex flex-col items-center justify-center">
-                      <span className="bg-gray-700 text-white font-semibold px-3 py-1 rounded-full">
+                      <span className="bg-yellow-500 text-black font-semibold px-3 py-1 rounded-full">
                         {masjid[activePrayer]}
                       </span>
                     </div>
@@ -132,14 +135,14 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                         key={prayer} 
                         className={
                           isSelected
-                            ? `bg-gray-700 text-white font-bold text-center` 
+                            ? `bg-yellow-500 text-black font-bold text-center` 
                             : `${prayerColors[prayer]} text-center`
                         }
                       >
                         <div className="flex flex-col items-center justify-center">
                           <span>{masjid[prayer]}</span>
                           {extremeType && !isSelected && (
-                            <Badge variant={extremeType === 'earliest' ? 'secondary' : 'default'} className="mt-1 text-[10px] px-2 py-0">
+                            <Badge className={`mt-1 text-[10px] px-2 py-0 ${badgeColors[prayer]}`}>
                               {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                             </Badge>
                           )}
@@ -150,29 +153,12 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                 )}
 
                 {!isMobile && (
-                  <>
-                    <TableCell>
-                      <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
-                        {selectedRegion}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                        {masjid.district || masjid.masjid.split(' ').pop() || 'Central'}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={masjid.type === 'MASJID' ? 'default' : 'secondary'} className={masjid.type === 'MASJID' ? 'bg-green-600' : 'bg-amber-600'}>
-                        {masjid.type || 'MASJID'}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Button variant="outline" size="sm" className="bg-teal-600 text-white border-teal-700 hover:bg-teal-700">
-                        <MapPin className="mr-1 h-4 w-4" />
-                        Directions
-                      </Button>
-                    </TableCell>
-                  </>
+                  <TableCell className="text-center">
+                    <Button variant="outline" size="sm" className="bg-teal-600 text-white border-teal-700 hover:bg-teal-700">
+                      <MapPin className="mr-1 h-4 w-4" />
+                      Directions
+                    </Button>
+                  </TableCell>
                 )}
               </TableRow>
             ))}
