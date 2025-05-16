@@ -38,10 +38,10 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
 
   // Define darker colors for badges
   const badgeColors = {
-    fajr: 'bg-pink-600 text-white',
-    dhuhr: 'bg-amber-600 text-white',
-    asr: 'bg-emerald-600 text-white',
-    isha: 'bg-indigo-600 text-white',
+    fajr: 'bg-pink-600',
+    dhuhr: 'bg-amber-600',
+    asr: 'bg-emerald-600',
+    isha: 'bg-indigo-600',
   };
   
   // Find the earliest and latest times for each prayer type
@@ -111,7 +111,7 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
                   </div>
                   <div className="text-center font-medium">{masjid[prayer]}</div>
                   {extremeType && !isSelected && (
-                    <Badge className={`mt-1 text-[10px] px-2 py-0 mx-auto ${badgeColors[prayer]}`}>
+                    <Badge className={`mt-1 text-[10px] px-2 py-0 mx-auto text-white ${badgeColors[prayer]}`}>
                       {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                     </Badge>
                   )}

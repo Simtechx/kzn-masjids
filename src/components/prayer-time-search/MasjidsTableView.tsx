@@ -35,10 +35,10 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
 
   // Define darker colors for badges
   const badgeColors = {
-    fajr: 'bg-pink-600 text-white',
-    dhuhr: 'bg-amber-600 text-white', 
-    asr: 'bg-emerald-600 text-white',
-    isha: 'bg-indigo-600 text-white',
+    fajr: 'bg-pink-600',
+    dhuhr: 'bg-amber-600',
+    asr: 'bg-emerald-600',
+    isha: 'bg-indigo-600',
   };
   
   // Find the earliest and latest times for each prayer type
@@ -94,9 +94,7 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
               )}
               
               {!isMobile && (
-                <>
-                  <TableHead className="font-bold text-white text-center">Location</TableHead>
-                </>
+                <TableHead className="font-bold text-white text-center">Location</TableHead>
               )}
             </TableRow>
           </TableHeader>
@@ -112,6 +110,15 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
               >
                 <TableCell className={`font-medium ${isMobile ? 'text-xs py-2 px-2' : ''}`}>
                   {masjid.masjid}
+                  {isMobile && (
+                    <div className="text-xs text-gray-500 mt-1">
+                      {masjid.type === 'MASJID' ? (
+                        <Badge className="bg-green-600 text-white">MASJID</Badge>
+                      ) : (
+                        <Badge className="bg-amber-600 text-white">MUSALLA</Badge>
+                      )}
+                    </div>
+                  )}
                 </TableCell>
                 
                 {/* Prayer times cells - show only selected prayer for mobile */}
@@ -142,7 +149,7 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                         <div className="flex flex-col items-center justify-center">
                           <span>{masjid[prayer]}</span>
                           {extremeType && !isSelected && (
-                            <Badge className={`mt-1 text-[10px] px-2 py-0 ${badgeColors[prayer]}`}>
+                            <Badge className={`mt-1 text-[10px] px-2 py-0 text-white ${badgeColors[prayer]}`}>
                               {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                             </Badge>
                           )}

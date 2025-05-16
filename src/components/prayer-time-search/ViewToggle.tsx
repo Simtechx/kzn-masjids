@@ -20,7 +20,9 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onViewChange }) => {
           variant="ghost"
           size="sm"
           className={`flex items-center ${
-            viewMode === 'block' ? 'bg-yellow-500 text-black' : 'hover:bg-gray-100 text-gray-700'
+            viewMode === 'block' 
+              ? 'bg-yellow-500 text-black' 
+              : 'text-gray-700 hover:bg-gray-100'
           }`}
           onClick={() => onViewChange('block')}
           aria-label="Block"
@@ -32,7 +34,9 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, onViewChange }) => {
           variant="ghost"
           size="sm"
           className={`flex items-center ${
-            viewMode === 'table' ? 'bg-yellow-500 text-black' : 'hover:bg-gray-100 text-gray-700'
+            viewMode === 'table' 
+              ? 'bg-yellow-500 text-black' 
+              : 'text-gray-700 hover:bg-gray-100'
           }`}
           onClick={() => onViewChange('table')}
           aria-label="Table"

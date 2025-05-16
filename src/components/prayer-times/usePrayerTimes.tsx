@@ -23,15 +23,15 @@ export function usePrayerTimes() {
         const month = today.getMonth() + 1;
         const year = today.getFullYear();
 
-        // Use aladhan.com API to get prayer times for Durban
-        const response = await fetch(`https://api.aladhan.com/v1/timingsByCity/${day}-${month}-${year}?city=Durban&country=South Africa&method=2`);
+        // Use the specific Durban API URL
+        const response = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=Durban&country=South Africa&method=2`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch prayer times');
         }
 
         const data = await response.json();
-        console.log('Aladhan API response:', data);
+        console.log('Aladhan API response for Durban:', data);
         
         if (data && data.data && data.data.timings) {
           const timings = data.data.timings;
@@ -107,8 +107,8 @@ export function usePrayerTimes() {
           ];
           
           setTodayPrayerTimes(prayerTimes);
-          setCurrentLocation(`${data.data.meta.timezone}`);
-          toast.success('Live prayer times loaded for today');
+          setCurrentLocation('Durban, KZN South Africa');
+          toast.success('Live prayer times loaded for Durban');
         } else {
           console.error('Invalid data format from aladhan.com API');
           toast.error('Could not load prayer times');

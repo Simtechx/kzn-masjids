@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Mail, Phone } from 'lucide-react';
+import { MapPin, Mail, Phone, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -103,8 +104,15 @@ const Footer = () => {
       {/* Contribution Form Dialog */}
       <Dialog open={isContributeDialogOpen} onOpenChange={setIsContributeDialogOpen}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader className="bg-[#072c23] text-white p-4 -mt-4 -mx-4 rounded-t-lg">
+          <DialogHeader className="bg-[#072c23] text-white p-4 -mt-4 -mx-4 rounded-t-lg relative">
             <DialogTitle>Contribute Masjid Information</DialogTitle>
+            <button 
+              onClick={() => setIsContributeDialogOpen(false)}
+              className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors"
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </DialogHeader>
           <form onSubmit={handleSubmitForm}>
             <div className="grid gap-4 py-4">
