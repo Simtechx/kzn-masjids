@@ -36,8 +36,9 @@ const NoticesSection = () => {
       const data = await response.json();
       console.log("Fetched notices data:", data);
       
-      if (data && Array.isArray(data.notices)) {
-        setNotices(data.notices);
+      if (data && Array.isArray(data)) {
+        // The API is now returning an array directly
+        setNotices(data);
         toast.success('Notices loaded successfully');
       } else {
         console.error('Invalid notices data format:', data);
@@ -59,6 +60,23 @@ const NoticesSection = () => {
   const filteredNotices = notices.filter(notice => 
     notice.Category?.toLowerCase() === activeTab.toLowerCase()
   );
+  
+  // Process the URL to make it properly viewable
+  const getDirectImageUrl = (url: string) => {
+    if (!url) return '';
+    
+    // Check if it's a Google Drive URL
+    if (url.includes('drive.google.com/file/d/')) {
+      // Extract the file ID
+      const fileIdMatch = url.match(/\/d\/([^\/]+)/);
+      if (fileIdMatch && fileIdMatch[1]) {
+        // Return the direct download URL
+        return `https://drive.google.com/uc?export=view&id=${fileIdMatch[1]}`;
+      }
+    }
+    
+    return url;
+  };
   
   return (
     <section className="py-12 px-4 bg-[#F7F8FA]">
@@ -99,7 +117,7 @@ const NoticesSection = () => {
                   <div key={`notice-${index}`} className="flex flex-col">
                     <div className="relative h-64 rounded-lg overflow-hidden">
                       <img 
-                        src={notice.URL}
+                        src={getDirectImageUrl(notice.URL)}
                         alt={notice["File Name"] || `Notice ${index + 1}`}
                         className="w-full h-full object-cover rounded-lg shadow"
                         loading="lazy"

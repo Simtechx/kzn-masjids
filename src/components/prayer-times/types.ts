@@ -1,4 +1,3 @@
-
 import { ReactNode } from 'react';
 
 export interface PrayerTime {
@@ -16,4 +15,19 @@ export interface ViewModeProps {
 
 export interface RegionViewModeProps {
   regionViewMode: 'icons' | 'grid' | 'tiles';
+}
+
+export interface PrayerSettings {
+  calculationMethod: string;
+  fajrAngle: string;
+  ishaAngle: string;
+  dhuhrAdjustment: string;
+  maghribAdjustment: string;
+  juristicMethod: string;
+  hijriAdjustment: string;
+  autoLocation: boolean;
+  location: string;
+  latitude: string;
+  longitude: string;
+  timezone: string;
 }

@@ -1,13 +1,18 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { PrayerTime } from '@/components/prayer-times/types';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Settings } from 'lucide-react';
+import PrayerTimeSettings from './PrayerTimeSettings';
 
 interface TodaysPrayersProps {
   todayPrayerTimes: PrayerTime[];
 }
 
 const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  
   // Reorder prayers to put Asr (S) before Asr (H)
   const reorderedPrayers = [...todayPrayerTimes].sort((a, b) => {
     // Special case for Asr prayers - swap their order
@@ -98,9 +103,27 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
         <div className="col-span-2 mt-2">
           <div className="text-sm text-gray-500">Calculation Method: Umm Al-Qura</div>
           <div className="text-sm text-gray-500">Juristic Method: Hanafi</div>
-          <button className="text-[#072c23] text-sm mt-2 font-medium hover:underline">Change Settings</button>
+          <Button 
+            variant="link" 
+            onClick={() => setSettingsOpen(true)} 
+            className="text-[#072c23] text-sm mt-2 font-medium p-0 hover:underline flex items-center"
+          >
+            <Settings className="h-4 w-4 mr-1" />
+            Change Settings
+          </Button>
         </div>
       </div>
+
+      {/* Prayer Settings Dialog */}
+      <PrayerTimeSettings 
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+        onSettingsChange={(settings) => {
+          console.log('Prayer settings updated:', settings);
+          // Here you would update the prayer times with these settings
+          // This would typically involve updating a context or making an API call
+        }}
+      />
     </div>
   );
 };
