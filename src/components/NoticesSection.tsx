@@ -21,6 +21,32 @@ const NoticesSection = () => {
   // Define the API URL
   const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbw4YC4da2e1ZDb_Mx6cHJ8VSNoNFZNKOBSGxhmWxt5vnaGf8aK4ztTuTj5TFcL17MCI/exec";
   
+  // Process the URL to make it properly viewable
+  // Moving this function definition to before it's used
+  const getDirectImageUrl = (url: string) => {
+    if (!url) {
+      console.log("URL is empty or undefined");
+      return '';
+    }
+    
+    console.log(`Processing URL: ${url}`);
+    
+    // Check if it's a Google Drive URL
+    if (url.includes('drive.google.com/file/d/')) {
+      // Extract the file ID
+      const fileIdMatch = url.match(/\/d\/([^\/]+)/);
+      if (fileIdMatch && fileIdMatch[1]) {
+        // Return the direct download URL
+        const directUrl = `https://drive.google.com/uc?export=view&id=${fileIdMatch[1]}`;
+        console.log(`Converted Google Drive URL: ${directUrl}`);
+        return directUrl;
+      }
+    }
+    
+    // For direct image URLs, return as is
+    return url;
+  };
+  
   useEffect(() => {
     fetchNotices();
   }, []);
@@ -69,31 +95,6 @@ const NoticesSection = () => {
     return processedUrl;
   });
   console.log("Debug image URLs:", debugImageUrls);
-  
-  // Process the URL to make it properly viewable
-  const getDirectImageUrl = (url: string) => {
-    if (!url) {
-      console.log("URL is empty or undefined");
-      return '';
-    }
-    
-    console.log(`Processing URL: ${url}`);
-    
-    // Check if it's a Google Drive URL
-    if (url.includes('drive.google.com/file/d/')) {
-      // Extract the file ID
-      const fileIdMatch = url.match(/\/d\/([^\/]+)/);
-      if (fileIdMatch && fileIdMatch[1]) {
-        // Return the direct download URL
-        const directUrl = `https://drive.google.com/uc?export=view&id=${fileIdMatch[1]}`;
-        console.log(`Converted Google Drive URL: ${directUrl}`);
-        return directUrl;
-      }
-    }
-    
-    // For direct image URLs, return as is
-    return url;
-  };
   
   return (
     <section className="py-12 px-4 bg-[#F7F8FA]">
