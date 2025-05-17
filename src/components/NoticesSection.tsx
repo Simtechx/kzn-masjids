@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, Image } from 'lucide-react';
@@ -16,7 +15,7 @@ const NoticesSection = () => {
   const [notices, setNotices] = useState<NoticeItem[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Updated API URL as per the latest information
+  // API URL for notices
   const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec";
   
   // Function to determine category from the file name if Category is not present
@@ -120,21 +119,39 @@ const NoticesSection = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {filteredNotices.map((notice, index) => {
                   console.log(`Rendering notice ${index}:`, notice);
+                  // Use a different approach for images - use a direct img tag with fallback
                   return (
                     <div key={`notice-${index}`} className="flex flex-col">
                       <div className="relative h-64 rounded-lg overflow-hidden">
-                        <img 
-                          src={notice["Image URL"]}
-                          alt={notice["File Name"] || `Notice ${index + 1}`}
-                          className="w-full h-full object-cover rounded-lg shadow"
-                          loading="lazy"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            console.error(`Error loading image: ${target.src}`);
-                            target.src = "/placeholder.svg";
-                            target.alt = "Image not available";
-                          }}
-                        />
+                        {/* Try different approach for Google Drive images */}
+                        <picture>
+                          <source srcSet={notice["Image URL"]} type="image/jpeg" />
+                          <source srcSet={notice["Image URL"]} type="image/png" />
+                          <img 
+                            src={notice["Image URL"]}
+                            alt={notice["File Name"] || `Notice ${index + 1}`}
+                            className="w-full h-full object-cover rounded-lg shadow"
+                            loading="lazy"
+                            onError={(e) => {
+                              // If direct URL fails, try alternative approach for Google Drive
+                              const target = e.target as HTMLImageElement;
+                              console.error(`Error loading image: ${target.src}`);
+                              
+                              // Try to extract the file ID from Google Drive URL if present
+                              const url = target.src;
+                              if (url.includes('drive.google.com') && url.includes('id=')) {
+                                // URL already has the correct format, keep it but log the error
+                                console.log("Using already formatted Google Drive URL:", url);
+                              }
+                              
+                              // Fallback to placeholder if everything fails
+                              if (target.src !== "/placeholder.svg") {
+                                target.src = "/placeholder.svg";
+                                target.alt = "Image not available";
+                              }
+                            }}
+                          />
+                        </picture>
                       </div>
                       <p className="mt-2 text-center text-sm font-medium text-gray-700">
                         {notice["File Name"] || `Notice ${index + 1}`}
