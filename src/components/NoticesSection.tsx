@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Loader2, Image } from 'lucide-react';
 import { toast } from 'sonner';
 
-// Updated interface to match the new API response format
+// Updated interface to match the API response format
 interface NoticeItem {
   "File Name": string;
   "Image URL": string;
-  Category?: string; // Made optional since it might not be present in the new API
+  Category?: string; // Optional since we'll have a fallback
 }
 
 const NoticesSection = () => {
@@ -16,10 +16,10 @@ const NoticesSection = () => {
   const [notices, setNotices] = useState<NoticeItem[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Updated API URL as per user's request
+  // Updated API URL as per the latest information
   const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec";
   
-  // Determine category based on file name (since Category field might not be present in the API)
+  // Function to determine category from the file name if Category is not present
   const getCategoryFromFileName = (fileName: string): string => {
     if (!fileName) return 'Info';
     
@@ -51,7 +51,8 @@ const NoticesSection = () => {
         // Process the data to ensure each item has a category
         const processedData = data.map(item => ({
           ...item,
-          Category: getCategoryFromFileName(item["File Name"])
+          // Use the Category field if it exists, otherwise determine it from the file name
+          Category: item.Category || getCategoryFromFileName(item["File Name"])
         }));
         
         setNotices(processedData);
@@ -73,10 +74,11 @@ const NoticesSection = () => {
   
   const tabs = ['Upcoming', 'Jumuah', 'Info'];
   
-  // Filter notices by active tab
-  const filteredNotices = notices.filter(notice => 
-    notice.Category?.toLowerCase() === activeTab.toLowerCase()
-  );
+  // Filter notices by active tab - case insensitive comparison
+  const filteredNotices = notices.filter(notice => {
+    const noticeCategory = notice.Category || '';
+    return noticeCategory.toLowerCase() === activeTab.toLowerCase();
+  });
   
   // Log the filtered notices for debugging
   console.log("Filtered notices for tab", activeTab, ":", filteredNotices);
