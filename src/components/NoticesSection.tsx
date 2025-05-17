@@ -4,13 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Loader2, Image } from 'lucide-react';
 import { toast } from 'sonner';
 
+// Updated interface to match the new API response format
 interface NoticeItem {
-  No: string;
   "File Name": string;
-  Category: string;
-  "File Size": string;
-  "MIME Type": string;
-  URL: string;
+  "Image URL": string;
+  Category?: string; // Made optional since it might not be present in the new API
 }
 
 const NoticesSection = () => {
@@ -18,32 +16,18 @@ const NoticesSection = () => {
   const [notices, setNotices] = useState<NoticeItem[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Define the API URL - Updated as per user request
-  const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbw4YC4da2e1ZDb_Mx6cHJ8VSNoNFZNKOBSGxhmWxt5vnaGf8aK4ztTuTj5TFcL17MCI/exec";
+  // Updated API URL as per user's request
+  const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec";
   
-  // Process the URL to make it properly viewable
-  const getDirectImageUrl = (url: string) => {
-    if (!url) {
-      console.log("URL is empty or undefined");
-      return '';
-    }
+  // Determine category based on file name (since Category field might not be present in the API)
+  const getCategoryFromFileName = (fileName: string): string => {
+    if (!fileName) return 'Info';
     
-    console.log(`Processing URL: ${url}`);
+    const lowerFileName = fileName.toLowerCase();
     
-    // Check if it's a Google Drive URL
-    if (url.includes('drive.google.com/file/d/')) {
-      // Extract the file ID
-      const fileIdMatch = url.match(/\/d\/([^\/]+)/);
-      if (fileIdMatch && fileIdMatch[1]) {
-        // Return the direct download URL
-        const directUrl = `https://drive.google.com/uc?export=view&id=${fileIdMatch[1]}`;
-        console.log(`Converted Google Drive URL: ${directUrl}`);
-        return directUrl;
-      }
-    }
-    
-    // For direct image URLs, return as is
-    return url;
+    if (lowerFileName.includes('upcoming')) return 'Upcoming';
+    if (lowerFileName.includes('jumuah')) return 'Jumuah';
+    return 'Info';
   };
   
   useEffect(() => {
@@ -53,7 +37,9 @@ const NoticesSection = () => {
   const fetchNotices = async () => {
     setLoading(true);
     try {
+      console.log("Fetching notices from:", NOTICES_API_URL);
       const response = await fetch(NOTICES_API_URL);
+      
       if (!response.ok) {
         throw new Error('Failed to fetch notices');
       }
@@ -61,9 +47,15 @@ const NoticesSection = () => {
       const data = await response.json();
       console.log("Fetched notices data:", data);
       
-      // The API now returns an array directly
       if (data && Array.isArray(data)) {
-        setNotices(data);
+        // Process the data to ensure each item has a category
+        const processedData = data.map(item => ({
+          ...item,
+          Category: getCategoryFromFileName(item["File Name"])
+        }));
+        
+        setNotices(processedData);
+        console.log("Processed notices data:", processedData);
         toast.success('Notices loaded successfully');
       } else {
         console.error('Invalid notices data format:', data);
@@ -86,14 +78,8 @@ const NoticesSection = () => {
     notice.Category?.toLowerCase() === activeTab.toLowerCase()
   );
   
-  // Debug image URLs to diagnose what's happening
-  const debugImageUrls = filteredNotices.map(notice => {
-    console.log(`Notice URL before processing: ${notice.URL}`);
-    const processedUrl = getDirectImageUrl(notice.URL);
-    console.log(`Notice URL after processing: ${processedUrl}`);
-    return processedUrl;
-  });
-  console.log("Debug image URLs:", debugImageUrls);
+  // Log the filtered notices for debugging
+  console.log("Filtered notices for tab", activeTab, ":", filteredNotices);
   
   return (
     <section className="py-12 px-4 bg-[#F7F8FA]">
@@ -130,27 +116,30 @@ const NoticesSection = () => {
           ) : filteredNotices.length > 0 ? (
             <div className="bg-white rounded-lg shadow-md p-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {filteredNotices.map((notice, index) => (
-                  <div key={`notice-${index}`} className="flex flex-col">
-                    <div className="relative h-64 rounded-lg overflow-hidden">
-                      <img 
-                        src={getDirectImageUrl(notice.URL)}
-                        alt={notice["File Name"] || `Notice ${index + 1}`}
-                        className="w-full h-full object-cover rounded-lg shadow"
-                        loading="lazy"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          console.error(`Error loading image: ${target.src}`);
-                          target.src = "/placeholder.svg";
-                          target.alt = "Image not available";
-                        }}
-                      />
+                {filteredNotices.map((notice, index) => {
+                  console.log(`Rendering notice ${index}:`, notice);
+                  return (
+                    <div key={`notice-${index}`} className="flex flex-col">
+                      <div className="relative h-64 rounded-lg overflow-hidden">
+                        <img 
+                          src={notice["Image URL"]}
+                          alt={notice["File Name"] || `Notice ${index + 1}`}
+                          className="w-full h-full object-cover rounded-lg shadow"
+                          loading="lazy"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            console.error(`Error loading image: ${target.src}`);
+                            target.src = "/placeholder.svg";
+                            target.alt = "Image not available";
+                          }}
+                        />
+                      </div>
+                      <p className="mt-2 text-center text-sm font-medium text-gray-700">
+                        {notice["File Name"] || `Notice ${index + 1}`}
+                      </p>
                     </div>
-                    <p className="mt-2 text-center text-sm font-medium text-gray-700">
-                      {notice["File Name"] || `Notice ${index + 1}`}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           ) : (
