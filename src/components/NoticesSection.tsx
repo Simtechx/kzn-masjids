@@ -18,11 +18,10 @@ const NoticesSection = () => {
   const [notices, setNotices] = useState<NoticeItem[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Define the API URL
+  // Define the API URL - Updated as per user request
   const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbw4YC4da2e1ZDb_Mx6cHJ8VSNoNFZNKOBSGxhmWxt5vnaGf8aK4ztTuTj5TFcL17MCI/exec";
   
   // Process the URL to make it properly viewable
-  // Moving this function definition to before it's used
   const getDirectImageUrl = (url: string) => {
     if (!url) {
       console.log("URL is empty or undefined");
@@ -62,8 +61,8 @@ const NoticesSection = () => {
       const data = await response.json();
       console.log("Fetched notices data:", data);
       
+      // The API now returns an array directly
       if (data && Array.isArray(data)) {
-        // The API is now returning an array directly
         setNotices(data);
         toast.success('Notices loaded successfully');
       } else {
