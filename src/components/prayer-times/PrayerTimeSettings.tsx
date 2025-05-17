@@ -318,6 +318,7 @@ const PrayerTimeSettings: React.FC<PrayerTimeSettingsProps> = ({
                         <Switch
                           checked={field.value}
                           onCheckedChange={field.onChange}
+                          className="data-[state=checked]:bg-yellow-500" 
                         />
                       </FormControl>
                     </FormItem>
@@ -408,7 +409,7 @@ const PrayerTimeSettings: React.FC<PrayerTimeSettingsProps> = ({
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <Button type="submit">Save Settings</Button>
+              <Button type="submit" className="bg-yellow-500 hover:bg-yellow-600 text-black">Save Settings</Button>
             </div>
           </form>
         </Form>

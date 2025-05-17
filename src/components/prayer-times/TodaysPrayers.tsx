@@ -106,7 +106,7 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
           <Button 
             variant="link" 
             onClick={() => setSettingsOpen(true)} 
-            className="text-[#072c23] text-sm mt-2 font-medium p-0 hover:underline flex items-center"
+            className="text-yellow-600 text-sm mt-2 font-medium p-0 hover:text-yellow-700 hover:underline flex items-center"
           >
             <Settings className="h-4 w-4 mr-1" />
             Change Settings

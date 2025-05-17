@@ -61,9 +61,23 @@ const NoticesSection = () => {
     notice.Category?.toLowerCase() === activeTab.toLowerCase()
   );
   
+  // Debug image URLs to diagnose what's happening
+  const debugImageUrls = filteredNotices.map(notice => {
+    console.log(`Notice URL before processing: ${notice.URL}`);
+    const processedUrl = getDirectImageUrl(notice.URL);
+    console.log(`Notice URL after processing: ${processedUrl}`);
+    return processedUrl;
+  });
+  console.log("Debug image URLs:", debugImageUrls);
+  
   // Process the URL to make it properly viewable
   const getDirectImageUrl = (url: string) => {
-    if (!url) return '';
+    if (!url) {
+      console.log("URL is empty or undefined");
+      return '';
+    }
+    
+    console.log(`Processing URL: ${url}`);
     
     // Check if it's a Google Drive URL
     if (url.includes('drive.google.com/file/d/')) {
@@ -71,10 +85,13 @@ const NoticesSection = () => {
       const fileIdMatch = url.match(/\/d\/([^\/]+)/);
       if (fileIdMatch && fileIdMatch[1]) {
         // Return the direct download URL
-        return `https://drive.google.com/uc?export=view&id=${fileIdMatch[1]}`;
+        const directUrl = `https://drive.google.com/uc?export=view&id=${fileIdMatch[1]}`;
+        console.log(`Converted Google Drive URL: ${directUrl}`);
+        return directUrl;
       }
     }
     
+    // For direct image URLs, return as is
     return url;
   };
   
