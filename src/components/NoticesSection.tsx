@@ -8,6 +8,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  CarouselApi,
 } from "@/components/ui/carousel"
 
 // Updated interface to match the API response format
@@ -23,6 +24,7 @@ const NoticesSection = () => {
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(false);
   const [imageLoadErrors, setImageLoadErrors] = useState<Set<string>>(new Set());
+  const [api, setApi] = useState<CarouselApi>();
   
   // API URL for notices
   const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec";
@@ -200,7 +202,7 @@ const NoticesSection = () => {
             </div>
           ) : filteredNotices.length > 0 ? (
             <div className="relative">
-              <Carousel className="w-full max-w-5xl mx-auto">
+              <Carousel className="w-full max-w-5xl mx-auto" setApi={setApi}>
                 <CarouselContent className="-ml-2 md:-ml-4">
                   {filteredNotices.map((notice, index) => {
                     const convertedImageUrl = convertGoogleDriveUrl(notice["Image URL"]);
@@ -260,7 +262,7 @@ const NoticesSection = () => {
                   variant="outline"
                   size="sm"
                   className="bg-white"
-                  onClick={() => document.querySelector('[data-carousel-prev]')?.click()}
+                  onClick={() => api?.scrollPrev()}
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
@@ -268,7 +270,7 @@ const NoticesSection = () => {
                   variant="outline"
                   size="sm"
                   className="bg-white"
-                  onClick={() => document.querySelector('[data-carousel-next]')?.click()}
+                  onClick={() => api?.scrollNext()}
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
