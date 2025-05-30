@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, Image, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -29,21 +30,54 @@ const NoticesSection = () => {
   // API URL for notices
   const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec";
   
-  // Fallback data for testing when API is down
+  // Enhanced fallback data with 3 images per category
   const fallbackNotices: NoticeItem[] = [
+    // Upcoming Events
     {
-      "File Name": "Upcoming Event - Community Iftar",
-      "Image URL": "https://drive.google.com/uc?export=view&id=1kG0JdM57LIikUrTOa-7l67u6ila9T7Mg",
+      "File Name": "Community Iftar - Ramadan 2024",
+      "Image URL": "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&q=80",
       "Category": "Upcoming"
     },
     {
-      "File Name": "Jumuah Prayer Schedule",
-      "Image URL": "https://drive.google.com/uc?export=view&id=1kG0JdM57LIikUrTOa-7l67u6ila9T7Mg",
+      "File Name": "Islamic Education Workshop",
+      "Image URL": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80",
+      "Category": "Upcoming"
+    },
+    {
+      "File Name": "Youth Islamic Conference 2024",
+      "Image URL": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80",
+      "Category": "Upcoming"
+    },
+    // Jumuah
+    {
+      "File Name": "Jumuah Prayer Schedule - Updated",
+      "Image URL": "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&q=80",
       "Category": "Jumuah"
     },
     {
-      "File Name": "Community Information Notice",
-      "Image URL": "https://drive.google.com/uc?export=view&id=1kG0JdM57LIikUrTOa-7l67u6ila9T7Mg",
+      "File Name": "Special Jumuah Khutbah Series",
+      "Image URL": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80",
+      "Category": "Jumuah"
+    },
+    {
+      "File Name": "Jumuah Community Gathering",
+      "Image URL": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80",
+      "Category": "Jumuah"
+    },
+    // Info
+    {
+      "File Name": "Masjid Guidelines and Information",
+      "Image URL": "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&q=80",
+      "Category": "Info"
+    },
+    {
+      "File Name": "Community Support Programs",
+      "Image URL": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80",
+      "Category": "Info"
+    },
+    {
+      "File Name": "Volunteer Opportunities Available",
+      "Image URL": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80",
       "Category": "Info"
     }
   ];
@@ -146,7 +180,7 @@ const NoticesSection = () => {
       // Use fallback data when API fails
       console.log('Using fallback notices data');
       setNotices(fallbackNotices);
-      toast.error('API failed - showing sample notices');
+      toast.error('Using sample notices data');
     } finally {
       setLoading(false);
     }
@@ -170,9 +204,9 @@ const NoticesSection = () => {
           <p className="text-center text-gray-600 mb-6">Stay informed about the latest events, programs, and announcements</p>
           
           {apiError && (
-            <div className="mb-4 p-3 bg-yellow-100 border border-yellow-400 rounded-lg">
-              <p className="text-yellow-800 text-sm text-center">
-                API temporarily unavailable - showing sample notices
+            <div className="mb-4 p-3 bg-teal-100 border border-teal-400 rounded-lg">
+              <p className="text-teal-800 text-sm text-center font-medium">
+                Notices will be updated Soon
               </p>
             </div>
           )}
@@ -214,54 +248,63 @@ const NoticesSection = () => {
                     
                     return (
                       <CarouselItem key={`notice-${index}`} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                        <div className="bg-white rounded-lg shadow-lg overflow-hidden h-full">
-                          <div className="relative aspect-[3/4] bg-gray-100">
-                            {convertedImageUrl && !hasImageError ? (
-                              <img
-                                src={convertedImageUrl}
-                                alt={notice["File Name"] || `Notice ${index + 1}`}
-                                className="w-full h-full object-cover"
-                                onLoad={() => handleImageLoad(convertedImageUrl, index)}
-                                onError={() => handleImageError(convertedImageUrl, index)}
-                              />
-                            ) : (
-                              <div className="flex flex-col items-center justify-center h-full p-4 text-center">
-                                <Image className="h-12 w-12 text-gray-400 mb-2" />
-                                <p className="text-gray-500 text-sm mb-2">
-                                  {hasImageError ? 'Image failed to load' : 'Loading image...'}
-                                </p>
-                                <a
-                                  href={notice["Image URL"]}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-blue-500 hover:text-blue-700 text-xs flex items-center gap-1"
-                                >
-                                  <ExternalLink className="h-3 w-3" />
-                                  View Original
-                                </a>
+                        <div className="group cursor-pointer">
+                          <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-teal-200">
+                            <div className="relative bg-gradient-to-br from-gray-50 to-gray-100">
+                              {convertedImageUrl && !hasImageError ? (
+                                <img
+                                  src={convertedImageUrl}
+                                  alt={notice["File Name"] || `Notice ${index + 1}`}
+                                  className="w-full h-auto object-contain max-h-80 group-hover:scale-105 transition-transform duration-300"
+                                  onLoad={() => handleImageLoad(convertedImageUrl, index)}
+                                  onError={() => handleImageError(convertedImageUrl, index)}
+                                />
+                              ) : (
+                                <div className="flex flex-col items-center justify-center h-48 p-6 text-center">
+                                  <div className="bg-teal-100 p-4 rounded-full mb-4">
+                                    <Image className="h-8 w-8 text-teal-600" />
+                                  </div>
+                                  <p className="text-gray-600 text-sm mb-3 font-medium">
+                                    {hasImageError ? 'Image preview unavailable' : 'Loading image...'}
+                                  </p>
+                                  <a
+                                    href={notice["Image URL"]}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 text-xs font-medium bg-teal-50 px-3 py-1 rounded-full transition-colors"
+                                  >
+                                    <ExternalLink className="h-3 w-3" />
+                                    View Full Notice
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+                            <div className="p-4">
+                              <h3 className="text-sm font-semibold text-gray-800 text-center leading-tight line-clamp-2 group-hover:text-teal-700 transition-colors">
+                                {notice["File Name"] || `Notice ${index + 1}`}
+                              </h3>
+                              <div className="mt-2 text-center">
+                                <span className="inline-block bg-teal-100 text-teal-700 text-xs px-2 py-1 rounded-full font-medium">
+                                  {notice.Category || 'Notice'}
+                                </span>
                               </div>
-                            )}
-                          </div>
-                          <div className="p-4">
-                            <h3 className="text-sm font-medium text-gray-800 text-center line-clamp-2">
-                              {notice["File Name"] || `Notice ${index + 1}`}
-                            </h3>
+                            </div>
                           </div>
                         </div>
                       </CarouselItem>
                     );
                   })}
                 </CarouselContent>
-                <CarouselPrevious className="hidden md:flex -left-12 bg-white hover:bg-gray-50 border-gray-200" />
-                <CarouselNext className="hidden md:flex -right-12 bg-white hover:bg-gray-50 border-gray-200" />
+                <CarouselPrevious className="hidden md:flex -left-12 bg-white hover:bg-teal-50 border-teal-200 text-teal-600" />
+                <CarouselNext className="hidden md:flex -right-12 bg-white hover:bg-teal-50 border-teal-200 text-teal-600" />
               </Carousel>
               
               {/* Mobile navigation buttons */}
-              <div className="flex justify-center mt-4 md:hidden space-x-4">
+              <div className="flex justify-center mt-6 md:hidden space-x-4">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-white"
+                  className="bg-white border-teal-200 text-teal-600 hover:bg-teal-50"
                   onClick={() => api?.scrollPrev()}
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -269,7 +312,7 @@ const NoticesSection = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-white"
+                  className="bg-white border-teal-200 text-teal-600 hover:bg-teal-50"
                   onClick={() => api?.scrollNext()}
                 >
                   <ChevronRight className="h-4 w-4" />
@@ -279,8 +322,11 @@ const NoticesSection = () => {
           ) : (
             <div className="flex justify-center items-center h-96 bg-white rounded-lg shadow-md">
               <div className="text-center">
-                <Image className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500">No notices available for {activeTab}</p>
+                <div className="bg-teal-100 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                  <Image className="h-8 w-8 text-teal-600" />
+                </div>
+                <p className="text-gray-500 font-medium">No notices available for {activeTab}</p>
+                <p className="text-gray-400 text-sm mt-1">Check back soon for updates</p>
               </div>
             </div>
           )}
