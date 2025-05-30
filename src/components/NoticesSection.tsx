@@ -225,7 +225,7 @@ const NoticesSection = () => {
     setCurrentSlide(0);
   }, [activeTab]);
   
-  // Auto-slide functionality - simplified
+  // Auto-slide functionality
   useEffect(() => {
     if (filteredNotices.length <= 1 || isPaused) return;
     
@@ -288,84 +288,103 @@ const NoticesSection = () => {
             </div>
           ) : filteredNotices.length > 0 ? (
             <div className="relative">
-              {/* Simple Carousel Container */}
+              {/* Apple-style Overlapping Cards Carousel */}
               <div 
                 ref={carouselRef}
-                className="relative max-w-4xl mx-auto overflow-hidden rounded-xl"
+                className="relative h-96 flex items-center justify-center overflow-hidden"
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
               >
-                {/* Carousel Track */}
-                <div 
-                  className="flex transition-transform duration-500 ease-in-out"
-                  style={{ 
-                    transform: `translateX(-${currentSlide * 100}%)`,
-                    width: `${filteredNotices.length * 100}%` 
-                  }}
-                >
-                  {filteredNotices.map((notice, index) => {
-                    const convertedImageUrl = convertGoogleDriveUrl(notice["Image URL"]);
-                    const imageKey = `${index}-${convertedImageUrl}`;
-                    const hasImageError = imageLoadErrors.has(imageKey);
-                    
-                    return (
-                      <div
-                        key={`notice-${index}`}
-                        className="w-full flex-shrink-0"
-                        style={{ width: `${100 / filteredNotices.length}%` }}
-                      >
-                        <div className="mx-4">
-                          {convertedImageUrl && !hasImageError ? (
-                            <div className="relative bg-white rounded-lg shadow-lg overflow-hidden">
-                              <img
-                                src={convertedImageUrl}
-                                alt={notice["File Name"] || `Notice ${index + 1}`}
-                                className="w-full h-auto object-contain"
-                                style={{ 
-                                  maxHeight: '600px',
-                                  minHeight: '400px'
-                                }}
-                                onLoad={() => handleImageLoad(convertedImageUrl, index)}
-                                onError={() => handleImageError(convertedImageUrl, index)}
-                              />
-                              
-                              {/* Title overlay */}
-                              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                                <h3 className="text-white font-bold text-lg mb-2">
-                                  {notice["File Name"] || `Notice ${index + 1}`}
-                                </h3>
-                                <span className="inline-block bg-yellow-500 text-black text-xs px-3 py-1 rounded-full font-bold">
-                                  {notice.Category || 'Notice'}
-                                </span>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="flex flex-col items-center justify-center h-96 p-6 text-center bg-white rounded-lg shadow-lg">
-                              <div className="bg-yellow-100 p-4 rounded-full mb-4">
-                                <Image className="h-8 w-8 text-yellow-600" />
-                              </div>
-                              <p className="text-gray-600 text-sm mb-3 font-medium">
-                                {hasImageError ? 'Image preview unavailable' : 'Loading image...'}
-                              </p>
-                              <a
-                                href={notice["Image URL"]}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 text-yellow-600 hover:text-yellow-700 text-xs font-medium bg-yellow-50 px-3 py-1 rounded-full transition-colors"
-                              >
-                                <ExternalLink className="h-3 w-3" />
-                                View Full Notice
-                              </a>
-                            </div>
-                          )}
+                {filteredNotices.map((notice, index) => {
+                  const convertedImageUrl = convertGoogleDriveUrl(notice["Image URL"]);
+                  const imageKey = `${index}-${convertedImageUrl}`;
+                  const hasImageError = imageLoadErrors.has(imageKey);
+                  
+                  // Calculate position relative to current slide
+                  const position = (index - currentSlide + filteredNotices.length) % filteredNotices.length;
+                  const isCurrent = position === 0;
+                  const isNext = position === 1;
+                  const isPrev = position === filteredNotices.length - 1;
+                  const isVisible = isCurrent || isNext || isPrev;
+                  
+                  // Apple-style positioning and styling
+                  let transform = 'translateX(-50%) scale(0.8)';
+                  let zIndex = 1;
+                  let opacity = 0.6;
+                  
+                  if (isCurrent) {
+                    transform = 'translateX(-50%) scale(1)';
+                    zIndex = 3;
+                    opacity = 1;
+                  } else if (isNext) {
+                    transform = 'translateX(20%) scale(0.85)';
+                    zIndex = 2;
+                    opacity = 0.7;
+                  } else if (isPrev) {
+                    transform = 'translateX(-120%) scale(0.85)';
+                    zIndex = 2;
+                    opacity = 0.7;
+                  }
+                  
+                  return (
+                    <div
+                      key={`notice-${index}`}
+                      className={`absolute left-1/2 transition-all duration-500 ease-out ${
+                        isVisible ? 'pointer-events-auto' : 'pointer-events-none'
+                      }`}
+                      style={{
+                        transform,
+                        zIndex,
+                        opacity: isVisible ? opacity : 0,
+                        width: '320px',
+                        height: '300px'
+                      }}
+                    >
+                      {convertedImageUrl && !hasImageError ? (
+                        <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden h-full">
+                          <img
+                            src={convertedImageUrl}
+                            alt={notice["File Name"] || `Notice ${index + 1}`}
+                            className="w-full h-full object-cover"
+                            onLoad={() => handleImageLoad(convertedImageUrl, index)}
+                            onError={() => handleImageError(convertedImageUrl, index)}
+                          />
+                          
+                          {/* Title overlay */}
+                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                            <h3 className="text-white font-bold text-sm mb-2 line-clamp-2">
+                              {notice["File Name"] || `Notice ${index + 1}`}
+                            </h3>
+                            <span className="inline-block bg-yellow-500 text-black text-xs px-2 py-1 rounded-full font-bold">
+                              {notice.Category || 'Notice'}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center h-full p-6 text-center bg-white rounded-2xl shadow-2xl">
+                          <div className="bg-yellow-100 p-3 rounded-full mb-3">
+                            <Image className="h-6 w-6 text-yellow-600" />
+                          </div>
+                          <p className="text-gray-600 text-xs mb-2 font-medium">
+                            {hasImageError ? 'Image preview unavailable' : 'Loading image...'}
+                          </p>
+                          <a
+                            href={notice["Image URL"]}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-yellow-600 hover:text-yellow-700 text-xs font-medium bg-yellow-50 px-2 py-1 rounded-full transition-colors"
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                            View Notice
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
                 
                 {/* Navigation Buttons - Hidden on mobile */}
                 {filteredNotices.length > 1 && !isMobile && (
