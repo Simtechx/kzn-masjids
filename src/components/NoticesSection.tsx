@@ -1,16 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, Image, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { getImageDimensions } from '@/lib/utils';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  CarouselApi,
-} from "@/components/ui/carousel"
 
 // Updated interface to match the API response format
 interface NoticeItem {
@@ -19,20 +11,13 @@ interface NoticeItem {
   Category?: string;
 }
 
-interface ImageDimensions {
-  width: number;
-  height: number;
-  aspectRatio: number;
-}
-
 const NoticesSection = () => {
   const [activeTab, setActiveTab] = useState('Upcoming');
   const [notices, setNotices] = useState<NoticeItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(false);
   const [imageLoadErrors, setImageLoadErrors] = useState<Set<string>>(new Set());
-  const [imageDimensions, setImageDimensions] = useState<Map<string, ImageDimensions>>(new Map());
-  const [api, setApi] = useState<CarouselApi>();
+  const [currentSlide, setCurrentSlide] = useState(0);
   
   // API URL for notices
   const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec";
@@ -137,41 +122,14 @@ const NoticesSection = () => {
     setImageLoadErrors(prev => new Set(prev).add(`${index}-${imageUrl}`));
   };
   
-  // Handle image load success and get dimensions
-  const handleImageLoad = async (imageUrl: string, index: number) => {
+  // Handle image load success
+  const handleImageLoad = (imageUrl: string, index: number) => {
     console.log(`Image loaded successfully: ${imageUrl}`);
     setImageLoadErrors(prev => {
       const newSet = new Set(prev);
       newSet.delete(`${index}-${imageUrl}`);
       return newSet;
     });
-    
-    // Get image dimensions for dynamic sizing
-    try {
-      const dimensions = await getImageDimensions(imageUrl);
-      setImageDimensions(prev => new Map(prev).set(`${index}-${imageUrl}`, dimensions));
-      console.log(`Image dimensions for ${imageUrl}:`, dimensions);
-    } catch (error) {
-      console.log(`Could not get dimensions for ${imageUrl}`);
-    }
-  };
-  
-  // Calculate dynamic height based on image aspect ratio
-  const getCardHeight = (imageUrl: string, index: number): string => {
-    const imageKey = `${index}-${imageUrl}`;
-    const dimensions = imageDimensions.get(imageKey);
-    
-    if (dimensions) {
-      // Base width is 320px for center card, calculate height to maintain aspect ratio
-      const baseWidth = 320;
-      const calculatedHeight = baseWidth / dimensions.aspectRatio;
-      // Clamp height between 240px and 480px for reasonable sizing
-      const clampedHeight = Math.max(240, Math.min(480, calculatedHeight));
-      return `${clampedHeight}px`;
-    }
-    
-    // Default height if dimensions not loaded
-    return '360px';
   };
   
   useEffect(() => {
@@ -225,6 +183,55 @@ const NoticesSection = () => {
     return noticeCategory.toLowerCase() === activeTab.toLowerCase();
   });
   
+  // Reset current slide when tab changes
+  useEffect(() => {
+    setCurrentSlide(0);
+  }, [activeTab]);
+  
+  // Navigation functions
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % filteredNotices.length);
+  };
+  
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + filteredNotices.length) % filteredNotices.length);
+  };
+  
+  // Calculate transform for each card based on position relative to current slide
+  const getCardTransform = (index: number) => {
+    const diff = index - currentSlide;
+    
+    if (diff === 0) {
+      // Center card - large and front
+      return {
+        transform: 'translateX(0px) translateZ(0px) scale(1)',
+        zIndex: 30,
+        opacity: 1
+      };
+    } else if (diff === 1 || (diff === -(filteredNotices.length - 1))) {
+      // Right card
+      return {
+        transform: 'translateX(220px) translateZ(-300px) scale(0.85)',
+        zIndex: 10,
+        opacity: 0.7
+      };
+    } else if (diff === -1 || (diff === filteredNotices.length - 1)) {
+      // Left card
+      return {
+        transform: 'translateX(-220px) translateZ(-300px) scale(0.85)',
+        zIndex: 10,
+        opacity: 0.7
+      };
+    } else {
+      // Far cards - hidden
+      return {
+        transform: 'translateX(0px) translateZ(-600px) scale(0.6)',
+        zIndex: 1,
+        opacity: 0
+      };
+    }
+  };
+  
   console.log("Filtered notices for tab", activeTab, ":", filteredNotices);
   
   return (
@@ -267,61 +274,49 @@ const NoticesSection = () => {
               <Loader2 className="h-8 w-8 text-yellow-500 animate-spin" />
             </div>
           ) : filteredNotices.length > 0 ? (
-            <div className="relative perspective-1000">
-              <Carousel 
-                className="w-full max-w-6xl mx-auto" 
-                setApi={setApi}
-                opts={{
-                  align: "center",
-                  loop: true,
+            <div className="relative">
+              {/* 3D Perspective Container */}
+              <div 
+                className="perspective-container relative mx-auto overflow-hidden"
+                style={{ 
+                  perspective: '1000px',
+                  height: '500px',
+                  maxWidth: '800px'
                 }}
               >
-                <CarouselContent className="-ml-4">
+                {/* Cards Container */}
+                <div className="absolute inset-0 flex items-center justify-center">
                   {filteredNotices.map((notice, index) => {
                     const convertedImageUrl = convertGoogleDriveUrl(notice["Image URL"]);
                     const imageKey = `${index}-${convertedImageUrl}`;
                     const hasImageError = imageLoadErrors.has(imageKey);
-                    const cardHeight = getCardHeight(convertedImageUrl, index);
+                    const cardStyle = getCardTransform(index);
                     
                     return (
-                      <CarouselItem key={`notice-${index}`} className="pl-4 basis-4/5 md:basis-2/5 lg:basis-1/3">
-                        <div className="group perspective-1000">
-                          <div 
-                            className="relative overflow-hidden rounded-xl bg-white shadow-2xl transition-all duration-700 transform-gpu hover:scale-105 hover:shadow-3xl"
-                            style={{ height: cardHeight }}
-                          >
-                            {convertedImageUrl && !hasImageError ? (
-                              <img
-                                src={convertedImageUrl}
-                                alt={notice["File Name"] || `Notice ${index + 1}`}
-                                className="w-full h-full object-cover"
-                                onLoad={() => handleImageLoad(convertedImageUrl, index)}
-                                onError={() => handleImageError(convertedImageUrl, index)}
-                              />
-                            ) : (
-                              <div className="flex flex-col items-center justify-center h-full p-6 text-center bg-gradient-to-br from-gray-50 to-gray-100">
-                                <div className="bg-yellow-100 p-4 rounded-full mb-4">
-                                  <Image className="h-8 w-8 text-yellow-600" />
-                                </div>
-                                <p className="text-gray-600 text-sm mb-3 font-medium">
-                                  {hasImageError ? 'Image preview unavailable' : 'Loading image...'}
-                                </p>
-                                <a
-                                  href={notice["Image URL"]}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-2 text-yellow-600 hover:text-yellow-700 text-xs font-medium bg-yellow-50 px-3 py-1 rounded-full transition-colors"
-                                >
-                                  <ExternalLink className="h-3 w-3" />
-                                  View Full Notice
-                                </a>
-                              </div>
-                            )}
+                      <div
+                        key={`notice-${index}`}
+                        className="absolute w-[70%] h-[80%] max-w-[350px] max-h-[400px] rounded-xl overflow-hidden shadow-2xl transition-all duration-700 ease-out cursor-pointer"
+                        style={{
+                          transform: cardStyle.transform,
+                          zIndex: cardStyle.zIndex,
+                          opacity: cardStyle.opacity,
+                        }}
+                        onClick={() => setCurrentSlide(index)}
+                      >
+                        {convertedImageUrl && !hasImageError ? (
+                          <div className="relative w-full h-full bg-gradient-to-br from-gray-50 to-gray-100">
+                            <img
+                              src={convertedImageUrl}
+                              alt={notice["File Name"] || `Notice ${index + 1}`}
+                              className="w-full h-full object-cover"
+                              onLoad={() => handleImageLoad(convertedImageUrl, index)}
+                              onError={() => handleImageError(convertedImageUrl, index)}
+                            />
                             
                             {/* Dark gradient overlay for text readability */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                             
-                            {/* Title overlay at bottom with improved styling */}
+                            {/* Title overlay at bottom */}
                             <div className="absolute bottom-0 left-0 right-0 p-6">
                               <h3 className="text-white font-bold text-lg leading-tight mb-3 drop-shadow-lg">
                                 {notice["File Name"] || `Notice ${index + 1}`}
@@ -331,34 +326,63 @@ const NoticesSection = () => {
                               </span>
                             </div>
                           </div>
-                        </div>
-                      </CarouselItem>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center h-full p-6 text-center bg-gradient-to-br from-gray-50 to-gray-100">
+                            <div className="bg-yellow-100 p-4 rounded-full mb-4">
+                              <Image className="h-8 w-8 text-yellow-600" />
+                            </div>
+                            <p className="text-gray-600 text-sm mb-3 font-medium">
+                              {hasImageError ? 'Image preview unavailable' : 'Loading image...'}
+                            </p>
+                            <a
+                              href={notice["Image URL"]}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 text-yellow-600 hover:text-yellow-700 text-xs font-medium bg-yellow-50 px-3 py-1 rounded-full transition-colors"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                              View Full Notice
+                            </a>
+                          </div>
+                        )}
+                      </div>
                     );
                   })}
-                </CarouselContent>
-                <CarouselPrevious className="hidden md:flex -left-12 bg-white hover:bg-yellow-50 border-yellow-200 text-yellow-600 shadow-lg" />
-                <CarouselNext className="hidden md:flex -right-12 bg-white hover:bg-yellow-50 border-yellow-200 text-yellow-600 shadow-lg" />
-              </Carousel>
-              
-              {/* Mobile navigation buttons */}
-              <div className="flex justify-center mt-6 md:hidden space-x-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-white border-yellow-200 text-yellow-600 hover:bg-yellow-50"
-                  onClick={() => api?.scrollPrev()}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-white border-yellow-200 text-yellow-600 hover:bg-yellow-50"
-                  onClick={() => api?.scrollNext()}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
+                </div>
+                
+                {/* Navigation Buttons */}
+                {filteredNotices.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevSlide}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 z-40 bg-white hover:bg-yellow-50 border border-yellow-200 text-yellow-600 shadow-lg rounded-full p-3 transition-colors"
+                    >
+                      <ChevronLeft className="h-5 w-5" />
+                    </button>
+                    <button
+                      onClick={nextSlide}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 z-40 bg-white hover:bg-yellow-50 border border-yellow-200 text-yellow-600 shadow-lg rounded-full p-3 transition-colors"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
+                  </>
+                )}
               </div>
+              
+              {/* Dots Indicator */}
+              {filteredNotices.length > 1 && (
+                <div className="flex justify-center mt-6 space-x-2">
+                  {filteredNotices.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`w-3 h-3 rounded-full transition-colors duration-300 ${
+                        index === currentSlide ? 'bg-yellow-500' : 'bg-gray-300'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           ) : (
             <div className="flex justify-center items-center h-96 bg-white rounded-lg shadow-md">
