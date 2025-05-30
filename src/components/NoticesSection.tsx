@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, Image, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
@@ -18,6 +17,13 @@ const NoticesSection = () => {
   const [apiError, setApiError] = useState(false);
   const [imageLoadErrors, setImageLoadErrors] = useState<Set<string>>(new Set());
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Touch handling refs
+  const touchStartX = useRef<number>(0);
+  const touchEndX = useRef<number>(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
   
   // API URL for notices
   const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec";
@@ -74,23 +80,30 @@ const NoticesSection = () => {
     }
   ];
   
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
   // Function to convert Google Drive URL to direct image URL
   const convertGoogleDriveUrl = (url: string): string => {
     if (!url) return '';
     
-    // Extract file ID from various Google Drive URL formats
     let fileId = '';
     
-    // Handle uc?export=view format
     if (url.includes('uc?export=view&id=')) {
       fileId = url.split('id=')[1];
     }
-    // Handle /file/d/ format
     else if (url.includes('/file/d/')) {
       const match = url.match(/\/file\/d\/([a-zA-Z0-9-_]+)/);
       fileId = match ? match[1] : '';
     }
-    // Handle direct ID
     else if (url.match(/^[a-zA-Z0-9-_]+$/)) {
       fileId = url;
     }
@@ -130,6 +143,30 @@ const NoticesSection = () => {
       newSet.delete(`${index}-${imageUrl}`);
       return newSet;
     });
+  };
+  
+  // Touch event handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+  
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+  
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+    
+    if (isLeftSwipe && filteredNotices.length > 0) {
+      nextSlide();
+    }
+    if (isRightSwipe && filteredNotices.length > 0) {
+      prevSlide();
+    }
   };
   
   useEffect(() => {
@@ -188,6 +225,17 @@ const NoticesSection = () => {
     setCurrentSlide(0);
   }, [activeTab]);
   
+  // Autoplay functionality
+  useEffect(() => {
+    if (filteredNotices.length <= 1 || isPaused) return;
+    
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % filteredNotices.length);
+    }, 4000); // Change slide every 4 seconds
+    
+    return () => clearInterval(interval);
+  }, [filteredNotices.length, isPaused]);
+  
   // Navigation functions
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % filteredNotices.length);
@@ -202,28 +250,24 @@ const NoticesSection = () => {
     const diff = index - currentSlide;
     
     if (diff === 0) {
-      // Center card - large and front
       return {
         transform: 'translateX(0px) translateZ(0px) scale(1)',
         zIndex: 30,
         opacity: 1
       };
     } else if (diff === 1 || (diff === -(filteredNotices.length - 1))) {
-      // Right card
       return {
         transform: 'translateX(220px) translateZ(-300px) scale(0.85)',
         zIndex: 10,
         opacity: 0.7
       };
     } else if (diff === -1 || (diff === filteredNotices.length - 1)) {
-      // Left card
       return {
         transform: 'translateX(-220px) translateZ(-300px) scale(0.85)',
         zIndex: 10,
         opacity: 0.7
       };
     } else {
-      // Far cards - hidden
       return {
         transform: 'translateX(0px) translateZ(-600px) scale(0.6)',
         zIndex: 1,
@@ -277,12 +321,18 @@ const NoticesSection = () => {
             <div className="relative">
               {/* 3D Perspective Container */}
               <div 
+                ref={carouselRef}
                 className="perspective-container relative mx-auto overflow-hidden"
                 style={{ 
                   perspective: '1000px',
                   height: '600px',
                   maxWidth: '900px'
                 }}
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
               >
                 {/* Cards Container */}
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -358,8 +408,8 @@ const NoticesSection = () => {
                   })}
                 </div>
                 
-                {/* Navigation Buttons */}
-                {filteredNotices.length > 1 && (
+                {/* Navigation Buttons - Hidden on mobile */}
+                {filteredNotices.length > 1 && !isMobile && (
                   <>
                     <button
                       onClick={prevSlide}
@@ -389,6 +439,13 @@ const NoticesSection = () => {
                       }`}
                     />
                   ))}
+                </div>
+              )}
+              
+              {/* Mobile swipe hint */}
+              {isMobile && filteredNotices.length > 1 && (
+                <div className="text-center mt-4">
+                  <p className="text-gray-500 text-sm">Swipe left or right to navigate</p>
                 </div>
               )}
             </div>
