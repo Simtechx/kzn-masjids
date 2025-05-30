@@ -3,7 +3,6 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PrayerTimeSearch from '@/components/PrayerTimeSearch';
-import SupportNewMasjids from '@/components/SupportNewMasjids';
 import NoticesSection from '@/components/NoticesSection';
 import CounterSection from '@/components/CounterSection';
 import LivePrayerTimes from '@/components/LivePrayerTimes';
@@ -24,14 +23,11 @@ const Index = () => {
         {/* SalaahTimeSearch */}
         <PrayerTimeSearch />
         
-        {/* Notices Section - Enhanced with Apple-style carousel */}
-        <NoticesSection />
-        
-        {/* Counter Section */}
+        {/* Counter Section - Between Find Masjid and Notices */}
         <CounterSection />
         
-        {/* Support New Masjids */}
-        <SupportNewMasjids />
+        {/* Notices Section - Last thing before footer */}
+        <NoticesSection />
       </main>
       <Footer />
     </div>

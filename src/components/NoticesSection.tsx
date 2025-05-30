@@ -280,8 +280,8 @@ const NoticesSection = () => {
                 className="perspective-container relative mx-auto overflow-hidden"
                 style={{ 
                   perspective: '1000px',
-                  height: '500px',
-                  maxWidth: '800px'
+                  height: '600px',
+                  maxWidth: '900px'
                 }}
               >
                 {/* Cards Container */}
@@ -295,8 +295,12 @@ const NoticesSection = () => {
                     return (
                       <div
                         key={`notice-${index}`}
-                        className="absolute w-[70%] h-[80%] max-w-[350px] max-h-[400px] rounded-xl overflow-hidden shadow-2xl transition-all duration-700 ease-out cursor-pointer"
+                        className="absolute rounded-xl overflow-hidden shadow-2xl transition-all duration-700 ease-out cursor-pointer"
                         style={{
+                          width: '350px',
+                          height: 'auto',
+                          minHeight: '450px',
+                          maxHeight: '550px',
                           transform: cardStyle.transform,
                           zIndex: cardStyle.zIndex,
                           opacity: cardStyle.opacity,
@@ -308,13 +312,17 @@ const NoticesSection = () => {
                             <img
                               src={convertedImageUrl}
                               alt={notice["File Name"] || `Notice ${index + 1}`}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-contain bg-white"
+                              style={{ 
+                                maxHeight: '550px',
+                                objectFit: 'contain'
+                              }}
                               onLoad={() => handleImageLoad(convertedImageUrl, index)}
                               onError={() => handleImageError(convertedImageUrl, index)}
                             />
                             
                             {/* Dark gradient overlay for text readability */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                             
                             {/* Title overlay at bottom */}
                             <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -327,7 +335,7 @@ const NoticesSection = () => {
                             </div>
                           </div>
                         ) : (
-                          <div className="flex flex-col items-center justify-center h-full p-6 text-center bg-gradient-to-br from-gray-50 to-gray-100">
+                          <div className="flex flex-col items-center justify-center h-full p-6 text-center bg-gradient-to-br from-gray-50 to-gray-100 min-h-[450px]">
                             <div className="bg-yellow-100 p-4 rounded-full mb-4">
                               <Image className="h-8 w-8 text-yellow-600" />
                             </div>
