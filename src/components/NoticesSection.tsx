@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, Image, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -30,17 +29,17 @@ const NoticesSection = () => {
   // API URL for notices
   const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec";
   
-  // Islamic fallback images
+  // Islamic fallback images - 3 per category with Islamic architecture
   const fallbackNotices: NoticeItem[] = [
     // Upcoming Events
     {
-      "File Name": "Community Iftar - Join Us for Breaking Fast",
-      "Image URL": "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&q=80&w=800",
+      "File Name": "Community Event - Join Us for Special Gathering",
+      "Image URL": "https://images.unsplash.com/photo-1564769625392-651b9a2a8b4b?auto=format&fit=crop&q=80&w=800",
       "Category": "Upcoming"
     },
     {
       "File Name": "Islamic Education Workshop - Learn & Grow",
-      "Image URL": "https://images.unsplash.com/photo-1564769625392-651b9a2a8b4b?auto=format&fit=crop&q=80&w=800",
+      "Image URL": "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&q=80&w=800",
       "Category": "Upcoming"
     },
     {
@@ -51,12 +50,12 @@ const NoticesSection = () => {
     // Jumuah
     {
       "File Name": "Jumuah Prayer Schedule - Updated Timings",
-      "Image URL": "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&q=80&w=800",
+      "Image URL": "https://images.unsplash.com/photo-1564769625392-651b9a2a8b4b?auto=format&fit=crop&q=80&w=800",
       "Category": "Jumuah"
     },
     {
       "File Name": "Special Jumuah Khutbah Series",
-      "Image URL": "https://images.unsplash.com/photo-1564769625392-651b9a2a8b4b?auto=format&fit=crop&q=80&w=800",
+      "Image URL": "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&q=80&w=800",
       "Category": "Jumuah"
     },
     {
@@ -67,12 +66,12 @@ const NoticesSection = () => {
     // Info
     {
       "File Name": "Masjid Guidelines and Community Information",
-      "Image URL": "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&q=80&w=800",
+      "Image URL": "https://images.unsplash.com/photo-1564769625392-651b9a2a8b4b?auto=format&fit=crop&q=80&w=800",
       "Category": "Info"
     },
     {
       "File Name": "Community Support Programs Available",
-      "Image URL": "https://images.unsplash.com/photo-1564769625392-651b9a2a8b4b?auto=format&fit=crop&q=80&w=800",
+      "Image URL": "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&q=80&w=800",
       "Category": "Info"
     },
     {
@@ -350,22 +349,24 @@ const NoticesSection = () => {
         </div>
       </div>
       
-      <style jsx>{`
-        .perspective-gallery {
-          perspective: 1200px;
-          perspective-origin: center center;
-        }
-        
-        .group:hover .group-hover\\:rotateY-12 {
-          transform: rotateX(0deg) rotateY(0deg) scale(1.02);
-        }
-        
-        @media (max-width: 768px) {
+      <style>
+        {`
           .perspective-gallery {
-            perspective: 800px;
+            perspective: 1200px;
+            perspective-origin: center center;
           }
-        }
-      `}</style>
+          
+          .group:hover .group-hover\\:rotateY-12 {
+            transform: rotateX(0deg) rotateY(0deg) scale(1.02);
+          }
+          
+          @media (max-width: 768px) {
+            .perspective-gallery {
+              perspective: 800px;
+            }
+          }
+        `}
+      </style>
     </section>
   );
 };
