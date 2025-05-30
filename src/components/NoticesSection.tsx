@@ -15,10 +15,29 @@ const NoticesSection = () => {
   const [activeTab, setActiveTab] = useState('Upcoming');
   const [notices, setNotices] = useState<NoticeItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [imageLoadingStates, setImageLoadingStates] = useState<{[key: string]: boolean}>({});
+  const [apiError, setApiError] = useState(false);
   
   // API URL for notices
   const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec";
+  
+  // Fallback data for testing when API is down
+  const fallbackNotices: NoticeItem[] = [
+    {
+      "File Name": "Upcoming Event - Community Iftar",
+      "Image URL": "https://drive.google.com/uc?export=view&id=1kG0JdM57LIikUrTOa-7l67u6ila9T7Mg",
+      "Category": "Upcoming"
+    },
+    {
+      "File Name": "Jumuah Prayer Schedule",
+      "Image URL": "https://drive.google.com/uc?export=view&id=1kG0JdM57LIikUrTOa-7l67u6ila9T7Mg",
+      "Category": "Jumuah"
+    },
+    {
+      "File Name": "Community Information Notice",
+      "Image URL": "https://drive.google.com/uc?export=view&id=1kG0JdM57LIikUrTOa-7l67u6ila9T7Mg",
+      "Category": "Info"
+    }
+  ];
   
   // Function to validate Google Drive URL format
   const validateGoogleDriveUrl = (url: string): boolean => {
@@ -49,12 +68,14 @@ const NoticesSection = () => {
   
   const fetchNotices = async () => {
     setLoading(true);
+    setApiError(false);
+    
     try {
       console.log("Fetching notices from:", NOTICES_API_URL);
       const response = await fetch(NOTICES_API_URL);
       
       if (!response.ok) {
-        throw new Error('Failed to fetch notices');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       
       const data = await response.json();
@@ -80,40 +101,18 @@ const NoticesSection = () => {
         console.log("Processed notices data:", processedData);
         toast.success('Notices loaded successfully');
       } else {
-        console.error('Invalid notices data format:', data);
-        toast.error('Could not load notices data');
-        setNotices([]);
+        throw new Error('Invalid notices data format');
       }
     } catch (error) {
       console.error('Error fetching notices:', error);
-      toast.error('Failed to load notices');
-      setNotices([]);
+      setApiError(true);
+      
+      // Use fallback data when API fails
+      console.log('Using fallback notices data');
+      setNotices(fallbackNotices);
+      toast.error('API failed - showing sample notices');
     } finally {
       setLoading(false);
-    }
-  };
-  
-  const handleImageLoad = (noticeIndex: number) => {
-    console.log(`Image loaded successfully for notice ${noticeIndex}`);
-    setImageLoadingStates(prev => ({
-      ...prev,
-      [noticeIndex]: false
-    }));
-  };
-  
-  const handleImageError = (noticeIndex: number, imageUrl: string, target: HTMLImageElement) => {
-    console.error(`Image failed to load for notice ${noticeIndex}:`, imageUrl);
-    
-    setImageLoadingStates(prev => ({
-      ...prev,
-      [noticeIndex]: false
-    }));
-    
-    // Only set placeholder if not already set
-    if (target.src !== "/placeholder.svg") {
-      console.log(`Setting placeholder for notice ${noticeIndex}`);
-      target.src = "/placeholder.svg";
-      target.alt = "Image not available";
     }
   };
   
@@ -134,6 +133,14 @@ const NoticesSection = () => {
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-2 text-gray-800">NOTICES</h2>
           <p className="text-center text-gray-600 mb-6">Stay informed about the latest events, programs, and announcements</p>
+          
+          {apiError && (
+            <div className="mb-4 p-3 bg-yellow-100 border border-yellow-400 rounded-lg">
+              <p className="text-yellow-800 text-sm text-center">
+                API temporarily unavailable - showing sample notices
+              </p>
+            </div>
+          )}
           
           <div className="flex justify-center mb-6">
             <div className="flex space-x-2 bg-white shadow-sm rounded-full overflow-x-auto p-1">
@@ -165,27 +172,22 @@ const NoticesSection = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {filteredNotices.map((notice, index) => {
                   console.log(`Rendering notice ${index}:`, notice);
-                  const isImageLoading = imageLoadingStates[index] !== false;
                   
                   return (
                     <div key={`notice-${index}`} className="flex flex-col">
-                      <div className="relative h-64 rounded-lg overflow-hidden bg-gray-100">
-                        {isImageLoading && (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <Loader2 className="h-6 w-6 text-gray-400 animate-spin" />
-                          </div>
+                      <div className="relative h-64 rounded-lg overflow-hidden bg-gray-100 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-4">
+                        {notice["Image URL"] ? (
+                          <>
+                            <Image className="h-16 w-16 text-gray-400 mb-2" />
+                            <p className="text-gray-500 text-sm text-center mb-2">Image Loading...</p>
+                            <p className="text-xs text-gray-400 break-all">{notice["Image URL"]}</p>
+                          </>
+                        ) : (
+                          <>
+                            <Image className="h-16 w-16 text-gray-400 mb-2" />
+                            <p className="text-gray-500 text-sm">No Image Available</p>
+                          </>
                         )}
-                        <img 
-                          src={notice["Image URL"]}
-                          alt={notice["File Name"] || `Notice ${index + 1}`}
-                          className="w-full h-full object-cover rounded-lg shadow"
-                          loading="lazy"
-                          crossOrigin="anonymous"
-                          referrerPolicy="no-referrer"
-                          onLoad={() => handleImageLoad(index)}
-                          onError={(e) => handleImageError(index, notice["Image URL"], e.target as HTMLImageElement)}
-                          style={{ display: isImageLoading ? 'none' : 'block' }}
-                        />
                       </div>
                       <p className="mt-2 text-center text-sm font-medium text-gray-700">
                         {notice["File Name"] || `Notice ${index + 1}`}
