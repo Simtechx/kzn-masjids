@@ -48,12 +48,10 @@ const NoticesSection = () => {
     (notice.Category || '').toLowerCase() === activeTab.toLowerCase()
   );
 
-  // Reset slide when tab changes
   useEffect(() => {
     setCurrentSlide(0);
   }, [activeTab]);
 
-  // Auto-slide functionality
   useEffect(() => {
     if (filteredNotices.length <= 1) return;
     
@@ -81,40 +79,6 @@ const NoticesSection = () => {
     }
     
     return fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w800` : url;
-  };
-
-  const getSlidePosition = (index: number) => {
-    const position = (index - currentSlide + filteredNotices.length) % filteredNotices.length;
-    
-    if (position === 0) {
-      // Center card
-      return {
-        transform: 'translateX(-50%) translateZ(0) scale(1)',
-        zIndex: 30,
-        opacity: 1
-      };
-    } else if (position === 1) {
-      // Right card
-      return {
-        transform: 'translateX(50%) translateZ(-100px) scale(0.8) rotateY(-25deg)',
-        zIndex: 20,
-        opacity: 0.7
-      };
-    } else if (position === filteredNotices.length - 1) {
-      // Left card
-      return {
-        transform: 'translateX(-150%) translateZ(-100px) scale(0.8) rotateY(25deg)',
-        zIndex: 20,
-        opacity: 0.7
-      };
-    } else {
-      // Hidden cards
-      return {
-        transform: 'translateX(-50%) translateZ(-200px) scale(0.6)',
-        zIndex: 10,
-        opacity: 0
-      };
-    }
   };
 
   return (
@@ -149,55 +113,80 @@ const NoticesSection = () => {
           </div>
         ) : filteredNotices.length > 0 ? (
           <div className="relative">
-            {/* 3D Carousel Container */}
-            <div 
-              className="relative h-96 overflow-hidden"
-              style={{ perspective: '1000px' }}
-            >
-              <div className="relative w-full h-full flex items-center justify-center">
-                {filteredNotices.map((notice, index) => {
-                  const style = getSlidePosition(index);
-                  const convertedImageUrl = convertGoogleDriveUrl(notice["Image URL"]);
-                  
-                  return (
-                    <div
-                      key={index}
-                      className="absolute left-1/2 w-80 h-72 transition-all duration-700 ease-out cursor-pointer"
-                      style={style}
-                      onClick={() => setCurrentSlide(index)}
-                    >
-                      <div className="w-full h-full bg-white rounded-2xl shadow-2xl overflow-hidden">
-                        {convertedImageUrl ? (
-                          <div className="relative w-full h-full">
-                            <img
-                              src={convertedImageUrl}
-                              alt={notice["File Name"]}
-                              className="w-full h-full object-cover"
-                            />
-                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                              <h3 className="text-white font-bold text-sm mb-2 line-clamp-2">
-                                {notice["File Name"]}
-                              </h3>
-                              <span className="inline-block bg-yellow-500 text-black text-xs px-2 py-1 rounded-full font-bold">
-                                {notice.Category || 'Notice'}
-                              </span>
-                            </div>
+            {/* 3D Carousel */}
+            <div className="relative h-96 flex items-center justify-center" style={{ perspective: '1000px' }}>
+              {filteredNotices.map((notice, index) => {
+                const offset = (index - currentSlide + filteredNotices.length) % filteredNotices.length;
+                const isCenter = offset === 0;
+                const isNext = offset === 1;
+                const isPrev = offset === filteredNotices.length - 1;
+                
+                let transform = 'translateX(-50%)';
+                let zIndex = 1;
+                let opacity = 0.3;
+                let scale = 0.7;
+                
+                if (isCenter) {
+                  transform = 'translateX(-50%) translateZ(0px) rotateY(0deg)';
+                  zIndex = 30;
+                  opacity = 1;
+                  scale = 1;
+                } else if (isNext) {
+                  transform = 'translateX(-10%) translateZ(-150px) rotateY(-35deg)';
+                  zIndex = 20;
+                  opacity = 0.7;
+                  scale = 0.85;
+                } else if (isPrev) {
+                  transform = 'translateX(-90%) translateZ(-150px) rotateY(35deg)';
+                  zIndex = 20;
+                  opacity = 0.7;
+                  scale = 0.85;
+                }
+                
+                const convertedImageUrl = convertGoogleDriveUrl(notice["Image URL"]);
+                
+                return (
+                  <div
+                    key={index}
+                    className="absolute left-1/2 w-80 h-72 transition-all duration-700 ease-in-out cursor-pointer"
+                    style={{
+                      transform: `${transform} scale(${scale})`,
+                      zIndex,
+                      opacity
+                    }}
+                    onClick={() => setCurrentSlide(index)}
+                  >
+                    <div className="w-full h-full bg-white rounded-2xl shadow-2xl overflow-hidden">
+                      {convertedImageUrl ? (
+                        <div className="relative w-full h-full">
+                          <img
+                            src={convertedImageUrl}
+                            alt={notice["File Name"]}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                            <h3 className="text-white font-bold text-sm mb-2 line-clamp-2">
+                              {notice["File Name"]}
+                            </h3>
+                            <span className="inline-block bg-yellow-500 text-black text-xs px-2 py-1 rounded-full font-bold">
+                              {notice.Category || 'Notice'}
+                            </span>
                           </div>
-                        ) : (
-                          <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-                            <div className="bg-yellow-100 p-3 rounded-full mb-3">
-                              <div className="h-6 w-6 bg-yellow-600 rounded"></div>
-                            </div>
-                            <p className="text-gray-600 text-sm">{notice["File Name"]}</p>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+                          <div className="bg-yellow-100 p-3 rounded-full mb-3">
+                            <div className="h-6 w-6 bg-yellow-600 rounded"></div>
                           </div>
-                        )}
-                      </div>
+                          <p className="text-gray-600 text-sm">{notice["File Name"]}</p>
+                        </div>
+                      )}
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
               
-              {/* Navigation Arrows - Hidden on mobile */}
+              {/* Navigation Arrows */}
               {filteredNotices.length > 1 && (
                 <>
                   <button
