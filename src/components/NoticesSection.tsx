@@ -225,13 +225,13 @@ const NoticesSection = () => {
     setCurrentSlide(0);
   }, [activeTab]);
   
-  // Auto-slide functionality
+  // Auto-slide functionality - simplified
   useEffect(() => {
     if (filteredNotices.length <= 1 || isPaused) return;
     
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % filteredNotices.length);
-    }, 4000); // Change slide every 4 seconds
+    }, 4000);
     
     return () => clearInterval(interval);
   }, [filteredNotices.length, isPaused]);
@@ -243,37 +243,6 @@ const NoticesSection = () => {
   
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + filteredNotices.length) % filteredNotices.length);
-  };
-  
-  // Calculate transform for each card based on position relative to current slide
-  const getCardTransform = (index: number) => {
-    const diff = index - currentSlide;
-    
-    if (diff === 0) {
-      return {
-        transform: 'translateX(0px) translateZ(0px) scale(1)',
-        zIndex: 30,
-        opacity: 1
-      };
-    } else if (diff === 1 || (diff === -(filteredNotices.length - 1))) {
-      return {
-        transform: 'translateX(220px) translateZ(-300px) scale(0.85)',
-        zIndex: 10,
-        opacity: 0.7
-      };
-    } else if (diff === -1 || (diff === filteredNotices.length - 1)) {
-      return {
-        transform: 'translateX(-220px) translateZ(-300px) scale(0.85)',
-        zIndex: 10,
-        opacity: 0.7
-      };
-    } else {
-      return {
-        transform: 'translateX(0px) translateZ(-600px) scale(0.6)',
-        zIndex: 1,
-        opacity: 0
-      };
-    }
   };
   
   console.log("Filtered notices for tab", activeTab, ":", filteredNotices);
@@ -319,90 +288,80 @@ const NoticesSection = () => {
             </div>
           ) : filteredNotices.length > 0 ? (
             <div className="relative">
-              {/* 3D Perspective Container */}
+              {/* Simple Carousel Container */}
               <div 
                 ref={carouselRef}
-                className="perspective-container relative mx-auto overflow-hidden"
-                style={{ 
-                  perspective: '1000px',
-                  height: '600px',
-                  maxWidth: '900px'
-                }}
+                className="relative max-w-4xl mx-auto overflow-hidden rounded-xl"
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
               >
-                {/* Cards Container */}
-                <div className="absolute inset-0 flex items-center justify-center">
+                {/* Carousel Track */}
+                <div 
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{ 
+                    transform: `translateX(-${currentSlide * 100}%)`,
+                    width: `${filteredNotices.length * 100}%` 
+                  }}
+                >
                   {filteredNotices.map((notice, index) => {
                     const convertedImageUrl = convertGoogleDriveUrl(notice["Image URL"]);
                     const imageKey = `${index}-${convertedImageUrl}`;
                     const hasImageError = imageLoadErrors.has(imageKey);
-                    const cardStyle = getCardTransform(index);
                     
                     return (
                       <div
                         key={`notice-${index}`}
-                        className="absolute rounded-xl overflow-hidden shadow-2xl transition-all duration-700 ease-out cursor-pointer"
-                        style={{
-                          width: '350px',
-                          height: 'auto',
-                          minHeight: '450px',
-                          maxHeight: '550px',
-                          transform: cardStyle.transform,
-                          zIndex: cardStyle.zIndex,
-                          opacity: cardStyle.opacity,
-                        }}
-                        onClick={() => setCurrentSlide(index)}
+                        className="w-full flex-shrink-0"
+                        style={{ width: `${100 / filteredNotices.length}%` }}
                       >
-                        {convertedImageUrl && !hasImageError ? (
-                          <div className="relative w-full h-full bg-gradient-to-br from-gray-50 to-gray-100">
-                            <img
-                              src={convertedImageUrl}
-                              alt={notice["File Name"] || `Notice ${index + 1}`}
-                              className="w-full h-full object-cover"
-                              style={{ 
-                                minHeight: '450px',
-                                maxHeight: '550px'
-                              }}
-                              onLoad={() => handleImageLoad(convertedImageUrl, index)}
-                              onError={() => handleImageError(convertedImageUrl, index)}
-                            />
-                            
-                            {/* Dark gradient overlay for text readability */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                            
-                            {/* Title overlay at bottom */}
-                            <div className="absolute bottom-0 left-0 right-0 p-6">
-                              <h3 className="text-white font-bold text-lg leading-tight mb-3 drop-shadow-lg">
-                                {notice["File Name"] || `Notice ${index + 1}`}
-                              </h3>
-                              <span className="inline-block bg-yellow-500 text-black text-xs px-3 py-1.5 rounded-full font-bold shadow-lg">
-                                {notice.Category || 'Notice'}
-                              </span>
+                        <div className="mx-4">
+                          {convertedImageUrl && !hasImageError ? (
+                            <div className="relative bg-white rounded-lg shadow-lg overflow-hidden">
+                              <img
+                                src={convertedImageUrl}
+                                alt={notice["File Name"] || `Notice ${index + 1}`}
+                                className="w-full h-auto object-contain"
+                                style={{ 
+                                  maxHeight: '600px',
+                                  minHeight: '400px'
+                                }}
+                                onLoad={() => handleImageLoad(convertedImageUrl, index)}
+                                onError={() => handleImageError(convertedImageUrl, index)}
+                              />
+                              
+                              {/* Title overlay */}
+                              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                                <h3 className="text-white font-bold text-lg mb-2">
+                                  {notice["File Name"] || `Notice ${index + 1}`}
+                                </h3>
+                                <span className="inline-block bg-yellow-500 text-black text-xs px-3 py-1 rounded-full font-bold">
+                                  {notice.Category || 'Notice'}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="flex flex-col items-center justify-center h-full p-6 text-center bg-gradient-to-br from-gray-50 to-gray-100 min-h-[450px]">
-                            <div className="bg-yellow-100 p-4 rounded-full mb-4">
-                              <Image className="h-8 w-8 text-yellow-600" />
+                          ) : (
+                            <div className="flex flex-col items-center justify-center h-96 p-6 text-center bg-white rounded-lg shadow-lg">
+                              <div className="bg-yellow-100 p-4 rounded-full mb-4">
+                                <Image className="h-8 w-8 text-yellow-600" />
+                              </div>
+                              <p className="text-gray-600 text-sm mb-3 font-medium">
+                                {hasImageError ? 'Image preview unavailable' : 'Loading image...'}
+                              </p>
+                              <a
+                                href={notice["Image URL"]}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 text-yellow-600 hover:text-yellow-700 text-xs font-medium bg-yellow-50 px-3 py-1 rounded-full transition-colors"
+                              >
+                                <ExternalLink className="h-3 w-3" />
+                                View Full Notice
+                              </a>
                             </div>
-                            <p className="text-gray-600 text-sm mb-3 font-medium">
-                              {hasImageError ? 'Image preview unavailable' : 'Loading image...'}
-                            </p>
-                            <a
-                              href={notice["Image URL"]}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 text-yellow-600 hover:text-yellow-700 text-xs font-medium bg-yellow-50 px-3 py-1 rounded-full transition-colors"
-                            >
-                              <ExternalLink className="h-3 w-3" />
-                              View Full Notice
-                            </a>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
                     );
                   })}
