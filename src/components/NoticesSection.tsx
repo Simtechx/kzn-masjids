@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, Image, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
+import { getImageDimensions } from '@/lib/utils';
 import {
   Carousel,
   CarouselContent,
@@ -18,12 +19,19 @@ interface NoticeItem {
   Category?: string;
 }
 
+interface ImageDimensions {
+  width: number;
+  height: number;
+  aspectRatio: number;
+}
+
 const NoticesSection = () => {
   const [activeTab, setActiveTab] = useState('Upcoming');
   const [notices, setNotices] = useState<NoticeItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(false);
   const [imageLoadErrors, setImageLoadErrors] = useState<Set<string>>(new Set());
+  const [imageDimensions, setImageDimensions] = useState<Map<string, ImageDimensions>>(new Map());
   const [api, setApi] = useState<CarouselApi>();
   
   // API URL for notices
@@ -103,8 +111,8 @@ const NoticesSection = () => {
     }
     
     if (fileId) {
-      const convertedUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
-      console.log(`Converting URL: ${url} -> ${convertedUrl}`);
+      const convertedUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
+      console.log(`Converting Google Drive URL: ${url} -> ${convertedUrl}`);
       return convertedUrl;
     }
     
@@ -129,14 +137,41 @@ const NoticesSection = () => {
     setImageLoadErrors(prev => new Set(prev).add(`${index}-${imageUrl}`));
   };
   
-  // Handle image load success
-  const handleImageLoad = (imageUrl: string, index: number) => {
+  // Handle image load success and get dimensions
+  const handleImageLoad = async (imageUrl: string, index: number) => {
     console.log(`Image loaded successfully: ${imageUrl}`);
     setImageLoadErrors(prev => {
       const newSet = new Set(prev);
       newSet.delete(`${index}-${imageUrl}`);
       return newSet;
     });
+    
+    // Get image dimensions for dynamic sizing
+    try {
+      const dimensions = await getImageDimensions(imageUrl);
+      setImageDimensions(prev => new Map(prev).set(`${index}-${imageUrl}`, dimensions));
+      console.log(`Image dimensions for ${imageUrl}:`, dimensions);
+    } catch (error) {
+      console.log(`Could not get dimensions for ${imageUrl}`);
+    }
+  };
+  
+  // Calculate dynamic height based on image aspect ratio
+  const getCardHeight = (imageUrl: string, index: number): string => {
+    const imageKey = `${index}-${imageUrl}`;
+    const dimensions = imageDimensions.get(imageKey);
+    
+    if (dimensions) {
+      // Base width is 320px for center card, calculate height to maintain aspect ratio
+      const baseWidth = 320;
+      const calculatedHeight = baseWidth / dimensions.aspectRatio;
+      // Clamp height between 240px and 480px for reasonable sizing
+      const clampedHeight = Math.max(240, Math.min(480, calculatedHeight));
+      return `${clampedHeight}px`;
+    }
+    
+    // Default height if dimensions not loaded
+    return '360px';
   };
   
   useEffect(() => {
@@ -232,59 +267,68 @@ const NoticesSection = () => {
               <Loader2 className="h-8 w-8 text-yellow-500 animate-spin" />
             </div>
           ) : filteredNotices.length > 0 ? (
-            <div className="relative">
-              <Carousel className="w-full max-w-5xl mx-auto" setApi={setApi}>
-                <CarouselContent className="-ml-2 md:-ml-4">
+            <div className="relative perspective-1000">
+              <Carousel 
+                className="w-full max-w-6xl mx-auto" 
+                setApi={setApi}
+                opts={{
+                  align: "center",
+                  loop: true,
+                }}
+              >
+                <CarouselContent className="-ml-4">
                   {filteredNotices.map((notice, index) => {
                     const convertedImageUrl = convertGoogleDriveUrl(notice["Image URL"]);
                     const imageKey = `${index}-${convertedImageUrl}`;
                     const hasImageError = imageLoadErrors.has(imageKey);
+                    const cardHeight = getCardHeight(convertedImageUrl, index);
                     
                     return (
-                      <CarouselItem key={`notice-${index}`} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                        <div className="group">
-                          <div className="relative overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-500 hover:shadow-2xl hover:scale-105">
-                            <div className="relative h-80">
-                              {convertedImageUrl && !hasImageError ? (
-                                <img
-                                  src={convertedImageUrl}
-                                  alt={notice["File Name"] || `Notice ${index + 1}`}
-                                  className="w-full h-full object-cover"
-                                  onLoad={() => handleImageLoad(convertedImageUrl, index)}
-                                  onError={() => handleImageError(convertedImageUrl, index)}
-                                />
-                              ) : (
-                                <div className="flex flex-col items-center justify-center h-full p-6 text-center bg-gradient-to-br from-gray-50 to-gray-100">
-                                  <div className="bg-yellow-100 p-4 rounded-full mb-4">
-                                    <Image className="h-8 w-8 text-yellow-600" />
-                                  </div>
-                                  <p className="text-gray-600 text-sm mb-3 font-medium">
-                                    {hasImageError ? 'Image preview unavailable' : 'Loading image...'}
-                                  </p>
-                                  <a
-                                    href={notice["Image URL"]}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 text-yellow-600 hover:text-yellow-700 text-xs font-medium bg-yellow-50 px-3 py-1 rounded-full transition-colors"
-                                  >
-                                    <ExternalLink className="h-3 w-3" />
-                                    View Full Notice
-                                  </a>
+                      <CarouselItem key={`notice-${index}`} className="pl-4 basis-4/5 md:basis-2/5 lg:basis-1/3">
+                        <div className="group perspective-1000">
+                          <div 
+                            className="relative overflow-hidden rounded-xl bg-white shadow-2xl transition-all duration-700 transform-gpu hover:scale-105 hover:shadow-3xl"
+                            style={{ height: cardHeight }}
+                          >
+                            {convertedImageUrl && !hasImageError ? (
+                              <img
+                                src={convertedImageUrl}
+                                alt={notice["File Name"] || `Notice ${index + 1}`}
+                                className="w-full h-full object-cover"
+                                onLoad={() => handleImageLoad(convertedImageUrl, index)}
+                                onError={() => handleImageError(convertedImageUrl, index)}
+                              />
+                            ) : (
+                              <div className="flex flex-col items-center justify-center h-full p-6 text-center bg-gradient-to-br from-gray-50 to-gray-100">
+                                <div className="bg-yellow-100 p-4 rounded-full mb-4">
+                                  <Image className="h-8 w-8 text-yellow-600" />
                                 </div>
-                              )}
-                              
-                              {/* Dark gradient overlay for text readability */}
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                              
-                              {/* Title overlay at bottom */}
-                              <div className="absolute bottom-0 left-0 right-0 p-4">
-                                <h3 className="text-white font-semibold text-lg leading-tight mb-2">
-                                  {notice["File Name"] || `Notice ${index + 1}`}
-                                </h3>
-                                <span className="inline-block bg-yellow-500 text-black text-xs px-3 py-1 rounded-full font-medium">
-                                  {notice.Category || 'Notice'}
-                                </span>
+                                <p className="text-gray-600 text-sm mb-3 font-medium">
+                                  {hasImageError ? 'Image preview unavailable' : 'Loading image...'}
+                                </p>
+                                <a
+                                  href={notice["Image URL"]}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-2 text-yellow-600 hover:text-yellow-700 text-xs font-medium bg-yellow-50 px-3 py-1 rounded-full transition-colors"
+                                >
+                                  <ExternalLink className="h-3 w-3" />
+                                  View Full Notice
+                                </a>
                               </div>
+                            )}
+                            
+                            {/* Dark gradient overlay for text readability */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                            
+                            {/* Title overlay at bottom with improved styling */}
+                            <div className="absolute bottom-0 left-0 right-0 p-6">
+                              <h3 className="text-white font-bold text-lg leading-tight mb-3 drop-shadow-lg">
+                                {notice["File Name"] || `Notice ${index + 1}`}
+                              </h3>
+                              <span className="inline-block bg-yellow-500 text-black text-xs px-3 py-1.5 rounded-full font-bold shadow-lg">
+                                {notice.Category || 'Notice'}
+                              </span>
                             </div>
                           </div>
                         </div>
