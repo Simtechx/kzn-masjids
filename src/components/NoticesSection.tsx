@@ -225,7 +225,7 @@ const NoticesSection = () => {
     setCurrentSlide(0);
   }, [activeTab]);
   
-  // Autoplay functionality
+  // Auto-slide functionality
   useEffect(() => {
     if (filteredNotices.length <= 1 || isPaused) return;
     
@@ -362,10 +362,10 @@ const NoticesSection = () => {
                             <img
                               src={convertedImageUrl}
                               alt={notice["File Name"] || `Notice ${index + 1}`}
-                              className="w-full h-full object-contain bg-white"
+                              className="w-full h-full object-cover"
                               style={{ 
-                                maxHeight: '550px',
-                                objectFit: 'contain'
+                                minHeight: '450px',
+                                maxHeight: '550px'
                               }}
                               onLoad={() => handleImageLoad(convertedImageUrl, index)}
                               onError={() => handleImageError(convertedImageUrl, index)}
