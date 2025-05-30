@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Loader2, Image } from 'lucide-react';
+import { Loader2, Image, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 
 // Updated interface to match the API response format
@@ -16,6 +16,7 @@ const NoticesSection = () => {
   const [notices, setNotices] = useState<NoticeItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(false);
+  const [imageLoadErrors, setImageLoadErrors] = useState<Set<string>>(new Set());
   
   // API URL for notices
   const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec";
@@ -39,16 +40,36 @@ const NoticesSection = () => {
     }
   ];
   
-  // Function to validate Google Drive URL format
-  const validateGoogleDriveUrl = (url: string): boolean => {
-    if (!url) return false;
+  // Function to convert Google Drive URL to direct image URL
+  const convertGoogleDriveUrl = (url: string): string => {
+    if (!url) return '';
     
-    // Check if it's a proper Google Drive viewable URL
-    const isGoogleDriveViewUrl = url.includes('drive.google.com/uc?export=view&id=');
+    // Extract file ID from various Google Drive URL formats
+    let fileId = '';
     
-    console.log(`Validating URL: ${url} - Valid: ${isGoogleDriveViewUrl}`);
+    // Handle uc?export=view format
+    if (url.includes('uc?export=view&id=')) {
+      fileId = url.split('id=')[1];
+    }
+    // Handle /file/d/ format
+    else if (url.includes('/file/d/')) {
+      const match = url.match(/\/file\/d\/([a-zA-Z0-9-_]+)/);
+      fileId = match ? match[1] : '';
+    }
+    // Handle direct ID
+    else if (url.match(/^[a-zA-Z0-9-_]+$/)) {
+      fileId = url;
+    }
     
-    return isGoogleDriveViewUrl;
+    if (fileId) {
+      // Use the thumbnail format which is more reliable for display
+      const convertedUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
+      console.log(`Converting URL: ${url} -> ${convertedUrl}`);
+      return convertedUrl;
+    }
+    
+    console.log(`Could not extract file ID from: ${url}`);
+    return url; // Return original if can't convert
   };
   
   // Function to determine category from the file name if Category is not present
@@ -60,6 +81,22 @@ const NoticesSection = () => {
     if (lowerFileName.includes('upcoming')) return 'Upcoming';
     if (lowerFileName.includes('jumuah')) return 'Jumuah';
     return 'Info';
+  };
+  
+  // Handle image load error
+  const handleImageError = (imageUrl: string, index: number) => {
+    console.log(`Image failed to load: ${imageUrl}`);
+    setImageLoadErrors(prev => new Set(prev).add(`${index}-${imageUrl}`));
+  };
+  
+  // Handle image load success
+  const handleImageLoad = (imageUrl: string, index: number) => {
+    console.log(`Image loaded successfully: ${imageUrl}`);
+    setImageLoadErrors(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(`${index}-${imageUrl}`);
+      return newSet;
+    });
   };
   
   useEffect(() => {
@@ -82,20 +119,11 @@ const NoticesSection = () => {
       console.log("Fetched notices data:", data);
       
       if (data && Array.isArray(data)) {
-        // Process the data to ensure each item has a category and validate URLs
-        const processedData = data.map(item => {
-          const processedItem = {
-            ...item,
-            // Use the Category field if it exists, otherwise determine it from the file name
-            Category: item.Category || getCategoryFromFileName(item["File Name"])
-          };
-          
-          // Log URL validation for each item
-          const isValidUrl = validateGoogleDriveUrl(item["Image URL"]);
-          console.log(`Notice "${item["File Name"]}" - URL valid: ${isValidUrl}, URL: ${item["Image URL"]}`);
-          
-          return processedItem;
-        });
+        // Process the data to ensure each item has a category
+        const processedData = data.map(item => ({
+          ...item,
+          Category: item.Category || getCategoryFromFileName(item["File Name"])
+        }));
         
         setNotices(processedData);
         console.log("Processed notices data:", processedData);
@@ -124,7 +152,6 @@ const NoticesSection = () => {
     return noticeCategory.toLowerCase() === activeTab.toLowerCase();
   });
   
-  // Log the filtered notices for debugging
   console.log("Filtered notices for tab", activeTab, ":", filteredNotices);
   
   return (
@@ -153,9 +180,7 @@ const NoticesSection = () => {
                       ? 'bg-yellow-500 text-black hover:bg-yellow-600' 
                       : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
                   }`}
-                  onClick={() => {
-                    setActiveTab(tab);
-                  }}
+                  onClick={() => setActiveTab(tab)}
                 >
                   {tab}
                 </Button>
@@ -171,22 +196,40 @@ const NoticesSection = () => {
             <div className="bg-white rounded-lg shadow-md p-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {filteredNotices.map((notice, index) => {
+                  const convertedImageUrl = convertGoogleDriveUrl(notice["Image URL"]);
+                  const imageKey = `${index}-${convertedImageUrl}`;
+                  const hasImageError = imageLoadErrors.has(imageKey);
+                  
                   console.log(`Rendering notice ${index}:`, notice);
+                  console.log(`Converted image URL:`, convertedImageUrl);
                   
                   return (
                     <div key={`notice-${index}`} className="flex flex-col">
-                      <div className="relative h-64 rounded-lg overflow-hidden bg-gray-100 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-4">
-                        {notice["Image URL"] ? (
-                          <>
-                            <Image className="h-16 w-16 text-gray-400 mb-2" />
-                            <p className="text-gray-500 text-sm text-center mb-2">Image Loading...</p>
-                            <p className="text-xs text-gray-400 break-all">{notice["Image URL"]}</p>
-                          </>
+                      <div className="relative h-64 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                        {convertedImageUrl && !hasImageError ? (
+                          <img
+                            src={convertedImageUrl}
+                            alt={notice["File Name"] || `Notice ${index + 1}`}
+                            className="w-full h-full object-cover"
+                            onLoad={() => handleImageLoad(convertedImageUrl, index)}
+                            onError={() => handleImageError(convertedImageUrl, index)}
+                          />
                         ) : (
-                          <>
-                            <Image className="h-16 w-16 text-gray-400 mb-2" />
-                            <p className="text-gray-500 text-sm">No Image Available</p>
-                          </>
+                          <div className="flex flex-col items-center justify-center h-full p-4 text-center">
+                            <Image className="h-12 w-12 text-gray-400 mb-2" />
+                            <p className="text-gray-500 text-sm mb-2">
+                              {hasImageError ? 'Image failed to load' : 'Loading image...'}
+                            </p>
+                            <a
+                              href={notice["Image URL"]}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-500 hover:text-blue-700 text-xs flex items-center gap-1"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                              View Original
+                            </a>
+                          </div>
                         )}
                       </div>
                       <p className="mt-2 text-center text-sm font-medium text-gray-700">
