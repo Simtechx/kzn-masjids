@@ -1,8 +1,14 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Loader2, Image, ExternalLink } from 'lucide-react';
+import { Loader2, Image, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 
 // Updated interface to match the API response format
 interface NoticeItem {
@@ -157,7 +163,7 @@ const NoticesSection = () => {
   return (
     <section className="py-12 px-4 bg-[#F7F8FA]">
       <div className="container mx-auto">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-2 text-gray-800">NOTICES</h2>
           <p className="text-center text-gray-600 mb-6">Stay informed about the latest events, programs, and announcements</p>
           
@@ -169,7 +175,7 @@ const NoticesSection = () => {
             </div>
           )}
           
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-8">
             <div className="flex space-x-2 bg-white shadow-sm rounded-full overflow-x-auto p-1">
               {tabs.map(tab => (
                 <Button
@@ -189,59 +195,87 @@ const NoticesSection = () => {
           </div>
           
           {loading ? (
-            <div className="flex justify-center items-center h-80 bg-white rounded-lg shadow-md">
+            <div className="flex justify-center items-center h-96 bg-white rounded-lg shadow-md">
               <Loader2 className="h-8 w-8 text-yellow-500 animate-spin" />
             </div>
           ) : filteredNotices.length > 0 ? (
-            <div className="bg-white rounded-lg shadow-md p-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {filteredNotices.map((notice, index) => {
-                  const convertedImageUrl = convertGoogleDriveUrl(notice["Image URL"]);
-                  const imageKey = `${index}-${convertedImageUrl}`;
-                  const hasImageError = imageLoadErrors.has(imageKey);
-                  
-                  console.log(`Rendering notice ${index}:`, notice);
-                  console.log(`Converted image URL:`, convertedImageUrl);
-                  
-                  return (
-                    <div key={`notice-${index}`} className="flex flex-col">
-                      <div className="relative h-64 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
-                        {convertedImageUrl && !hasImageError ? (
-                          <img
-                            src={convertedImageUrl}
-                            alt={notice["File Name"] || `Notice ${index + 1}`}
-                            className="w-full h-full object-cover"
-                            onLoad={() => handleImageLoad(convertedImageUrl, index)}
-                            onError={() => handleImageError(convertedImageUrl, index)}
-                          />
-                        ) : (
-                          <div className="flex flex-col items-center justify-center h-full p-4 text-center">
-                            <Image className="h-12 w-12 text-gray-400 mb-2" />
-                            <p className="text-gray-500 text-sm mb-2">
-                              {hasImageError ? 'Image failed to load' : 'Loading image...'}
-                            </p>
-                            <a
-                              href={notice["Image URL"]}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-500 hover:text-blue-700 text-xs flex items-center gap-1"
-                            >
-                              <ExternalLink className="h-3 w-3" />
-                              View Original
-                            </a>
+            <div className="relative">
+              <Carousel className="w-full max-w-5xl mx-auto">
+                <CarouselContent className="-ml-2 md:-ml-4">
+                  {filteredNotices.map((notice, index) => {
+                    const convertedImageUrl = convertGoogleDriveUrl(notice["Image URL"]);
+                    const imageKey = `${index}-${convertedImageUrl}`;
+                    const hasImageError = imageLoadErrors.has(imageKey);
+                    
+                    console.log(`Rendering notice ${index}:`, notice);
+                    console.log(`Converted image URL:`, convertedImageUrl);
+                    
+                    return (
+                      <CarouselItem key={`notice-${index}`} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                        <div className="bg-white rounded-lg shadow-lg overflow-hidden h-full">
+                          <div className="relative aspect-[3/4] bg-gray-100">
+                            {convertedImageUrl && !hasImageError ? (
+                              <img
+                                src={convertedImageUrl}
+                                alt={notice["File Name"] || `Notice ${index + 1}`}
+                                className="w-full h-full object-cover"
+                                onLoad={() => handleImageLoad(convertedImageUrl, index)}
+                                onError={() => handleImageError(convertedImageUrl, index)}
+                              />
+                            ) : (
+                              <div className="flex flex-col items-center justify-center h-full p-4 text-center">
+                                <Image className="h-12 w-12 text-gray-400 mb-2" />
+                                <p className="text-gray-500 text-sm mb-2">
+                                  {hasImageError ? 'Image failed to load' : 'Loading image...'}
+                                </p>
+                                <a
+                                  href={notice["Image URL"]}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-500 hover:text-blue-700 text-xs flex items-center gap-1"
+                                >
+                                  <ExternalLink className="h-3 w-3" />
+                                  View Original
+                                </a>
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                      <p className="mt-2 text-center text-sm font-medium text-gray-700">
-                        {notice["File Name"] || `Notice ${index + 1}`}
-                      </p>
-                    </div>
-                  );
-                })}
+                          <div className="p-4">
+                            <h3 className="text-sm font-medium text-gray-800 text-center line-clamp-2">
+                              {notice["File Name"] || `Notice ${index + 1}`}
+                            </h3>
+                          </div>
+                        </div>
+                      </CarouselItem>
+                    );
+                  })}
+                </CarouselContent>
+                <CarouselPrevious className="hidden md:flex -left-12 bg-white hover:bg-gray-50 border-gray-200" />
+                <CarouselNext className="hidden md:flex -right-12 bg-white hover:bg-gray-50 border-gray-200" />
+              </Carousel>
+              
+              {/* Mobile navigation buttons */}
+              <div className="flex justify-center mt-4 md:hidden space-x-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-white"
+                  onClick={() => document.querySelector('[data-carousel-prev]')?.click()}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-white"
+                  onClick={() => document.querySelector('[data-carousel-next]')?.click()}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
               </div>
             </div>
           ) : (
-            <div className="flex justify-center items-center h-80 bg-white rounded-lg shadow-md">
+            <div className="flex justify-center items-center h-96 bg-white rounded-lg shadow-md">
               <div className="text-center">
                 <Image className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <p className="text-gray-500">No notices available for {activeTab}</p>
