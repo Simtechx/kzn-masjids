@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, Image } from 'lucide-react';
@@ -14,9 +15,22 @@ const NoticesSection = () => {
   const [activeTab, setActiveTab] = useState('Upcoming');
   const [notices, setNotices] = useState<NoticeItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [imageLoadingStates, setImageLoadingStates] = useState<{[key: string]: boolean}>({});
   
   // API URL for notices
   const NOTICES_API_URL = "https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec";
+  
+  // Function to validate Google Drive URL format
+  const validateGoogleDriveUrl = (url: string): boolean => {
+    if (!url) return false;
+    
+    // Check if it's a proper Google Drive viewable URL
+    const isGoogleDriveViewUrl = url.includes('drive.google.com/uc?export=view&id=');
+    
+    console.log(`Validating URL: ${url} - Valid: ${isGoogleDriveViewUrl}`);
+    
+    return isGoogleDriveViewUrl;
+  };
   
   // Function to determine category from the file name if Category is not present
   const getCategoryFromFileName = (fileName: string): string => {
@@ -47,12 +61,20 @@ const NoticesSection = () => {
       console.log("Fetched notices data:", data);
       
       if (data && Array.isArray(data)) {
-        // Process the data to ensure each item has a category
-        const processedData = data.map(item => ({
-          ...item,
-          // Use the Category field if it exists, otherwise determine it from the file name
-          Category: item.Category || getCategoryFromFileName(item["File Name"])
-        }));
+        // Process the data to ensure each item has a category and validate URLs
+        const processedData = data.map(item => {
+          const processedItem = {
+            ...item,
+            // Use the Category field if it exists, otherwise determine it from the file name
+            Category: item.Category || getCategoryFromFileName(item["File Name"])
+          };
+          
+          // Log URL validation for each item
+          const isValidUrl = validateGoogleDriveUrl(item["Image URL"]);
+          console.log(`Notice "${item["File Name"]}" - URL valid: ${isValidUrl}, URL: ${item["Image URL"]}`);
+          
+          return processedItem;
+        });
         
         setNotices(processedData);
         console.log("Processed notices data:", processedData);
@@ -68,6 +90,30 @@ const NoticesSection = () => {
       setNotices([]);
     } finally {
       setLoading(false);
+    }
+  };
+  
+  const handleImageLoad = (noticeIndex: number) => {
+    console.log(`Image loaded successfully for notice ${noticeIndex}`);
+    setImageLoadingStates(prev => ({
+      ...prev,
+      [noticeIndex]: false
+    }));
+  };
+  
+  const handleImageError = (noticeIndex: number, imageUrl: string, target: HTMLImageElement) => {
+    console.error(`Image failed to load for notice ${noticeIndex}:`, imageUrl);
+    
+    setImageLoadingStates(prev => ({
+      ...prev,
+      [noticeIndex]: false
+    }));
+    
+    // Only set placeholder if not already set
+    if (target.src !== "/placeholder.svg") {
+      console.log(`Setting placeholder for notice ${noticeIndex}`);
+      target.src = "/placeholder.svg";
+      target.alt = "Image not available";
     }
   };
   
@@ -119,39 +165,27 @@ const NoticesSection = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {filteredNotices.map((notice, index) => {
                   console.log(`Rendering notice ${index}:`, notice);
-                  // Use a different approach for images - use a direct img tag with fallback
+                  const isImageLoading = imageLoadingStates[index] !== false;
+                  
                   return (
                     <div key={`notice-${index}`} className="flex flex-col">
-                      <div className="relative h-64 rounded-lg overflow-hidden">
-                        {/* Try different approach for Google Drive images */}
-                        <picture>
-                          <source srcSet={notice["Image URL"]} type="image/jpeg" />
-                          <source srcSet={notice["Image URL"]} type="image/png" />
-                          <img 
-                            src={notice["Image URL"]}
-                            alt={notice["File Name"] || `Notice ${index + 1}`}
-                            className="w-full h-full object-cover rounded-lg shadow"
-                            loading="lazy"
-                            onError={(e) => {
-                              // If direct URL fails, try alternative approach for Google Drive
-                              const target = e.target as HTMLImageElement;
-                              console.error(`Error loading image: ${target.src}`);
-                              
-                              // Try to extract the file ID from Google Drive URL if present
-                              const url = target.src;
-                              if (url.includes('drive.google.com') && url.includes('id=')) {
-                                // URL already has the correct format, keep it but log the error
-                                console.log("Using already formatted Google Drive URL:", url);
-                              }
-                              
-                              // Fallback to placeholder if everything fails
-                              if (target.src !== "/placeholder.svg") {
-                                target.src = "/placeholder.svg";
-                                target.alt = "Image not available";
-                              }
-                            }}
-                          />
-                        </picture>
+                      <div className="relative h-64 rounded-lg overflow-hidden bg-gray-100">
+                        {isImageLoading && (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <Loader2 className="h-6 w-6 text-gray-400 animate-spin" />
+                          </div>
+                        )}
+                        <img 
+                          src={notice["Image URL"]}
+                          alt={notice["File Name"] || `Notice ${index + 1}`}
+                          className="w-full h-full object-cover rounded-lg shadow"
+                          loading="lazy"
+                          crossOrigin="anonymous"
+                          referrerPolicy="no-referrer"
+                          onLoad={() => handleImageLoad(index)}
+                          onError={(e) => handleImageError(index, notice["Image URL"], e.target as HTMLImageElement)}
+                          style={{ display: isImageLoading ? 'none' : 'block' }}
+                        />
                       </div>
                       <p className="mt-2 text-center text-sm font-medium text-gray-700">
                         {notice["File Name"] || `Notice ${index + 1}`}
