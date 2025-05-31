@@ -10,53 +10,59 @@ interface NoticeItem {
   category: string;
 }
 
-// Mock data - replace with your JSON file
+// Mock data with the uploaded poster images
 const mockNotices = {
   upcoming: [
     {
       id: 1,
-      title: "Eid Celebration 2024",
-      image: "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?auto=format&fit=crop&q=80&w=800",
+      title: "Vacancy - Masjid Abu Hurairah",
+      image: "/lovable-uploads/087b6459-3d7d-41fb-a08c-46066e0e41ab.png",
       category: "upcoming"
     },
     {
       id: 2,
-      title: "Community Iftar",
-      image: "https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?auto=format&fit=crop&q=80&w=800",
+      title: "Programme of Hazrat Mufti Ebrahim Salejee",
+      image: "/lovable-uploads/f75d6a2e-5b07-4cf3-a119-5af96257e5b2.png",
       category: "upcoming"
     },
     {
       id: 3,
-      title: "Quran Classes",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
+      title: "Sayyidah Saarah Programme",
+      image: "/lovable-uploads/34181ca3-ac38-4b18-8d0d-e18718b3b0f9.png",
       category: "upcoming"
     }
   ],
   jumuah: [
     {
       id: 4,
-      title: "Friday Prayer 1:30 PM",
-      image: "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?auto=format&fit=crop&q=80&w=800",
+      title: "Qira'ah Programme",
+      image: "/lovable-uploads/eaecb088-d4d0-4b62-b068-c89e23f956b7.png",
       category: "jumuah"
     },
     {
       id: 5,
-      title: "Special Jumuah Program",
-      image: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&q=80&w=800",
+      title: "Prophet Mohammed Quiz",
+      image: "/lovable-uploads/0a47d0ac-e96f-4737-b2b8-aa1d1ab5653f.png",
       category: "jumuah"
     }
   ],
   info: [
     {
       id: 6,
-      title: "Prayer Times Updated",
-      image: "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?auto=format&fit=crop&q=80&w=800",
+      title: "Time to Quit Vaping",
+      image: "/lovable-uploads/1b0f1fde-f17a-42d9-bd2b-2c2584d54361.png",
       category: "info"
     },
     {
       id: 7,
-      title: "New Programs Available",
-      image: "https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?auto=format&fit=crop&q=80&w=800",
+      title: "Overnight Programme",
+      image: "/lovable-uploads/3a6fc561-7de3-4dcb-a5fd-eacd3f8e5157.png",
+      category: "info"
+    },
+    {
+      id: 8,
+      title: "Programme of Hazrat Moulana",
+      image: "/lovable-uploads/94f8a3b1-ed0a-48d4-905e-767e509e801e.png",
       category: "info"
     }
   ]
@@ -122,7 +128,10 @@ const NoticesSection = () => {
         {/* 3D Carousel */}
         {currentNotices.length > 0 && (
           <div className="relative">
-            <div className="relative h-80 flex items-center justify-center" style={{ perspective: '1200px' }}>
+            <div 
+              className="relative h-96 flex items-center justify-center" 
+              style={{ perspective: '1200px' }}
+            >
               {currentNotices.map((notice, index) => {
                 const offset = (index - currentSlide + currentNotices.length) % currentNotices.length;
                 let transform = '';
@@ -154,7 +163,7 @@ const NoticesSection = () => {
                 return (
                   <div
                     key={notice.id}
-                    className="absolute left-1/2 w-72 h-64 transition-all duration-700 ease-out cursor-pointer"
+                    className="absolute left-1/2 transition-all duration-700 ease-out cursor-pointer"
                     style={{
                       transform,
                       zIndex,
@@ -162,22 +171,15 @@ const NoticesSection = () => {
                     }}
                     onClick={() => setCurrentSlide(index)}
                   >
-                    <div className="w-full h-full bg-white rounded-xl shadow-xl overflow-hidden">
-                      <div className="relative w-full h-full">
-                        <img
-                          src={notice.image}
-                          alt={notice.title}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                          <h3 className="text-white font-bold text-lg mb-2">
-                            {notice.title}
-                          </h3>
-                          <span className="inline-block bg-yellow-500 text-black text-xs px-3 py-1 rounded-full font-bold capitalize">
-                            {notice.category}
-                          </span>
-                        </div>
-                      </div>
+                    <div className="bg-white rounded-xl shadow-xl overflow-hidden">
+                      <img
+                        src={notice.image}
+                        alt={notice.title}
+                        className="w-auto h-auto max-w-xs max-h-80 object-contain"
+                        style={{
+                          display: 'block'
+                        }}
+                      />
                     </div>
                   </div>
                 );
