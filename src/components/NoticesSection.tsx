@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -123,9 +124,21 @@ const NoticesSection = () => {
       try {
         setLoading(true);
         console.log('Fetching notices from API...');
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec');
-        const data = await response.json();
         
+        // Try to fetch from the API with proper headers
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec', {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
         console.log('Fetched notices data:', data);
         
         // Organize data by category and convert URLs
@@ -161,7 +174,9 @@ const NoticesSection = () => {
         setNoticesData(organizedData);
       } catch (error) {
         console.error('Error fetching notices:', error);
-        // Keep empty arrays if fetch fails
+        console.log('Using mock data as fallback');
+        // Use mock data as fallback
+        setNoticesData(mockNotices);
       } finally {
         setLoading(false);
       }
