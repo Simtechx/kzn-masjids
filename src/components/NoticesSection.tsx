@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -71,9 +70,77 @@ const mockNotices = {
 const NoticesSection = () => {
   const [activeTab, setActiveTab] = useState('upcoming');
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [noticesData, setNoticesData] = useState<{[key: string]: NoticeItem[]}>({
+    upcoming: [],
+    jumuah: [],
+    info: []
+  });
+  const [loading, setLoading] = useState(true);
+
+  // Function to convert Google Drive URL to thumbnail view
+  const convertToThumbnailUrl = (googleDriveUrl: string): string => {
+    try {
+      // Extract file ID from Google Drive URL
+      const match = googleDriveUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        const fileId = match[1];
+        return `https://drive.google.com/uc?export=view&id=${fileId}`;
+      }
+      return googleDriveUrl; // Return original if can't parse
+    } catch (error) {
+      console.error('Error converting Google Drive URL:', error);
+      return googleDriveUrl;
+    }
+  };
+
+  // Fetch data from JSON API
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec');
+        const data = await response.json();
+        
+        console.log('Fetched notices data:', data);
+        
+        // Organize data by category and convert URLs
+        const organizedData: {[key: string]: NoticeItem[]} = {
+          upcoming: [],
+          jumuah: [],
+          info: []
+        };
+        
+        data.forEach((item: any, index: number) => {
+          const notice: NoticeItem = {
+            id: index + 1,
+            title: item.title || `Notice ${index + 1}`,
+            image: convertToThumbnailUrl(item.imageUrl || item.image || ''),
+            category: item.category || 'upcoming'
+          };
+          
+          // Add to appropriate category, default to 'upcoming' if category doesn't exist
+          const category = notice.category.toLowerCase();
+          if (organizedData[category]) {
+            organizedData[category].push(notice);
+          } else {
+            organizedData.upcoming.push(notice);
+          }
+        });
+        
+        setNoticesData(organizedData);
+      } catch (error) {
+        console.error('Error fetching notices:', error);
+        // Keep empty arrays if fetch fails
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotices();
+  }, []);
 
   const tabs = ['upcoming', 'jumuah', 'info'];
-  const currentNotices = mockNotices[activeTab as keyof typeof mockNotices] || [];
+  const currentNotices = noticesData[activeTab] || [];
 
   // Auto-slide functionality
   useEffect(() => {
@@ -97,6 +164,33 @@ const NoticesSection = () => {
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + currentNotices.length) % currentNotices.length);
+  };
+
+  // Touch handling for mobile
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && currentNotices.length > 1) {
+      nextSlide();
+    }
+    if (isRightSwipe && currentNotices.length > 1) {
+      prevSlide();
+    }
   };
 
   return (
@@ -125,9 +219,24 @@ const NoticesSection = () => {
           </div>
         </div>
 
+        {/* Loading state */}
+        {loading && (
+          <div className="flex justify-center items-center h-80">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500 mx-auto mb-4"></div>
+              <p className="text-gray-500 font-medium">Loading notices...</p>
+            </div>
+          </div>
+        )}
+
         {/* 3D Carousel */}
-        {currentNotices.length > 0 && (
-          <div className="relative">
+        {!loading && currentNotices.length > 0 && (
+          <div 
+            className="relative"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
             <div 
               className="relative h-96 flex items-center justify-center" 
               style={{ perspective: '1200px' }}
@@ -171,13 +280,17 @@ const NoticesSection = () => {
                     }}
                     onClick={() => setCurrentSlide(index)}
                   >
-                    <div className="bg-white rounded-xl shadow-xl overflow-hidden">
+                    <div className="bg-white rounded-xl shadow-xl">
                       <img
                         src={notice.image}
                         alt={notice.title}
-                        className="w-auto h-auto max-w-xs max-h-80 object-contain"
+                        className="w-auto h-auto max-w-[300px] max-h-[400px] min-w-[200px] min-h-[250px] object-contain rounded-xl"
                         style={{
                           display: 'block'
+                        }}
+                        onError={(e) => {
+                          console.error('Image failed to load:', notice.image);
+                          // You can set a fallback image here if needed
                         }}
                       />
                     </div>
@@ -221,7 +334,8 @@ const NoticesSection = () => {
           </div>
         )}
 
-        {currentNotices.length === 0 && (
+        {/* No notices state */}
+        {!loading && currentNotices.length === 0 && (
           <div className="flex justify-center items-center h-80">
             <div className="text-center">
               <p className="text-gray-500 font-medium">No notices available for {activeTab}</p>
