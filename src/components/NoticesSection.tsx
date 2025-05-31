@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -174,24 +175,28 @@ const NoticesSection = () => {
         console.log('Final organized data:', organizedData);
         setNoticesData(organizedData);
         
-        // Show success toast
-        const totalNotices = Object.values(organizedData).reduce((total, notices) => total + notices.length, 0);
-        toast({
-          title: "Notices Loaded Successfully",
-          description: `${totalNotices} notices loaded and images processed`,
-        });
+        // Show success toast with delay to avoid blocking other notifications
+        setTimeout(() => {
+          const totalNotices = Object.values(organizedData).reduce((total, notices) => total + notices.length, 0);
+          toast({
+            title: "Notices Loaded Successfully",
+            description: `${totalNotices} notices loaded and images processed`,
+          });
+        }, 2000); // 2 second delay after other notifications
         
       } catch (error) {
         console.error('Error fetching notices:', error);
         console.log('Using mock data as fallback');
         setNoticesData(mockNotices);
         
-        // Show error toast
-        toast({
-          title: "Notice Loading Failed",
-          description: "Using cached notices as fallback",
-          variant: "destructive",
-        });
+        // Show error toast with delay to avoid blocking other notifications
+        setTimeout(() => {
+          toast({
+            title: "Notice Loading Failed",
+            description: "Using cached notices as fallback",
+            variant: "destructive",
+          });
+        }, 2500); // 2.5 second delay after other notifications
       } finally {
         setLoading(false);
       }
