@@ -2,12 +2,18 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { getImageDimensions } from '@/lib/utils';
 
 interface NoticeItem {
   id: number;
   title: string;
   image: string;
   category: string;
+  dimensions?: {
+    width: number;
+    height: number;
+    aspectRatio: number;
+  };
 }
 
 // Mock data as fallback
@@ -54,36 +60,34 @@ const NoticesSection = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  // Function to convert Google Drive URL to direct image URL
-  const convertToDirectImageUrl = (googleDriveUrl: string): string => {
+  // Function to convert Google Drive URL to thumbnail URL
+  const convertGoogleDriveUrl = (googleDriveUrl: string): string => {
     try {
       console.log('Converting URL:', googleDriveUrl);
       
-      // If it's already in the uc?export=view format, return as is
-      if (googleDriveUrl.includes('drive.google.com/uc?export=view&id=')) {
-        console.log('URL already in correct format');
-        return googleDriveUrl;
-      }
-      
-      // Extract file ID from Google Drive URL
       let fileId = '';
       
-      // Handle format: https://drive.google.com/file/d/FILE_ID/view?usp=drivesdk
-      const fileMatch = googleDriveUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-      if (fileMatch && fileMatch[1]) {
-        fileId = fileMatch[1];
-        const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-        console.log('Converted to direct URL:', directUrl);
-        return directUrl;
+      // Extract file ID from various Google Drive URL formats
+      
+      // Handle format: https://drive.google.com/uc?export=view&id=FILE_ID
+      const ucMatch = googleDriveUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (ucMatch && ucMatch[1]) {
+        fileId = ucMatch[1];
       }
       
-      // Handle format: https://drive.google.com/open?id=FILE_ID
-      const openMatch = googleDriveUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (openMatch && openMatch[1]) {
-        fileId = openMatch[1];
-        const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-        console.log('Converted to direct URL:', directUrl);
-        return directUrl;
+      // Handle format: https://drive.google.com/file/d/FILE_ID/view?usp=drivesdk
+      if (!fileId) {
+        const fileMatch = googleDriveUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+        if (fileMatch && fileMatch[1]) {
+          fileId = fileMatch[1];
+        }
+      }
+      
+      // If we have a file ID, convert to thumbnail URL
+      if (fileId) {
+        const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
+        console.log('Converted to thumbnail URL:', thumbnailUrl);
+        return thumbnailUrl;
       }
       
       console.log('Could not extract file ID from URL:', googleDriveUrl);
@@ -91,6 +95,20 @@ const NoticesSection = () => {
     } catch (error) {
       console.error('Error converting Google Drive URL:', error);
       return googleDriveUrl;
+    }
+  };
+
+  // Function to get image dimensions and calculate card height
+  const getCardHeight = async (imageSrc: string): Promise<number> => {
+    try {
+      const dimensions = await getImageDimensions(imageSrc);
+      const baseWidth = 320;
+      const calculatedHeight = baseWidth / dimensions.aspectRatio;
+      // Clamp height between 240px and 480px
+      return Math.max(240, Math.min(480, calculatedHeight));
+    } catch (error) {
+      console.error('Error getting image dimensions:', error);
+      return 320; // Default height
     }
   };
 
@@ -117,21 +135,33 @@ const NoticesSection = () => {
           info: []
         };
         
-        data.forEach((item: any, index: number) => {
-          // The API returns "Image URL" field
-          const imageUrl = item['Image URL'] || '';
-          const convertedImageUrl = convertToDirectImageUrl(imageUrl);
-          
-          const notice: NoticeItem = {
-            id: index + 1,
-            title: item['File Name'] || `Notice ${index + 1}`,
-            image: convertedImageUrl,
-            category: item.Category ? item.Category.toLowerCase() : 'upcoming'
-          };
-          
-          console.log('Processing notice:', notice);
-          
-          // Add to appropriate category
+        const processedNotices = await Promise.all(
+          data.map(async (item: any, index: number) => {
+            const imageUrl = item['Image URL'] || '';
+            const convertedImageUrl = convertGoogleDriveUrl(imageUrl);
+            
+            const notice: NoticeItem = {
+              id: index + 1,
+              title: item['File Name'] || `Notice ${index + 1}`,
+              image: convertedImageUrl,
+              category: item.Category ? item.Category.toLowerCase() : 'upcoming'
+            };
+            
+            // Get image dimensions
+            try {
+              const dimensions = await getImageDimensions(convertedImageUrl);
+              notice.dimensions = dimensions;
+            } catch (error) {
+              console.error('Could not get dimensions for image:', convertedImageUrl);
+            }
+            
+            console.log('Processing notice:', notice);
+            return notice;
+          })
+        );
+        
+        // Organize by category
+        processedNotices.forEach((notice) => {
           const category = notice.category.toLowerCase();
           if (organizedData[category]) {
             organizedData[category].push(notice);
@@ -284,6 +314,10 @@ const NoticesSection = () => {
                   opacity = 0;
                 }
 
+                const cardHeight = notice.dimensions 
+                  ? Math.max(240, Math.min(480, 320 / notice.dimensions.aspectRatio))
+                  : 320;
+
                 return (
                   <div
                     key={notice.id}
@@ -295,12 +329,11 @@ const NoticesSection = () => {
                     }}
                     onClick={() => setCurrentSlide(index)}
                   >
-                    <div className="bg-white rounded-xl shadow-xl overflow-hidden">
+                    <div className="bg-white rounded-xl shadow-xl overflow-hidden" style={{ height: cardHeight }}>
                       <img
                         src={notice.image}
                         alt={notice.title}
-                        className="w-auto h-auto max-w-[300px] max-h-[400px] min-w-[200px] min-h-[250px] object-contain"
-                        crossOrigin="anonymous"
+                        className="w-80 h-full object-contain"
                         onLoad={() => {
                           console.log('Image loaded successfully:', notice.image);
                         }}
