@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -9,7 +10,7 @@ interface NoticeItem {
   category: string;
 }
 
-// Mock data with the uploaded poster images
+// Mock data as fallback
 const mockNotices = {
   upcoming: [
     {
@@ -23,45 +24,21 @@ const mockNotices = {
       title: "Programme of Hazrat Mufti Ebrahim Salejee",
       image: "/lovable-uploads/f75d6a2e-5b07-4cf3-a119-5af96257e5b2.png",
       category: "upcoming"
-    },
-    {
-      id: 3,
-      title: "Sayyidah Saarah Programme",
-      image: "/lovable-uploads/34181ca3-ac38-4b18-8d0d-e18718b3b0f9.png",
-      category: "upcoming"
     }
   ],
   jumuah: [
     {
-      id: 4,
+      id: 3,
       title: "Qira'ah Programme",
       image: "/lovable-uploads/eaecb088-d4d0-4b62-b068-c89e23f956b7.png",
-      category: "jumuah"
-    },
-    {
-      id: 5,
-      title: "Prophet Mohammed Quiz",
-      image: "/lovable-uploads/0a47d0ac-e96f-4737-b2b8-aa1d1ab5653f.png",
       category: "jumuah"
     }
   ],
   info: [
     {
-      id: 6,
+      id: 4,
       title: "Time to Quit Vaping",
       image: "/lovable-uploads/1b0f1fde-f17a-42d9-bd2b-2c2584d54361.png",
-      category: "info"
-    },
-    {
-      id: 7,
-      title: "Overnight Programme",
-      image: "/lovable-uploads/3a6fc561-7de3-4dcb-a5fd-eacd3f8e5157.png",
-      category: "info"
-    },
-    {
-      id: 8,
-      title: "Programme of Hazrat Moulana",
-      image: "/lovable-uploads/94f8a3b1-ed0a-48d4-905e-767e509e801e.png",
       category: "info"
     }
   ]
@@ -77,14 +54,14 @@ const NoticesSection = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  // Function to convert Google Drive URL to thumbnail view
-  const convertToThumbnailUrl = (googleDriveUrl: string): string => {
+  // Function to convert Google Drive URL to direct image URL
+  const convertToDirectImageUrl = (googleDriveUrl: string): string => {
     try {
       console.log('Converting URL:', googleDriveUrl);
       
       // If it's already in the uc?export=view format, return as is
       if (googleDriveUrl.includes('drive.google.com/uc?export=view&id=')) {
-        console.log('URL already in uc format:', googleDriveUrl);
+        console.log('URL already in correct format');
         return googleDriveUrl;
       }
       
@@ -95,24 +72,22 @@ const NoticesSection = () => {
       const fileMatch = googleDriveUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
       if (fileMatch && fileMatch[1]) {
         fileId = fileMatch[1];
-        console.log('Extracted file ID:', fileId);
-        const thumbnailUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-        console.log('Converted to thumbnail URL:', thumbnailUrl);
-        return thumbnailUrl;
+        const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+        console.log('Converted to direct URL:', directUrl);
+        return directUrl;
       }
       
       // Handle format: https://drive.google.com/open?id=FILE_ID
       const openMatch = googleDriveUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
       if (openMatch && openMatch[1]) {
         fileId = openMatch[1];
-        console.log('Extracted file ID from open format:', fileId);
-        const thumbnailUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-        console.log('Converted to thumbnail URL:', thumbnailUrl);
-        return thumbnailUrl;
+        const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+        console.log('Converted to direct URL:', directUrl);
+        return directUrl;
       }
       
       console.log('Could not extract file ID from URL:', googleDriveUrl);
-      return googleDriveUrl; // Return original if can't parse
+      return googleDriveUrl;
     } catch (error) {
       console.error('Error converting Google Drive URL:', error);
       return googleDriveUrl;
@@ -124,21 +99,18 @@ const NoticesSection = () => {
     const fetchNotices = async () => {
       try {
         setLoading(true);
-        console.log('Fetching notices from updated API...');
+        console.log('Fetching notices from API...');
         
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec', {
-          method: 'GET',
-          mode: 'cors'
-        });
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec');
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log('Fetched notices data:', data);
+        console.log('API Response:', data);
         
-        // Organize data by category and convert URLs
+        // Organize data by category
         const organizedData: {[key: string]: NoticeItem[]} = {
           upcoming: [],
           jumuah: [],
@@ -146,19 +118,20 @@ const NoticesSection = () => {
         };
         
         data.forEach((item: any, index: number) => {
-          const imageUrl = item.imageUrl || item.image || '';
-          const convertedImageUrl = convertToThumbnailUrl(imageUrl);
+          // The API returns "Image URL" field
+          const imageUrl = item['Image URL'] || '';
+          const convertedImageUrl = convertToDirectImageUrl(imageUrl);
           
           const notice: NoticeItem = {
             id: index + 1,
-            title: item.title || `Notice ${index + 1}`,
+            title: item['File Name'] || `Notice ${index + 1}`,
             image: convertedImageUrl,
-            category: item.category || 'upcoming'
+            category: item.Category ? item.Category.toLowerCase() : 'upcoming'
           };
           
           console.log('Processing notice:', notice);
           
-          // Add to appropriate category, default to 'upcoming' if category doesn't exist
+          // Add to appropriate category
           const category = notice.category.toLowerCase();
           if (organizedData[category]) {
             organizedData[category].push(notice);
@@ -171,7 +144,7 @@ const NoticesSection = () => {
         setNoticesData(organizedData);
       } catch (error) {
         console.error('Error fetching notices:', error);
-        console.log('API fetch failed, using mock data as fallback');
+        console.log('Using mock data as fallback');
         setNoticesData(mockNotices);
       } finally {
         setLoading(false);
@@ -327,15 +300,13 @@ const NoticesSection = () => {
                         src={notice.image}
                         alt={notice.title}
                         className="w-auto h-auto max-w-[300px] max-h-[400px] min-w-[200px] min-h-[250px] object-contain"
-                        style={{
-                          display: 'block'
-                        }}
+                        crossOrigin="anonymous"
                         onLoad={() => {
                           console.log('Image loaded successfully:', notice.image);
                         }}
                         onError={(e) => {
                           console.error('Image failed to load:', notice.image);
-                          console.error('Error details:', e);
+                          console.error('Error event:', e);
                         }}
                       />
                     </div>
