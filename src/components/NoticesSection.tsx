@@ -80,12 +80,36 @@ const NoticesSection = () => {
   // Function to convert Google Drive URL to thumbnail view
   const convertToThumbnailUrl = (googleDriveUrl: string): string => {
     try {
-      // Extract file ID from Google Drive URL
-      const match = googleDriveUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) {
-        const fileId = match[1];
-        return `https://drive.google.com/uc?export=view&id=${fileId}`;
+      console.log('Original URL:', googleDriveUrl);
+      
+      // If it's already in the correct format, return as is
+      if (googleDriveUrl.includes('drive.google.com/uc?export=view&id=')) {
+        console.log('URL already in correct format:', googleDriveUrl);
+        return googleDriveUrl;
       }
+      
+      // Extract file ID from various Google Drive URL formats
+      let fileId = '';
+      
+      // Format: https://drive.google.com/file/d/FILE_ID/view?usp=drivesdk
+      const match1 = googleDriveUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (match1 && match1[1]) {
+        fileId = match1[1];
+      }
+      
+      // Format: https://drive.google.com/open?id=FILE_ID
+      const match2 = googleDriveUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (match2 && match2[1]) {
+        fileId = match2[1];
+      }
+      
+      if (fileId) {
+        const thumbnailUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+        console.log('Converted URL:', thumbnailUrl);
+        return thumbnailUrl;
+      }
+      
+      console.log('Could not extract file ID, returning original URL');
       return googleDriveUrl; // Return original if can't parse
     } catch (error) {
       console.error('Error converting Google Drive URL:', error);
@@ -98,6 +122,7 @@ const NoticesSection = () => {
     const fetchNotices = async () => {
       try {
         setLoading(true);
+        console.log('Fetching notices from API...');
         const response = await fetch('https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec');
         const data = await response.json();
         
@@ -111,12 +136,17 @@ const NoticesSection = () => {
         };
         
         data.forEach((item: any, index: number) => {
+          const imageUrl = item.imageUrl || item.image || '';
+          const convertedImageUrl = convertToThumbnailUrl(imageUrl);
+          
           const notice: NoticeItem = {
             id: index + 1,
             title: item.title || `Notice ${index + 1}`,
-            image: convertToThumbnailUrl(item.imageUrl || item.image || ''),
+            image: convertedImageUrl,
             category: item.category || 'upcoming'
           };
+          
+          console.log('Processing notice:', notice);
           
           // Add to appropriate category, default to 'upcoming' if category doesn't exist
           const category = notice.category.toLowerCase();
@@ -127,6 +157,7 @@ const NoticesSection = () => {
           }
         });
         
+        console.log('Organized data:', organizedData);
         setNoticesData(organizedData);
       } catch (error) {
         console.error('Error fetching notices:', error);
@@ -280,17 +311,20 @@ const NoticesSection = () => {
                     }}
                     onClick={() => setCurrentSlide(index)}
                   >
-                    <div className="bg-white rounded-xl shadow-xl">
+                    <div className="bg-white rounded-xl shadow-xl overflow-hidden">
                       <img
                         src={notice.image}
                         alt={notice.title}
-                        className="w-auto h-auto max-w-[300px] max-h-[400px] min-w-[200px] min-h-[250px] object-contain rounded-xl"
+                        className="w-auto h-auto max-w-[300px] max-h-[400px] min-w-[200px] min-h-[250px] object-contain"
                         style={{
                           display: 'block'
                         }}
+                        onLoad={() => {
+                          console.log('Image loaded successfully:', notice.image);
+                        }}
                         onError={(e) => {
                           console.error('Image failed to load:', notice.image);
-                          // You can set a fallback image here if needed
+                          console.error('Error details:', e);
                         }}
                       />
                     </div>
