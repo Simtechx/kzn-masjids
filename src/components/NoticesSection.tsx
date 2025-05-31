@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -81,36 +80,38 @@ const NoticesSection = () => {
   // Function to convert Google Drive URL to thumbnail view
   const convertToThumbnailUrl = (googleDriveUrl: string): string => {
     try {
-      console.log('Original URL:', googleDriveUrl);
+      console.log('Converting URL:', googleDriveUrl);
       
-      // If it's already in the correct format, return as is
+      // If it's already in the uc?export=view format, return as is
       if (googleDriveUrl.includes('drive.google.com/uc?export=view&id=')) {
-        console.log('URL already in correct format:', googleDriveUrl);
+        console.log('URL already in uc format:', googleDriveUrl);
         return googleDriveUrl;
       }
       
-      // Extract file ID from various Google Drive URL formats
+      // Extract file ID from Google Drive URL
       let fileId = '';
       
-      // Format: https://drive.google.com/file/d/FILE_ID/view?usp=drivesdk
-      const match1 = googleDriveUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-      if (match1 && match1[1]) {
-        fileId = match1[1];
-      }
-      
-      // Format: https://drive.google.com/open?id=FILE_ID
-      const match2 = googleDriveUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (match2 && match2[1]) {
-        fileId = match2[1];
-      }
-      
-      if (fileId) {
+      // Handle format: https://drive.google.com/file/d/FILE_ID/view?usp=drivesdk
+      const fileMatch = googleDriveUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (fileMatch && fileMatch[1]) {
+        fileId = fileMatch[1];
+        console.log('Extracted file ID:', fileId);
         const thumbnailUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-        console.log('Converted URL:', thumbnailUrl);
+        console.log('Converted to thumbnail URL:', thumbnailUrl);
         return thumbnailUrl;
       }
       
-      console.log('Could not extract file ID, returning original URL');
+      // Handle format: https://drive.google.com/open?id=FILE_ID
+      const openMatch = googleDriveUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (openMatch && openMatch[1]) {
+        fileId = openMatch[1];
+        console.log('Extracted file ID from open format:', fileId);
+        const thumbnailUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+        console.log('Converted to thumbnail URL:', thumbnailUrl);
+        return thumbnailUrl;
+      }
+      
+      console.log('Could not extract file ID from URL:', googleDriveUrl);
       return googleDriveUrl; // Return original if can't parse
     } catch (error) {
       console.error('Error converting Google Drive URL:', error);
@@ -123,15 +124,11 @@ const NoticesSection = () => {
     const fetchNotices = async () => {
       try {
         setLoading(true);
-        console.log('Fetching notices from API...');
+        console.log('Fetching notices from updated API...');
         
-        // Try to fetch from the API with proper headers
         const response = await fetch('https://script.google.com/macros/s/AKfycbxb0c6zf_w39OoFdyCX7Jh1KGTSkj56bQneQeMXdQj2RbyTQTELg96Z7VINuvPNdFd-/exec', {
           method: 'GET',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          mode: 'cors'
         });
 
         if (!response.ok) {
@@ -170,12 +167,11 @@ const NoticesSection = () => {
           }
         });
         
-        console.log('Organized data:', organizedData);
+        console.log('Final organized data:', organizedData);
         setNoticesData(organizedData);
       } catch (error) {
         console.error('Error fetching notices:', error);
-        console.log('Using mock data as fallback');
-        // Use mock data as fallback
+        console.log('API fetch failed, using mock data as fallback');
         setNoticesData(mockNotices);
       } finally {
         setLoading(false);
