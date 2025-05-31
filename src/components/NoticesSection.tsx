@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getImageDimensions } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 interface NoticeItem {
   id: number;
@@ -59,6 +59,7 @@ const NoticesSection = () => {
     info: []
   });
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
   // Function to convert Google Drive URL to thumbnail URL
   const convertGoogleDriveUrl = (googleDriveUrl: string): string => {
@@ -172,17 +173,32 @@ const NoticesSection = () => {
         
         console.log('Final organized data:', organizedData);
         setNoticesData(organizedData);
+        
+        // Show success toast
+        const totalNotices = Object.values(organizedData).reduce((total, notices) => total + notices.length, 0);
+        toast({
+          title: "Notices Loaded Successfully",
+          description: `${totalNotices} notices loaded and images processed`,
+        });
+        
       } catch (error) {
         console.error('Error fetching notices:', error);
         console.log('Using mock data as fallback');
         setNoticesData(mockNotices);
+        
+        // Show error toast
+        toast({
+          title: "Notice Loading Failed",
+          description: "Using cached notices as fallback",
+          variant: "destructive",
+        });
       } finally {
         setLoading(false);
       }
     };
 
     fetchNotices();
-  }, []);
+  }, [toast]);
 
   const tabs = ['upcoming', 'jumuah', 'info'];
   const currentNotices = noticesData[activeTab] || [];
