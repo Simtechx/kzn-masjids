@@ -105,15 +105,15 @@ const NoticesSection = () => {
       const dimensions = await getImageDimensions(imageSrc);
       // Different base widths for mobile vs desktop
       const isMobile = window.innerWidth < 768;
-      const baseWidth = isMobile ? 280 : 320;
+      const baseWidth = isMobile ? 320 : 320; // Use full mobile width
       const calculatedHeight = baseWidth / dimensions.aspectRatio;
       // Different height limits for mobile vs desktop
-      const minHeight = isMobile ? 200 : 240;
-      const maxHeight = isMobile ? 350 : 480;
+      const minHeight = isMobile ? 180 : 240;
+      const maxHeight = isMobile ? 300 : 480; // Reduced max height for mobile
       return Math.max(minHeight, Math.min(maxHeight, calculatedHeight));
     } catch (error) {
       console.error('Error getting image dimensions:', error);
-      return window.innerWidth < 768 ? 280 : 320; // Default height based on screen size
+      return window.innerWidth < 768 ? 240 : 320; // Default height based on screen size
     }
   };
 
@@ -338,13 +338,13 @@ const NoticesSection = () => {
                   opacity = 0;
                 }
 
-                // Responsive card sizing
+                // Responsive card sizing - Full width on mobile
                 const isMobile = window.innerWidth < 768;
-                const cardWidth = isMobile ? 280 : 320;
-                const baseWidth = isMobile ? 280 : 320;
+                const cardWidth = isMobile ? 320 : 320; // Full width on mobile
+                const baseWidth = isMobile ? 320 : 320;
                 const cardHeight = notice.dimensions 
-                  ? Math.max(isMobile ? 200 : 240, Math.min(isMobile ? 350 : 480, baseWidth / notice.dimensions.aspectRatio))
-                  : (isMobile ? 280 : 320);
+                  ? Math.max(isMobile ? 180 : 240, Math.min(isMobile ? 300 : 480, baseWidth / notice.dimensions.aspectRatio))
+                  : (isMobile ? 240 : 320);
 
                 return (
                   <div
@@ -367,7 +367,10 @@ const NoticesSection = () => {
                       <img
                         src={notice.image}
                         alt={notice.title}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover" // Changed from object-contain to object-cover
+                        style={{
+                          objectPosition: 'center'
+                        }}
                         onLoad={() => {
                           console.log('Image loaded successfully:', notice.image);
                         }}
