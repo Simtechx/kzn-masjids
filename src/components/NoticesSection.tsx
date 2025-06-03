@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -104,13 +103,17 @@ const NoticesSection = () => {
   const getCardHeight = async (imageSrc: string): Promise<number> => {
     try {
       const dimensions = await getImageDimensions(imageSrc);
-      const baseWidth = 320;
+      // Different base widths for mobile vs desktop
+      const isMobile = window.innerWidth < 768;
+      const baseWidth = isMobile ? 280 : 320;
       const calculatedHeight = baseWidth / dimensions.aspectRatio;
-      // Clamp height between 240px and 480px
-      return Math.max(240, Math.min(480, calculatedHeight));
+      // Different height limits for mobile vs desktop
+      const minHeight = isMobile ? 200 : 240;
+      const maxHeight = isMobile ? 350 : 480;
+      return Math.max(minHeight, Math.min(maxHeight, calculatedHeight));
     } catch (error) {
       console.error('Error getting image dimensions:', error);
-      return 320; // Default height
+      return window.innerWidth < 768 ? 280 : 320; // Default height based on screen size
     }
   };
 
@@ -260,19 +263,19 @@ const NoticesSection = () => {
   };
 
   return (
-    <section className="py-12 px-4 bg-gray-50">
+    <section className="py-8 md:py-12 px-4 bg-gray-50">
       <div className="container mx-auto max-w-6xl">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-2 text-gray-800">NOTICES</h2>
-        <p className="text-center text-gray-600 mb-8">Stay informed about the latest events, programs, and announcements</p>
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-2 text-gray-800">NOTICES</h2>
+        <p className="text-center text-gray-600 mb-6 md:mb-8 text-sm md:text-base">Stay informed about the latest events, programs, and announcements</p>
         
         {/* Tabs */}
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center mb-8 md:mb-12">
           <div className="flex bg-white shadow-sm rounded-full overflow-hidden p-1 w-full max-w-sm">
             {tabs.map(tab => (
               <Button
                 key={tab}
                 variant={activeTab === tab ? "default" : "ghost"}
-                className={`rounded-full px-4 py-2 text-sm flex-1 capitalize ${
+                className={`rounded-full px-3 md:px-4 py-2 text-xs md:text-sm flex-1 capitalize ${
                   activeTab === tab 
                     ? 'bg-yellow-500 text-black hover:bg-yellow-600' 
                     : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
@@ -287,10 +290,10 @@ const NoticesSection = () => {
 
         {/* Loading state */}
         {loading && (
-          <div className="flex justify-center items-center h-80">
+          <div className="flex justify-center items-center h-60 md:h-80">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500 mx-auto mb-4"></div>
-              <p className="text-gray-500 font-medium">Loading notices...</p>
+              <div className="animate-spin rounded-full h-8 w-8 md:h-12 md:w-12 border-b-2 border-yellow-500 mx-auto mb-4"></div>
+              <p className="text-gray-500 font-medium text-sm md:text-base">Loading notices...</p>
             </div>
           </div>
         )}
@@ -304,7 +307,7 @@ const NoticesSection = () => {
             onTouchEnd={handleTouchEnd}
           >
             <div 
-              className="relative h-96 flex items-center justify-center" 
+              className="relative h-72 md:h-96 flex items-center justify-center" 
               style={{ perspective: '1200px' }}
             >
               {currentNotices.map((notice, index) => {
@@ -335,9 +338,13 @@ const NoticesSection = () => {
                   opacity = 0;
                 }
 
+                // Responsive card sizing
+                const isMobile = window.innerWidth < 768;
+                const cardWidth = isMobile ? 280 : 320;
+                const baseWidth = isMobile ? 280 : 320;
                 const cardHeight = notice.dimensions 
-                  ? Math.max(240, Math.min(480, 320 / notice.dimensions.aspectRatio))
-                  : 320;
+                  ? Math.max(isMobile ? 200 : 240, Math.min(isMobile ? 350 : 480, baseWidth / notice.dimensions.aspectRatio))
+                  : (isMobile ? 280 : 320);
 
                 return (
                   <div
@@ -350,11 +357,17 @@ const NoticesSection = () => {
                     }}
                     onClick={() => setCurrentSlide(index)}
                   >
-                    <div className="bg-white rounded-xl shadow-xl overflow-hidden" style={{ height: cardHeight }}>
+                    <div 
+                      className="bg-white rounded-xl shadow-xl overflow-hidden" 
+                      style={{ 
+                        height: cardHeight,
+                        width: cardWidth
+                      }}
+                    >
                       <img
                         src={notice.image}
                         alt={notice.title}
-                        className="w-80 h-full object-contain"
+                        className="w-full h-full object-contain"
                         onLoad={() => {
                           console.log('Image loaded successfully:', notice.image);
                         }}
@@ -374,27 +387,27 @@ const NoticesSection = () => {
               <>
                 <button
                   onClick={prevSlide}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-700 shadow-lg rounded-full p-3 transition-colors hidden md:block"
+                  className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-700 shadow-lg rounded-full p-2 md:p-3 transition-colors hidden md:block"
                 >
-                  <ChevronLeft className="h-5 w-5" />
+                  <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
                 </button>
                 <button
                   onClick={nextSlide}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-700 shadow-lg rounded-full p-3 transition-colors hidden md:block"
+                  className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-700 shadow-lg rounded-full p-2 md:p-3 transition-colors hidden md:block"
                 >
-                  <ChevronRight className="h-5 w-5" />
+                  <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
                 </button>
               </>
             )}
 
             {/* Dots Indicator */}
             {currentNotices.length > 1 && (
-              <div className="flex justify-center mt-8 space-x-2">
+              <div className="flex justify-center mt-6 md:mt-8 space-x-2">
                 {currentNotices.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentSlide(index)}
-                    className={`w-3 h-3 rounded-full transition-colors duration-300 ${
+                    className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-colors duration-300 ${
                       index === currentSlide ? 'bg-yellow-500' : 'bg-gray-300'
                     }`}
                   />
@@ -406,10 +419,10 @@ const NoticesSection = () => {
 
         {/* No notices state */}
         {!loading && currentNotices.length === 0 && (
-          <div className="flex justify-center items-center h-80">
+          <div className="flex justify-center items-center h-60 md:h-80">
             <div className="text-center">
-              <p className="text-gray-500 font-medium">No notices available for {activeTab}</p>
-              <p className="text-gray-400 text-sm mt-1">Check back soon for updates</p>
+              <p className="text-gray-500 font-medium text-sm md:text-base">No notices available for {activeTab}</p>
+              <p className="text-gray-400 text-xs md:text-sm mt-1">Check back soon for updates</p>
             </div>
           </div>
         )}

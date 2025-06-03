@@ -157,19 +157,32 @@
   .flip-card {
     position: relative;
     display: inline-block;
-    margin: 0 2px;
-    width: 60px;
-    height: 90px;
-    line-height: 90px;
-    border-radius: 10px;
+    margin: 0 1px;
+    width: 40px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 6px;
     background-color: #333;
     color: white;
-    font-size: 3rem;
+    font-size: 1.8rem;
     font-weight: 700;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     perspective: 400px;
     overflow: hidden;
+  }
+
+  /* Desktop styles for flip cards */
+  @media (min-width: 768px) {
+    .flip-card {
+      margin: 0 2px;
+      width: 60px;
+      height: 90px;
+      line-height: 90px;
+      border-radius: 10px;
+      font-size: 3rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
   }
   
   .flip-card-inner {

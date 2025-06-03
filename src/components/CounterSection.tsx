@@ -80,7 +80,7 @@ const FlipCounter: React.FC<FlipCounterProps> = ({ end, label, delay = 0 }) => {
           <FlipDigit key={index} digit={digit} />
         ))}
       </div>
-      <div className="text-xl text-white font-medium mt-3">{label}</div>
+      <div className="text-lg md:text-xl text-white font-medium mt-3">{label}</div>
     </div>
   );
 };
@@ -93,7 +93,7 @@ const CounterSection = () => {
   const totalCount = 309;
 
   return (
-    <section className="py-16 px-4 relative bg-[#051b16] overflow-hidden">
+    <section className="py-8 md:py-16 px-4 relative bg-[#051b16] overflow-hidden">
       {/* Background Image as Watermark with darker overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center opacity-10 z-0"
@@ -104,19 +104,19 @@ const CounterSection = () => {
       ></div>
       
       <div className="container mx-auto relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+        <div className="text-center mb-8 md:mb-16">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white">
             KWA-ZULU NATAL MASJIDS AND MUSALLAS
           </h2>
-          <p className="text-gray-300 max-w-2xl mx-auto">
+          <p className="text-gray-300 max-w-2xl mx-auto text-sm md:text-base">
             Discover the growing presence of masjids and musallahs throughout the province.
           </p>
           <div className="w-24 h-1 bg-islamic-gold mx-auto mt-6"></div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Removed the bg-white and shadow-lg classes to remove white blocks */}
-          <div className="p-6 flex flex-col items-center">
+        {/* Mobile: 2x2 grid, Desktop: 1x4 grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-10">
+          <div className="p-3 md:p-6 flex flex-col items-center">
             <FlipCounter 
               end={regionsCount} 
               label="Regions" 
@@ -124,7 +124,7 @@ const CounterSection = () => {
             />
           </div>
           
-          <div className="p-6 flex flex-col items-center">
+          <div className="p-3 md:p-6 flex flex-col items-center">
             <FlipCounter 
               end={masjidsCount} 
               label="Masjids" 
@@ -132,7 +132,7 @@ const CounterSection = () => {
             />
           </div>
           
-          <div className="p-6 flex flex-col items-center">
+          <div className="p-3 md:p-6 flex flex-col items-center">
             <FlipCounter 
               end={musallasCount} 
               label="Musallas" 
@@ -140,7 +140,7 @@ const CounterSection = () => {
             />
           </div>
           
-          <div className="p-6 flex flex-col items-center">
+          <div className="p-3 md:p-6 flex flex-col items-center">
             <FlipCounter 
               end={totalCount} 
               label="Total" 
