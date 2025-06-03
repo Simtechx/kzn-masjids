@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
@@ -8,7 +7,7 @@ interface MasjidData {
   id: number;
   name: string;
   distance: string;
-  address: string;
+  address?: string;
   type: 'Masjid' | 'Musalla';
   time?: string;
   prayer?: string;
@@ -23,17 +22,17 @@ const mockNearbyData: MasjidData[] = [
 ];
 
 const mockUpcomingData: MasjidData[] = [
-  { id: 1, name: "Masjid-e-Noor", distance: "0.8 km away", time: "06:32 PM", prayer: "Isha" },
-  { id: 2, name: "Durban Islamic Centre", distance: "1.2 km away", time: "06:35 PM", prayer: "Isha" },
-  { id: 3, name: "Al-Ansaar Musalla", distance: "1.5 km away", time: "06:33 PM", prayer: "Isha" },
-  { id: 4, name: "Masjid Al-Hidaya", distance: "2.1 km away", time: "06:30 PM", prayer: "Isha" }
+  { id: 1, name: "Masjid-e-Noor", distance: "0.8 km away", address: "Overport Road", type: "Masjid", time: "06:32 PM", prayer: "Isha" },
+  { id: 2, name: "Durban Islamic Centre", distance: "1.2 km away", address: "Grey Street", type: "Masjid", time: "06:35 PM", prayer: "Isha" },
+  { id: 3, name: "Al-Ansaar Musalla", distance: "1.5 km away", address: "Chatsworth", type: "Musalla", time: "06:33 PM", prayer: "Isha" },
+  { id: 4, name: "Masjid Al-Hidaya", distance: "2.1 km away", address: "Pietermaritzburg", type: "Masjid", time: "06:30 PM", prayer: "Isha" }
 ];
 
 const mockInfoData: MasjidData[] = [
-  { id: 1, name: "Masjid Al-Hilal", address: "Fajr - 6:00 AM", type: "Masjid", status: "Now" },
-  { id: 2, name: "Central Musalla", address: "Maghrib - 6:15 PM", type: "Musalla", status: "Today" },
-  { id: 3, name: "Eastgate Masjid", address: "Asr - 4:30 PM", type: "Masjid", status: "Today" },
-  { id: 4, name: "Southlands Musalla", address: "Zuhr - 1:15 PM", type: "Musalla", status: "Now" }
+  { id: 1, name: "Masjid Al-Hilal", distance: "1.0 km", address: "Fajr - 6:00 AM", type: "Masjid", status: "Now" },
+  { id: 2, name: "Central Musalla", distance: "1.5 km", address: "Maghrib - 6:15 PM", type: "Musalla", status: "Today" },
+  { id: 3, name: "Eastgate Masjid", distance: "2.0 km", address: "Asr - 4:30 PM", type: "Masjid", status: "Today" },
+  { id: 4, name: "Southlands Musalla", distance: "0.5 km", address: "Zuhr - 1:15 PM", type: "Musalla", status: "Now" }
 ];
 
 const NearbyMasjidsSlider = () => {
