@@ -105,15 +105,15 @@ const NoticesSection = () => {
       const dimensions = await getImageDimensions(imageSrc);
       // Different base widths for mobile vs desktop
       const isMobile = window.innerWidth < 768;
-      const baseWidth = isMobile ? 320 : 320; // Use full mobile width
+      const baseWidth = isMobile ? 300 : 320; // Slightly reduced for mobile
       const calculatedHeight = baseWidth / dimensions.aspectRatio;
-      // Different height limits for mobile vs desktop
-      const minHeight = isMobile ? 180 : 240;
-      const maxHeight = isMobile ? 300 : 480; // Reduced max height for mobile
+      // Better height limits for mobile to match image proportions
+      const minHeight = isMobile ? 200 : 240;
+      const maxHeight = isMobile ? 400 : 480; // Increased max height for mobile to accommodate full images
       return Math.max(minHeight, Math.min(maxHeight, calculatedHeight));
     } catch (error) {
       console.error('Error getting image dimensions:', error);
-      return window.innerWidth < 768 ? 240 : 320; // Default height based on screen size
+      return window.innerWidth < 768 ? 280 : 320; // Default height based on screen size
     }
   };
 
@@ -307,7 +307,7 @@ const NoticesSection = () => {
             onTouchEnd={handleTouchEnd}
           >
             <div 
-              className="relative h-72 md:h-96 flex items-center justify-center" 
+              className="relative h-80 md:h-96 flex items-center justify-center" 
               style={{ perspective: '1200px' }}
             >
               {currentNotices.map((notice, index) => {
@@ -338,13 +338,19 @@ const NoticesSection = () => {
                   opacity = 0;
                 }
 
-                // Responsive card sizing - Full width on mobile
+                // Responsive card sizing with better mobile proportions
                 const isMobile = window.innerWidth < 768;
-                const cardWidth = isMobile ? 320 : 320; // Full width on mobile
-                const baseWidth = isMobile ? 320 : 320;
-                const cardHeight = notice.dimensions 
-                  ? Math.max(isMobile ? 180 : 240, Math.min(isMobile ? 300 : 480, baseWidth / notice.dimensions.aspectRatio))
-                  : (isMobile ? 240 : 320);
+                const cardWidth = isMobile ? 300 : 320; // Slightly reduced for mobile
+                const baseWidth = isMobile ? 300 : 320;
+                
+                // Better height calculation for mobile to maintain image aspect ratio
+                let cardHeight;
+                if (notice.dimensions) {
+                  const calculatedHeight = baseWidth / notice.dimensions.aspectRatio;
+                  cardHeight = Math.max(isMobile ? 200 : 240, Math.min(isMobile ? 400 : 480, calculatedHeight));
+                } else {
+                  cardHeight = isMobile ? 280 : 320;
+                }
 
                 return (
                   <div
@@ -367,7 +373,7 @@ const NoticesSection = () => {
                       <img
                         src={notice.image}
                         alt={notice.title}
-                        className="w-full h-full object-cover" // Changed from object-contain to object-cover
+                        className="w-full h-full object-contain" // Changed back to object-contain for better mobile display
                         style={{
                           objectPosition: 'center'
                         }}

@@ -7,6 +7,7 @@ import NoticesSection from '@/components/NoticesSection';
 import CounterSection from '@/components/CounterSection';
 import LivePrayerTimes from '@/components/LivePrayerTimes';
 import FindMasjidsHero from '@/components/FindMasjidsHero';
+import NearbyMasjidsSlider from '@/components/NearbyMasjidsSlider';
 
 const Index = () => {
   return (
@@ -16,7 +17,10 @@ const Index = () => {
       {/* Live Salaah Times at top immediately after navbar */}
       <LivePrayerTimes />
       
-      {/* Find Masjids Hero Section - Placed at the top only */}
+      {/* Nearby Masjids Slider - New module between LivePrayerTimes and FindMasjidsHero */}
+      <NearbyMasjidsSlider />
+      
+      {/* Find Masjids Hero Section */}
       <FindMasjidsHero />
       
       <main>
