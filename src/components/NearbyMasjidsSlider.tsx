@@ -89,13 +89,13 @@ const NearbyMasjidsSlider = () => {
   };
 
   return (
-    <section className="py-8 md:py-12 px-4 bg-white overflow-hidden">
+    <section className="py-8 md:py-12 px-4 bg-white">
       <div className="container mx-auto max-w-4xl">
         {isMobile ? (
           <div className="text-center mb-8">
-            <h2 className="text-4xl font-bold text-gray-800">Nearby</h2>
-            <h3 className="text-4xl font-bold text-gray-800">Masjids & Musallahs</h3>
-            <p className="text-4xl font-bold text-gray-800">in KwaZulu-Natal</p>
+            <h2 className="text-5xl font-bold text-gray-800">Nearby</h2>
+            <h3 className="text-5xl font-bold text-gray-800">Masjids & Musallahs</h3>
+            <p className="text-5xl font-bold text-gray-800">in KwaZulu-Natal</p>
           </div>
         ) : (
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800">
@@ -142,11 +142,11 @@ const NearbyMasjidsSlider = () => {
                 </div>
               )}
 
-              {/* Approx time pill */}
-              <div className="bg-yellow-400 text-green-900 rounded-full px-4 py-1 font-semibold flex items-center gap-2 shadow-md w-max">
+              {/* Time away pill */}
+              <div className={`bg-yellow-400 text-green-900 rounded-full font-semibold flex items-center gap-2 shadow-md w-max ${isMobile ? 'px-2 py-1' : 'px-4 py-1'}`}>
                 <Clock className="h-4 w-4" />
-                <span className={isMobile ? "text-3xl font-bold" : ""}>
-                  {isMobile ? `+ ${Math.round(distance[0] * 2)} mins away` : `${getApproxTime(`${distance[0]}km`)}`}
+                <span className={isMobile ? "text-lg font-bold" : ""}>
+                  {isMobile ? `${Math.round(distance[0] * 2)} mins away` : `${getApproxTime(`${distance[0]}km`)}`}
                 </span>
               </div>
             </div>
@@ -163,7 +163,7 @@ const NearbyMasjidsSlider = () => {
                 ? 'text-white hover:opacity-90' 
                 : 'text-gray-700 border-gray-300 hover:bg-gray-100'
             }`}
-            style={activeTab === 'nearby' ? { backgroundColor: '#072C23' } : {}}
+            style={{ backgroundColor: '#072C23' }}
           >
             <MapPin className="h-4 w-4" />
             NEARBY
@@ -177,7 +177,7 @@ const NearbyMasjidsSlider = () => {
                 ? 'text-white hover:opacity-90' 
                 : 'text-gray-700 border-gray-300 hover:bg-gray-100'
             }`}
-            style={activeTab === 'upcoming' ? { backgroundColor: '#072C23' } : {}}
+            style={{ backgroundColor: '#072C23' }}
           >
             <Clock className="h-4 w-4" />
             UPCOMING
@@ -191,7 +191,7 @@ const NearbyMasjidsSlider = () => {
                 ? 'text-white hover:opacity-90' 
                 : 'text-gray-700 border-gray-300 hover:bg-gray-100'
             }`}
-            style={activeTab === 'info' ? { backgroundColor: '#072C23' } : {}}
+            style={{ backgroundColor: '#072C23' }}
           >
             <Info className="h-4 w-4" />
             INFO
@@ -243,29 +243,35 @@ const NearbyMasjidsSlider = () => {
                     </div>
                     
                     {/* Second line */}
-                    {activeTab === 'info' ? (
-                      <div className="flex items-center gap-2 mb-2 text-sm text-gray-600">
+                    {activeTab === 'nearby' ? (
+                      <div className="text-sm text-gray-600 mb-3">
+                        <span className="font-medium">{item.distance}</span>
+                        <span className="mx-2">•</span>
+                        <span>{item.address}</span>
+                      </div>
+                    ) : activeTab === 'upcoming' ? (
+                      <div className="text-sm text-gray-600 mb-3">
+                        <span className="font-medium">{item.distance}</span>
+                        <span className="mx-2">•</span>
+                        <span>{item.address}</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 mb-3 text-sm text-gray-600">
                         <span className="font-medium">{item.distance}</span>
                         <Badge 
-                          className="text-xs px-2 py-0.5 bg-yellow-600 text-white"
+                          className="text-xs px-1.5 py-0.5 bg-yellow-600 text-white"
                         >
                           {item.prayer}
                         </Badge>
                         <span>{item.time}</span>
                       </div>
-                    ) : (
-                      <div className="text-sm text-gray-600 mb-2">
-                        <span className="font-medium">{item.distance}</span>
-                        <span className="mx-2">•</span>
-                        <span>{activeTab === 'info' ? item.address?.split(' - ')[0] : item.address}</span>
-                      </div>
                     )}
                     
                     {/* Third line: Prayer info (for upcoming only) */}
                     {activeTab === 'upcoming' && item.prayer && item.time && (
-                      <div className="flex items-center gap-2 mb-2">
+                      <div className="flex items-center gap-2 mb-3">
                         <Badge 
-                          className="text-xs px-2 py-0.5 bg-blue-600 text-white"
+                          className="text-xs px-1.5 py-0.5 bg-blue-600 text-white"
                         >
                           {item.prayer}
                         </Badge>
@@ -275,7 +281,7 @@ const NearbyMasjidsSlider = () => {
                     
                     {/* Last line: Time away in yellow badge */}
                     <div className="flex justify-center">
-                      <Badge className="bg-yellow-400 text-black font-medium text-base px-3 py-1">
+                      <Badge className="bg-yellow-400 text-black font-medium text-sm px-2 py-0.5">
                         {getApproxTime(item.distance)}
                       </Badge>
                     </div>
@@ -314,8 +320,6 @@ const NearbyMasjidsSlider = () => {
                         <span>{item.distance}</span>
                         <span>•</span>
                         <span>{activeTab === 'info' ? item.address?.split(' - ')[0] : item.address}</span>
-                        <span>•</span>
-                        <span>{getApproxTime(item.distance)}</span>
                       </div>
                     </div>
                     
