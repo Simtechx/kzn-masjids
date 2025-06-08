@@ -95,16 +95,10 @@ const NearbyMasjidsSlider = () => {
         
         {/* Distance Slider */}
         <div className="mb-8">
-          <div className="bg-gradient-to-r from-blue-500 to-teal-500 rounded-2xl p-6 text-white">
+          <div className="max-w-md mx-auto rounded-2xl p-6 text-white bg-gradient-to-r from-green-600 to-green-400 shadow-lg">
             <div className="text-center mb-6">
               <h3 className="text-3xl md:text-4xl font-bold">{distance[0]}km</h3>
-              <p className="text-blue-100">Your search radius</p>
-              <div className="flex items-center justify-center gap-2 mt-2">
-                <Clock className="h-4 w-4 text-[#072c23]" />
-                <span className="text-sm text-[#072c23] font-medium">
-                  Approx {getApproxTime(`${distance[0]}km`)} travel time
-                </span>
-              </div>
+              <p className="text-green-200">Your search radius</p>
             </div>
             
             <div className="relative">
@@ -114,11 +108,21 @@ const NearbyMasjidsSlider = () => {
                 max={100}
                 min={0}
                 step={1}
-                className="w-full"
+                className="w-full [&_.bg-primary]:bg-yellow-400 [&_.border-primary]:border-yellow-400 [&_.bg-background]:bg-green-800"
               />
-              <div className="flex justify-between text-sm text-blue-100 mt-2">
-                <span>5km</span>
-                <span>50km+</span>
+            </div>
+
+            {/* Km and Approx time pills */}
+            <div className="flex justify-between mt-6 px-2">
+              {/* Km pill */}
+              <div className="bg-green-700 text-white rounded-full px-5 py-2 font-semibold flex items-center justify-center shadow-md w-max">
+                {distance[0]} km
+              </div>
+
+              {/* Approx time pill */}
+              <div className="bg-yellow-400 text-green-900 rounded-full px-5 py-2 font-semibold flex items-center gap-2 shadow-md w-max">
+                <Clock className="h-4 w-4" />
+                <span>Approx {getApproxTime(`${distance[0]}km`)}</span>
               </div>
             </div>
           </div>
@@ -188,8 +192,8 @@ const NearbyMasjidsSlider = () => {
                         variant={item.type === 'Masjid' ? 'default' : 'secondary'}
                         className={`text-xs ${
                           item.type === 'Masjid' 
-                            ? 'bg-teal-600 text-white hover:bg-teal-700' 
-                            : 'bg-blue-600 text-white hover:bg-blue-700'
+                            ? 'bg-green-600 text-white hover:bg-green-700 border-green-600' 
+                            : 'bg-blue-600 text-white hover:bg-blue-700 border-blue-600'
                         }`}
                       >
                         {item.type}
