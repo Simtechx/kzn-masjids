@@ -25,17 +25,17 @@ const mockNearbyData: MasjidData[] = [
 ];
 
 const mockUpcomingData: MasjidData[] = [
-  { id: 1, name: "Masjid-e-Noor", distance: "0.8 km", address: "Overport Road", type: "Masjid", time: "06:32 PM", prayer: "Isha" },
-  { id: 2, name: "Durban Islamic Centre", distance: "1.2 km", address: "Grey Street", type: "Masjid", time: "06:35 PM", prayer: "Isha" },
-  { id: 3, name: "Al-Ansaar Musalla", distance: "1.5 km", address: "Chatsworth", type: "Musalla", time: "06:33 PM", prayer: "Isha" },
-  { id: 4, name: "Masjid Al-Hidaya", distance: "2.1 km", address: "Pietermaritzburg", type: "Masjid", time: "06:30 PM", prayer: "Isha" }
+  { id: 1, name: "Masjid-e-Noor", distance: "0.8 km", address: "Overport Road", type: "Masjid", time: "06:32 PM", prayer: "isha" },
+  { id: 2, name: "Durban Islamic Centre", distance: "1.2 km", address: "Grey Street", type: "Masjid", time: "06:35 PM", prayer: "isha" },
+  { id: 3, name: "Al-Ansaar Musalla", distance: "1.5 km", address: "Chatsworth", type: "Musalla", time: "06:33 PM", prayer: "isha" },
+  { id: 4, name: "Masjid Al-Hidaya", distance: "2.1 km", address: "Pietermaritzburg", type: "Masjid", time: "06:30 PM", prayer: "isha" }
 ];
 
 const mockInfoData: MasjidData[] = [
-  { id: 1, name: "Masjid Al-Hilal", distance: "1.0 km", address: "Fajr - 6:00 AM", type: "Masjid", status: "Now", prayer: "Fajr", time: "6:00 AM" },
-  { id: 2, name: "Central Musalla", distance: "1.5 km", address: "Maghrib - 6:15 PM", type: "Musalla", status: "Today", prayer: "Maghrib", time: "6:15 PM" },
-  { id: 3, name: "Eastgate Masjid", distance: "2.0 km", address: "Asr - 4:30 PM", type: "Masjid", status: "Today", prayer: "Asr", time: "4:30 PM" },
-  { id: 4, name: "Southlands Musalla", distance: "0.5 km", address: "Zuhr - 1:15 PM", type: "Musalla", status: "Now", prayer: "Zuhr", time: "1:15 PM" }
+  { id: 1, name: "Masjid Al-Hilal", distance: "1.0 km", address: "Fajr - 6:00 AM", type: "Masjid", status: "Now", prayer: "fajr", time: "6:00 AM" },
+  { id: 2, name: "Central Musalla", distance: "1.5 km", address: "Maghrib - 6:15 PM", type: "Musalla", status: "Today", prayer: "maghrib", time: "6:15 PM" },
+  { id: 3, name: "Eastgate Masjid", distance: "2.0 km", address: "Asr - 4:30 PM", type: "Masjid", status: "Today", prayer: "asr", time: "4:30 PM" },
+  { id: 4, name: "Southlands Musalla", distance: "0.5 km", address: "Zuhr - 1:15 PM", type: "Musalla", status: "Now", prayer: "dhuhr", time: "1:15 PM" }
 ];
 
 const NearbyMasjidsSlider = () => {
@@ -85,17 +85,34 @@ const NearbyMasjidsSlider = () => {
   const getApproxTime = (distance: string) => {
     const km = parseFloat(distance.replace(/[^\d.]/g, ''));
     const minutes = Math.round(km * 2);
-    return `+ ${minutes} mins away`;
+    return `${minutes} mins away`;
+  };
+
+  const getPrayerBadgeStyle = (prayer: string) => {
+    switch (prayer?.toLowerCase()) {
+      case 'fajr':
+        return 'bg-pink-600 text-white';
+      case 'dhuhr':
+        return 'bg-amber-600 text-white';
+      case 'asr':
+        return 'bg-emerald-600 text-white';
+      case 'isha':
+        return 'bg-indigo-600 text-white';
+      case 'maghrib':
+        return 'bg-purple-600 text-white';
+      default:
+        return 'bg-gray-600 text-white';
+    }
   };
 
   return (
-    <section className="py-8 md:py-12 px-4 bg-white">
+    <section className="py-8 md:py-12 px-4 bg-white overflow-x-hidden">
       <div className="container mx-auto max-w-4xl">
         {isMobile ? (
           <div className="text-center mb-8">
-            <h2 className="text-5xl font-bold text-gray-800">Nearby</h2>
-            <h3 className="text-5xl font-bold text-gray-800">Masjids & Musallahs</h3>
-            <p className="text-5xl font-bold text-gray-800">in KwaZulu-Natal</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 leading-tight">Nearby</h2>
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 leading-tight">Masjids & Musallahs</h3>
+            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 leading-tight">in KwaZulu-Natal</p>
           </div>
         ) : (
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800">
@@ -130,7 +147,7 @@ const NearbyMasjidsSlider = () => {
               />
             </div>
 
-            {/* Km and Approx time pills */}
+            {/* Km and time pills */}
             <div className={`flex ${isMobile ? 'justify-center' : 'justify-between'} mt-6 px-2`}>
               {/* Km pill - only show on desktop */}
               {!isMobile && (
@@ -143,10 +160,10 @@ const NearbyMasjidsSlider = () => {
               )}
 
               {/* Time away pill */}
-              <div className={`bg-yellow-400 text-green-900 rounded-full font-semibold flex items-center gap-2 shadow-md w-max ${isMobile ? 'px-2 py-1' : 'px-4 py-1'}`}>
+              <div className={`bg-yellow-400 text-green-900 rounded-full font-semibold flex items-center gap-2 shadow-md w-max ${isMobile ? 'px-3 py-1' : 'px-4 py-1'}`}>
                 <Clock className="h-4 w-4" />
-                <span className={isMobile ? "text-lg font-bold" : ""}>
-                  {isMobile ? `${Math.round(distance[0] * 2)} mins away` : `${getApproxTime(`${distance[0]}km`)}`}
+                <span className={isMobile ? "text-base font-bold" : ""}>
+                  {getApproxTime(`${distance[0]}km`)}
                 </span>
               </div>
             </div>
@@ -161,9 +178,9 @@ const NearbyMasjidsSlider = () => {
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm md:text-base ${
               activeTab === 'nearby' 
                 ? 'text-white hover:opacity-90' 
-                : 'text-gray-700 border-gray-300 hover:bg-gray-100'
+                : 'bg-white text-black border-black hover:bg-gray-100'
             }`}
-            style={{ backgroundColor: '#072C23' }}
+            style={activeTab === 'nearby' ? { backgroundColor: '#072C23' } : {}}
           >
             <MapPin className="h-4 w-4" />
             NEARBY
@@ -175,9 +192,9 @@ const NearbyMasjidsSlider = () => {
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm md:text-base ${
               activeTab === 'upcoming' 
                 ? 'text-white hover:opacity-90' 
-                : 'text-gray-700 border-gray-300 hover:bg-gray-100'
+                : 'bg-white text-black border-black hover:bg-gray-100'
             }`}
-            style={{ backgroundColor: '#072C23' }}
+            style={activeTab === 'upcoming' ? { backgroundColor: '#072C23' } : {}}
           >
             <Clock className="h-4 w-4" />
             UPCOMING
@@ -189,9 +206,9 @@ const NearbyMasjidsSlider = () => {
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm md:text-base ${
               activeTab === 'info' 
                 ? 'text-white hover:opacity-90' 
-                : 'text-gray-700 border-gray-300 hover:bg-gray-100'
+                : 'bg-white text-black border-black hover:bg-gray-100'
             }`}
-            style={{ backgroundColor: '#072C23' }}
+            style={activeTab === 'info' ? { backgroundColor: '#072C23' } : {}}
           >
             <Info className="h-4 w-4" />
             INFO
@@ -259,11 +276,11 @@ const NearbyMasjidsSlider = () => {
                       <div className="flex items-center gap-2 mb-3 text-sm text-gray-600">
                         <span className="font-medium">{item.distance}</span>
                         <Badge 
-                          className="text-xs px-1.5 py-0.5 bg-yellow-600 text-white"
+                          className={`text-xs px-2 py-0.5 ${getPrayerBadgeStyle(item.prayer || '')}`}
                         >
-                          {item.prayer}
+                          {item.prayer?.charAt(0).toUpperCase() + item.prayer?.slice(1)}
                         </Badge>
-                        <span>{item.time}</span>
+                        <span className="font-medium">{item.time}</span>
                       </div>
                     )}
                     
@@ -271,9 +288,9 @@ const NearbyMasjidsSlider = () => {
                     {activeTab === 'upcoming' && item.prayer && item.time && (
                       <div className="flex items-center gap-2 mb-3">
                         <Badge 
-                          className="text-xs px-1.5 py-0.5 bg-blue-600 text-white"
+                          className={`text-xs px-2 py-0.5 ${getPrayerBadgeStyle(item.prayer)}`}
                         >
-                          {item.prayer}
+                          {item.prayer.charAt(0).toUpperCase() + item.prayer.slice(1)}
                         </Badge>
                         <span className="text-sm font-medium text-gray-800">{item.time}</span>
                       </div>
@@ -281,7 +298,7 @@ const NearbyMasjidsSlider = () => {
                     
                     {/* Last line: Time away in yellow badge */}
                     <div className="flex justify-center">
-                      <Badge className="bg-yellow-400 text-black font-medium text-sm px-2 py-0.5">
+                      <Badge className="bg-yellow-400 text-black font-medium text-sm px-2 py-1">
                         {getApproxTime(item.distance)}
                       </Badge>
                     </div>
@@ -325,13 +342,18 @@ const NearbyMasjidsSlider = () => {
                     
                     <div className="text-right ml-4">
                       {activeTab === 'upcoming' && item.time ? (
-                        <span className="text-lg font-bold text-blue-600" style={{ fontSize: '24px' }}>
-                          {item.time}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <Badge className={`${getPrayerBadgeStyle(item.prayer || '')}`}>
+                            {item.prayer?.charAt(0).toUpperCase() + item.prayer?.slice(1)}
+                          </Badge>
+                          <span className="text-lg font-bold text-blue-600" style={{ fontSize: '24px' }}>
+                            {item.time}
+                          </span>
+                        </div>
                       ) : activeTab === 'info' && item.prayer && item.time ? (
                         <div className="flex items-center gap-2">
-                          <Badge className="bg-yellow-600 text-white">
-                            {item.prayer}
+                          <Badge className={`${getPrayerBadgeStyle(item.prayer)}`}>
+                            {item.prayer.charAt(0).toUpperCase() + item.prayer.slice(1)}
                           </Badge>
                           <div className="text-lg font-bold text-yellow-600" style={{ fontSize: '24px' }}>
                             {item.time}
