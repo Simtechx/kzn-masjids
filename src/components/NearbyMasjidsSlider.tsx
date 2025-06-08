@@ -94,8 +94,8 @@ const NearbyMasjidsSlider = () => {
         {isMobile ? (
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-gray-800">Nearby</h2>
-            <h3 className="text-xl font-semibold text-gray-700">Masjids & Musallahs</h3>
-            <p className="text-lg text-gray-600">in KwaZulu-Natal</p>
+            <h3 className="text-2xl font-bold text-gray-800">Masjids & Musallahs</h3>
+            <p className="text-2xl font-bold text-gray-800">in KwaZulu-Natal</p>
           </div>
         ) : (
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800">
@@ -145,7 +145,9 @@ const NearbyMasjidsSlider = () => {
               {/* Approx time pill */}
               <div className="bg-yellow-400 text-green-900 rounded-full px-5 py-2 font-semibold flex items-center gap-2 shadow-md w-max">
                 <Clock className="h-4 w-4" />
-                <span>Approx {getApproxTime(`${distance[0]}km`)}</span>
+                <span className={isMobile ? "text-3xl md:text-4xl" : ""}>
+                  {isMobile ? `+ ${Math.round(distance[0] * 2)} mins away` : `Approx ${getApproxTime(`${distance[0]}km`)}`}
+                </span>
               </div>
             </div>
           </div>
@@ -208,72 +210,63 @@ const NearbyMasjidsSlider = () => {
             {getCurrentData().map((item) => (
               <div key={item.id} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                 {isMobile ? (
-                  // Mobile layout - block view like the image
+                  // Mobile layout - organized block view
                   <div>
                     {/* First line: Masjid name and badges */}
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2 flex-1">
-                        <h4 className="font-semibold text-gray-800 text-base">{item.name}</h4>
+                    <div className="flex items-center gap-2 mb-2">
+                      <h4 className="font-semibold text-gray-800 text-base">{item.name}</h4>
+                      <Badge 
+                        variant={item.type === 'Masjid' ? 'default' : 'secondary'}
+                        className={`text-xs ${
+                          item.type === 'Masjid' 
+                            ? 'bg-green-600 text-white hover:bg-green-700 border-green-600' 
+                            : 'bg-blue-600 text-white hover:bg-blue-700 border-blue-600'
+                        }`}
+                      >
+                        {item.type}
+                      </Badge>
+                      {item.status && (
                         <Badge 
-                          variant={item.type === 'Masjid' ? 'default' : 'secondary'}
+                          variant="outline"
                           className={`text-xs ${
-                            item.type === 'Masjid' 
-                              ? 'bg-green-600 text-white hover:bg-green-700 border-green-600' 
-                              : 'bg-blue-600 text-white hover:bg-blue-700 border-blue-600'
+                            item.status === 'Now' 
+                              ? 'bg-red-100 text-red-700 border-red-300' 
+                              : 'bg-green-100 text-green-700 border-green-300'
                           }`}
                         >
-                          {item.type}
+                          {item.status}
                         </Badge>
-                        {item.status && (
-                          <Badge 
-                            variant="outline"
-                            className={`text-xs ${
-                              item.status === 'Now' 
-                                ? 'bg-red-100 text-red-700 border-red-300' 
-                                : 'bg-green-100 text-green-700 border-green-300'
-                            }`}
-                          >
-                            {item.status}
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      {/* Prayer info on the right for INFO tab */}
-                      {activeTab === 'info' && item.prayer && item.time && (
-                        <div className="text-right">
-                          <div className="text-sm font-medium text-gray-800">{item.prayer}</div>
-                          <div className="text-sm text-gray-600">{item.time}</div>
-                        </div>
-                      )}
-                      
-                      {/* Time display for UPCOMING tab */}
-                      {activeTab === 'upcoming' && item.time && (
-                        <span className="text-lg font-bold text-blue-600">
-                          {item.time}
-                        </span>
                       )}
                     </div>
                     
-                    {/* Second line: Distance and sub-region */}
-                    <div className="flex items-center justify-between text-sm text-gray-600 mb-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">{item.distance}</span>
-                        <span>•</span>
-                        <span>{activeTab === 'info' ? item.address?.split(' - ')[0] : item.address}</span>
-                        {activeTab === 'upcoming' && item.prayer && (
-                          <>
-                            <span>•</span>
-                            <span className="text-blue-600 font-medium">{item.prayer}</span>
-                          </>
-                        )}
-                      </div>
+                    {/* Second line: Distance and area */}
+                    <div className="text-sm text-gray-600 mb-2">
+                      <span className="font-medium">{item.distance}</span>
+                      <span className="mx-2">•</span>
+                      <span>{activeTab === 'info' ? item.address?.split(' - ')[0] : item.address}</span>
                     </div>
                     
-                    {/* Third line: Time away with 16px font */}
-                    <div className="text-left">
-                      <span className="font-medium text-[#0f766e]" style={{ fontSize: '16px' }}>
+                    {/* Third line: Prayer info (for upcoming and info only) */}
+                    {(activeTab === 'upcoming' || activeTab === 'info') && item.prayer && item.time && (
+                      <div className="flex items-center gap-2 mb-2">
+                        <Badge 
+                          className={`text-xs ${
+                            activeTab === 'upcoming' 
+                              ? 'bg-blue-600 text-white' 
+                              : 'bg-yellow-600 text-white'
+                          }`}
+                        >
+                          {item.prayer}
+                        </Badge>
+                        <span className="text-sm font-medium text-gray-800">{item.time}</span>
+                      </div>
+                    )}
+                    
+                    {/* Last line: Time away in yellow badge */}
+                    <div className="flex justify-center">
+                      <Badge className="bg-yellow-400 text-black font-medium text-base px-4 py-2">
                         {getApproxTime(item.distance)}
-                      </span>
+                      </Badge>
                     </div>
                   </div>
                 ) : (
