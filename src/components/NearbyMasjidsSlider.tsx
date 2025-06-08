@@ -1,6 +1,8 @@
+
 import React, { useState } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { MapPin, Clock, Info } from 'lucide-react';
 
 interface MasjidData {
@@ -22,10 +24,10 @@ const mockNearbyData: MasjidData[] = [
 ];
 
 const mockUpcomingData: MasjidData[] = [
-  { id: 1, name: "Masjid-e-Noor", distance: "0.8 km away", address: "Overport Road", type: "Masjid", time: "06:32 PM", prayer: "Isha" },
-  { id: 2, name: "Durban Islamic Centre", distance: "1.2 km away", address: "Grey Street", type: "Masjid", time: "06:35 PM", prayer: "Isha" },
-  { id: 3, name: "Al-Ansaar Musalla", distance: "1.5 km away", address: "Chatsworth", type: "Musalla", time: "06:33 PM", prayer: "Isha" },
-  { id: 4, name: "Masjid Al-Hidaya", distance: "2.1 km away", address: "Pietermaritzburg", type: "Masjid", time: "06:30 PM", prayer: "Isha" }
+  { id: 1, name: "Masjid-e-Noor", distance: "0.8 km", address: "Overport Road", type: "Masjid", time: "06:32 PM", prayer: "Isha" },
+  { id: 2, name: "Durban Islamic Centre", distance: "1.2 km", address: "Grey Street", type: "Masjid", time: "06:35 PM", prayer: "Isha" },
+  { id: 3, name: "Al-Ansaar Musalla", distance: "1.5 km", address: "Chatsworth", type: "Musalla", time: "06:33 PM", prayer: "Isha" },
+  { id: 4, name: "Masjid Al-Hidaya", distance: "2.1 km", address: "Pietermaritzburg", type: "Masjid", time: "06:30 PM", prayer: "Isha" }
 ];
 
 const mockInfoData: MasjidData[] = [
@@ -78,6 +80,12 @@ const NearbyMasjidsSlider = () => {
     }
   };
 
+  const getApproxTime = (distance: string) => {
+    const km = parseFloat(distance.replace(/[^\d.]/g, ''));
+    const minutes = Math.round(km * 2); // Rough estimate: 2 minutes per km
+    return `~${minutes} min`;
+  };
+
   return (
     <section className="py-8 md:py-12 px-4 bg-white">
       <div className="container mx-auto max-w-4xl">
@@ -91,6 +99,12 @@ const NearbyMasjidsSlider = () => {
             <div className="text-center mb-6">
               <h3 className="text-3xl md:text-4xl font-bold">{distance[0]}km</h3>
               <p className="text-blue-100">Your search radius</p>
+              <div className="flex items-center justify-center gap-2 mt-2">
+                <Clock className="h-4 w-4 text-[#072c23]" />
+                <span className="text-sm text-[#072c23] font-medium">
+                  Approx {getApproxTime(`${distance[0]}km`)} travel time
+                </span>
+              </div>
             </div>
             
             <div className="relative">
@@ -168,31 +182,56 @@ const NearbyMasjidsSlider = () => {
               <div key={item.id} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-2">
                       <h4 className="font-semibold text-gray-800">{item.name}</h4>
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        item.type === 'Masjid' ? 'bg-teal-100 text-teal-700' : 'bg-blue-100 text-blue-700'
-                      }`}>
+                      <Badge 
+                        variant={item.type === 'Masjid' ? 'default' : 'secondary'}
+                        className={`text-xs ${
+                          item.type === 'Masjid' 
+                            ? 'bg-teal-600 text-white hover:bg-teal-700' 
+                            : 'bg-blue-600 text-white hover:bg-blue-700'
+                        }`}
+                      >
                         {item.type}
-                      </span>
+                      </Badge>
                       {item.status && (
-                        <span className={`text-xs px-2 py-1 rounded-full ${
-                          item.status === 'Now' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
-                        }`}>
+                        <Badge 
+                          variant="outline"
+                          className={`text-xs ${
+                            item.status === 'Now' 
+                              ? 'bg-red-100 text-red-700 border-red-300' 
+                              : 'bg-green-100 text-green-700 border-green-300'
+                          }`}
+                        >
                           {item.status}
-                        </span>
+                        </Badge>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600">{item.address}</p>
-                    {activeTab === 'upcoming' && item.prayer && (
-                      <p className="text-xs text-blue-600 mt-1">{item.prayer}</p>
-                    )}
+                    
+                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                      <span>{item.distance}</span>
+                      <span>•</span>
+                      <span>{getApproxTime(item.distance)}</span>
+                      {activeTab === 'upcoming' && item.prayer && (
+                        <>
+                          <span>•</span>
+                          <span className="text-blue-600 font-medium">{item.prayer}</span>
+                        </>
+                      )}
+                    </div>
+                    
+                    <p className="text-sm text-gray-600 mt-1">{item.address}</p>
                   </div>
-                  <div className="text-right">
+                  
+                  <div className="text-right ml-4">
                     {activeTab === 'upcoming' && item.time ? (
-                      <span className="text-lg font-bold text-blue-600">{item.time}</span>
+                      <span className="text-lg font-bold text-blue-600" style={{ fontSize: '16px' }}>
+                        {item.time}
+                      </span>
                     ) : (
-                      <span className="text-sm font-medium text-teal-600">{item.distance}</span>
+                      <span className="text-base font-medium text-teal-600" style={{ fontSize: '16px' }}>
+                        {getApproxTime(item.distance)}
+                      </span>
                     )}
                   </div>
                 </div>
