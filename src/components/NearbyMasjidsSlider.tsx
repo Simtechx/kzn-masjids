@@ -83,7 +83,7 @@ const NearbyMasjidsSlider = () => {
   const getApproxTime = (distance: string) => {
     const km = parseFloat(distance.replace(/[^\d.]/g, ''));
     const minutes = Math.round(km * 2); // Rough estimate: 2 minutes per km
-    return `~${minutes} min`;
+    return `+ ${minutes} mins away`;
   };
 
   return (
@@ -95,7 +95,7 @@ const NearbyMasjidsSlider = () => {
         
         {/* Distance Slider */}
         <div className="mb-8">
-          <div className="max-w-md mx-auto rounded-2xl p-6 text-white bg-gradient-to-r from-green-600 to-green-400 shadow-lg">
+          <div className="max-w-md mx-auto rounded-2xl p-6 text-white bg-[#0f766e] shadow-lg">
             <div className="text-center mb-6">
               <h3 className="text-3xl md:text-4xl font-bold">{distance[0]}km</h3>
               <p className="text-green-200">Your search radius</p>
@@ -108,7 +108,7 @@ const NearbyMasjidsSlider = () => {
                 max={100}
                 min={0}
                 step={1}
-                className="w-full [&_.bg-primary]:bg-yellow-400 [&_.border-primary]:border-yellow-400 [&_.bg-background]:bg-green-800"
+                className="w-full [&_.bg-primary]:bg-yellow-400 [&_.border-primary]:border-yellow-400 [&_.bg-background]:bg-white [&_.bg-secondary]:bg-white"
               />
             </div>
 
@@ -229,11 +229,11 @@ const NearbyMasjidsSlider = () => {
                   
                   <div className="text-right ml-4">
                     {activeTab === 'upcoming' && item.time ? (
-                      <span className="text-lg font-bold text-blue-600" style={{ fontSize: '16px' }}>
+                      <span className="text-lg font-bold text-blue-600" style={{ fontSize: '24px' }}>
                         {item.time}
                       </span>
                     ) : (
-                      <span className="text-base font-medium text-teal-600" style={{ fontSize: '16px' }}>
+                      <span className="font-medium text-[#0f766e]" style={{ fontSize: '24px' }}>
                         {getApproxTime(item.distance)}
                       </span>
                     )}
