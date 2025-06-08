@@ -32,10 +32,10 @@ const mockUpcomingData: MasjidData[] = [
 ];
 
 const mockInfoData: MasjidData[] = [
-  { id: 1, name: "Masjid Al-Hilal", distance: "1.0 km", address: "Fajr - 6:00 AM", type: "Masjid", status: "Now" },
-  { id: 2, name: "Central Musalla", distance: "1.5 km", address: "Maghrib - 6:15 PM", type: "Musalla", status: "Today" },
-  { id: 3, name: "Eastgate Masjid", distance: "2.0 km", address: "Asr - 4:30 PM", type: "Masjid", status: "Today" },
-  { id: 4, name: "Southlands Musalla", distance: "0.5 km", address: "Zuhr - 1:15 PM", type: "Musalla", status: "Now" }
+  { id: 1, name: "Masjid Al-Hilal", distance: "1.0 km", address: "Fajr - 6:00 AM", type: "Masjid", status: "Now", prayer: "Fajr", time: "6:00 AM" },
+  { id: 2, name: "Central Musalla", distance: "1.5 km", address: "Maghrib - 6:15 PM", type: "Musalla", status: "Today", prayer: "Maghrib", time: "6:15 PM" },
+  { id: 3, name: "Eastgate Masjid", distance: "2.0 km", address: "Asr - 4:30 PM", type: "Masjid", status: "Today", prayer: "Asr", time: "4:30 PM" },
+  { id: 4, name: "Southlands Musalla", distance: "0.5 km", address: "Zuhr - 1:15 PM", type: "Musalla", status: "Now", prayer: "Zuhr", time: "1:15 PM" }
 ];
 
 const NearbyMasjidsSlider = () => {
@@ -59,13 +59,13 @@ const NearbyMasjidsSlider = () => {
   const getHeaderTitle = () => {
     switch (activeTab) {
       case 'nearby':
-        return 'Nearby Mosques';
+        return isMobile ? 'Nearby' : 'Nearby Masjids';
       case 'upcoming':
-        return 'Upcoming Prayer Times';
+        return 'Upcoming Salaah Times';
       case 'info':
-        return 'Prayer Time Updates';
+        return 'Salaah Time Updates';
       default:
-        return 'Nearby Mosques';
+        return 'Nearby Masjids';
     }
   };
 
@@ -91,9 +91,17 @@ const NearbyMasjidsSlider = () => {
   return (
     <section className="py-8 md:py-12 px-4 bg-white">
       <div className="container mx-auto max-w-4xl">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800">
-          Nearby Masjids & Musallahs in KwaZulu-Natal
-        </h2>
+        {isMobile ? (
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-800">Nearby</h2>
+            <h3 className="text-xl font-semibold text-gray-700">Masjids & Musallahs</h3>
+            <p className="text-lg text-gray-600">in KwaZulu-Natal</p>
+          </div>
+        ) : (
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800">
+            Nearby Masjids & Musallahs in KwaZulu-Natal
+          </h2>
+        )}
         
         {/* Distance Slider */}
         <div className="mb-8">
@@ -123,14 +131,16 @@ const NearbyMasjidsSlider = () => {
             </div>
 
             {/* Km and Approx time pills */}
-            <div className="flex justify-between mt-6 px-2">
-              {/* Km pill */}
-              <div 
-                className="rounded-full px-5 py-2 font-semibold flex items-center justify-center shadow-md w-max"
-                style={{ backgroundColor: 'white', color: 'black', border: '2px solid #FBBF24' }}
-              >
-                {distance[0]} km
-              </div>
+            <div className={`flex ${isMobile ? 'justify-center' : 'justify-between'} mt-6 px-2`}>
+              {/* Km pill - only show on desktop */}
+              {!isMobile && (
+                <div 
+                  className="rounded-full px-5 py-2 font-semibold flex items-center justify-center shadow-md w-max"
+                  style={{ backgroundColor: 'white', color: 'black', border: '2px solid #FBBF24' }}
+                >
+                  {distance[0]} km
+                </div>
+              )}
 
               {/* Approx time pill */}
               <div className="bg-yellow-400 text-green-900 rounded-full px-5 py-2 font-semibold flex items-center gap-2 shadow-md w-max">
@@ -198,12 +208,12 @@ const NearbyMasjidsSlider = () => {
             {getCurrentData().map((item) => (
               <div key={item.id} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                 {isMobile ? (
-                  // Mobile layout - more compact and block-like
+                  // Mobile layout - block view like the image
                   <div>
-                    {/* First line: Masjid name and badge */}
+                    {/* First line: Masjid name and badges */}
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2 flex-1">
-                        <h4 className="font-semibold text-gray-800 text-sm">{item.name}</h4>
+                        <h4 className="font-semibold text-gray-800 text-base">{item.name}</h4>
                         <Badge 
                           variant={item.type === 'Masjid' ? 'default' : 'secondary'}
                           className={`text-xs ${
@@ -228,26 +238,28 @@ const NearbyMasjidsSlider = () => {
                         )}
                       </div>
                       
-                      {/* Time display on the right */}
-                      <div className="text-right">
-                        {activeTab === 'upcoming' && item.time ? (
-                          <span className="text-lg font-bold text-blue-600" style={{ fontSize: '18px' }}>
-                            {item.time}
-                          </span>
-                        ) : (
-                          <span className="font-medium text-[#0f766e]" style={{ fontSize: '18px' }}>
-                            {getApproxTime(item.distance)}
-                          </span>
-                        )}
-                      </div>
+                      {/* Prayer info on the right for INFO tab */}
+                      {activeTab === 'info' && item.prayer && item.time && (
+                        <div className="text-right">
+                          <div className="text-sm font-medium text-gray-800">{item.prayer}</div>
+                          <div className="text-sm text-gray-600">{item.time}</div>
+                        </div>
+                      )}
+                      
+                      {/* Time display for UPCOMING tab */}
+                      {activeTab === 'upcoming' && item.time && (
+                        <span className="text-lg font-bold text-blue-600">
+                          {item.time}
+                        </span>
+                      )}
                     </div>
                     
-                    {/* Second line: Distance, time info, and sub-region */}
-                    <div className="flex items-center justify-between text-sm text-gray-600">
+                    {/* Second line: Distance and sub-region */}
+                    <div className="flex items-center justify-between text-sm text-gray-600 mb-1">
                       <div className="flex items-center gap-2">
                         <span className="font-medium">{item.distance}</span>
                         <span>•</span>
-                        <span>{item.address}</span>
+                        <span>{activeTab === 'info' ? item.address?.split(' - ')[0] : item.address}</span>
                         {activeTab === 'upcoming' && item.prayer && (
                           <>
                             <span>•</span>
@@ -255,6 +267,13 @@ const NearbyMasjidsSlider = () => {
                           </>
                         )}
                       </div>
+                    </div>
+                    
+                    {/* Third line: Time away with 16px font */}
+                    <div className="text-left">
+                      <span className="font-medium text-[#0f766e]" style={{ fontSize: '16px' }}>
+                        {getApproxTime(item.distance)}
+                      </span>
                     </div>
                   </div>
                 ) : (
@@ -297,9 +316,17 @@ const NearbyMasjidsSlider = () => {
                             <span className="text-blue-600 font-medium">{item.prayer}</span>
                           </>
                         )}
+                        {activeTab === 'info' && item.prayer && (
+                          <>
+                            <span>•</span>
+                            <span className="text-yellow-600 font-medium">{item.prayer}</span>
+                          </>
+                        )}
                       </div>
                       
-                      <p className="text-sm text-gray-600 mt-1">{item.address}</p>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {activeTab === 'info' ? item.address?.split(' - ')[0] : item.address}
+                      </p>
                     </div>
                     
                     <div className="text-right ml-4">
@@ -307,6 +334,11 @@ const NearbyMasjidsSlider = () => {
                         <span className="text-lg font-bold text-blue-600" style={{ fontSize: '24px' }}>
                           {item.time}
                         </span>
+                      ) : activeTab === 'info' && item.prayer && item.time ? (
+                        <div>
+                          <div className="text-lg font-bold text-yellow-600">{item.prayer}</div>
+                          <div className="text-sm text-gray-600">{item.time}</div>
+                        </div>
                       ) : (
                         <span className="font-medium text-[#0f766e]" style={{ fontSize: '24px' }}>
                           {getApproxTime(item.distance)}
