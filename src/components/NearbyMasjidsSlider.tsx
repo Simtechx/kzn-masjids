@@ -4,6 +4,7 @@ import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Clock, Info } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface MasjidData {
   id: number;
@@ -40,6 +41,7 @@ const mockInfoData: MasjidData[] = [
 const NearbyMasjidsSlider = () => {
   const [distance, setDistance] = useState([15]);
   const [activeTab, setActiveTab] = useState<'nearby' | 'upcoming' | 'info'>('nearby');
+  const isMobile = useIsMobile();
 
   const getCurrentData = () => {
     switch (activeTab) {
@@ -95,7 +97,10 @@ const NearbyMasjidsSlider = () => {
         
         {/* Distance Slider */}
         <div className="mb-8">
-          <div className="max-w-md mx-auto rounded-2xl p-6 text-white bg-[#0f766e] shadow-lg">
+          <div 
+            className="max-w-md md:max-w-4xl mx-auto rounded-2xl p-6 text-white shadow-lg"
+            style={{ backgroundColor: '#072c23' }}
+          >
             <div className="text-center mb-6">
               <h3 className="text-3xl md:text-4xl font-bold">{distance[0]}km</h3>
               <p className="text-green-200">Your search radius</p>
@@ -109,13 +114,21 @@ const NearbyMasjidsSlider = () => {
                 min={0}
                 step={1}
                 className="w-full [&_.bg-primary]:bg-yellow-400 [&_.border-primary]:border-yellow-400 [&_.bg-background]:bg-white [&_.bg-secondary]:bg-white"
+                style={{
+                  '--slider-thumb-size': '20px',
+                  '--slider-thumb-bg': '#FBBF24',
+                  '--slider-thumb-border': '2px solid black'
+                } as React.CSSProperties}
               />
             </div>
 
             {/* Km and Approx time pills */}
             <div className="flex justify-between mt-6 px-2">
               {/* Km pill */}
-              <div className="bg-green-700 text-white rounded-full px-5 py-2 font-semibold flex items-center justify-center shadow-md w-max">
+              <div 
+                className="rounded-full px-5 py-2 font-semibold flex items-center justify-center shadow-md w-max"
+                style={{ backgroundColor: 'white', color: 'black', border: '2px solid #FBBF24' }}
+              >
                 {distance[0]} km
               </div>
 
@@ -184,61 +197,124 @@ const NearbyMasjidsSlider = () => {
           <div className="space-y-4">
             {getCurrentData().map((item) => (
               <div key={item.id} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h4 className="font-semibold text-gray-800">{item.name}</h4>
-                      <Badge 
-                        variant={item.type === 'Masjid' ? 'default' : 'secondary'}
-                        className={`text-xs ${
-                          item.type === 'Masjid' 
-                            ? 'bg-green-600 text-white hover:bg-green-700 border-green-600' 
-                            : 'bg-blue-600 text-white hover:bg-blue-700 border-blue-600'
-                        }`}
-                      >
-                        {item.type}
-                      </Badge>
-                      {item.status && (
+                {isMobile ? (
+                  // Mobile layout - more compact and block-like
+                  <div>
+                    {/* First line: Masjid name and badge */}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2 flex-1">
+                        <h4 className="font-semibold text-gray-800 text-sm">{item.name}</h4>
                         <Badge 
-                          variant="outline"
+                          variant={item.type === 'Masjid' ? 'default' : 'secondary'}
                           className={`text-xs ${
-                            item.status === 'Now' 
-                              ? 'bg-red-100 text-red-700 border-red-300' 
-                              : 'bg-green-100 text-green-700 border-green-300'
+                            item.type === 'Masjid' 
+                              ? 'bg-green-600 text-white hover:bg-green-700 border-green-600' 
+                              : 'bg-blue-600 text-white hover:bg-blue-700 border-blue-600'
                           }`}
                         >
-                          {item.status}
+                          {item.type}
                         </Badge>
-                      )}
+                        {item.status && (
+                          <Badge 
+                            variant="outline"
+                            className={`text-xs ${
+                              item.status === 'Now' 
+                                ? 'bg-red-100 text-red-700 border-red-300' 
+                                : 'bg-green-100 text-green-700 border-green-300'
+                            }`}
+                          >
+                            {item.status}
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      {/* Time display on the right */}
+                      <div className="text-right">
+                        {activeTab === 'upcoming' && item.time ? (
+                          <span className="text-lg font-bold text-blue-600" style={{ fontSize: '18px' }}>
+                            {item.time}
+                          </span>
+                        ) : (
+                          <span className="font-medium text-[#0f766e]" style={{ fontSize: '18px' }}>
+                            {getApproxTime(item.distance)}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
-                      <span>{item.distance}</span>
-                      <span>•</span>
-                      <span>{getApproxTime(item.distance)}</span>
-                      {activeTab === 'upcoming' && item.prayer && (
-                        <>
-                          <span>•</span>
-                          <span className="text-blue-600 font-medium">{item.prayer}</span>
-                        </>
-                      )}
+                    {/* Second line: Distance, time info, and sub-region */}
+                    <div className="flex items-center justify-between text-sm text-gray-600">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{item.distance}</span>
+                        <span>•</span>
+                        <span>{item.address}</span>
+                        {activeTab === 'upcoming' && item.prayer && (
+                          <>
+                            <span>•</span>
+                            <span className="text-blue-600 font-medium">{item.prayer}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  // Desktop layout - original design
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h4 className="font-semibold text-gray-800">{item.name}</h4>
+                        <Badge 
+                          variant={item.type === 'Masjid' ? 'default' : 'secondary'}
+                          className={`text-xs ${
+                            item.type === 'Masjid' 
+                              ? 'bg-green-600 text-white hover:bg-green-700 border-green-600' 
+                              : 'bg-blue-600 text-white hover:bg-blue-700 border-blue-600'
+                          }`}
+                        >
+                          {item.type}
+                        </Badge>
+                        {item.status && (
+                          <Badge 
+                            variant="outline"
+                            className={`text-xs ${
+                              item.status === 'Now' 
+                                ? 'bg-red-100 text-red-700 border-red-300' 
+                                : 'bg-green-100 text-green-700 border-green-300'
+                            }`}
+                          >
+                            {item.status}
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <span>{item.distance}</span>
+                        <span>•</span>
+                        <span>{getApproxTime(item.distance)}</span>
+                        {activeTab === 'upcoming' && item.prayer && (
+                          <>
+                            <span>•</span>
+                            <span className="text-blue-600 font-medium">{item.prayer}</span>
+                          </>
+                        )}
+                      </div>
+                      
+                      <p className="text-sm text-gray-600 mt-1">{item.address}</p>
                     </div>
                     
-                    <p className="text-sm text-gray-600 mt-1">{item.address}</p>
+                    <div className="text-right ml-4">
+                      {activeTab === 'upcoming' && item.time ? (
+                        <span className="text-lg font-bold text-blue-600" style={{ fontSize: '24px' }}>
+                          {item.time}
+                        </span>
+                      ) : (
+                        <span className="font-medium text-[#0f766e]" style={{ fontSize: '24px' }}>
+                          {getApproxTime(item.distance)}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  
-                  <div className="text-right ml-4">
-                    {activeTab === 'upcoming' && item.time ? (
-                      <span className="text-lg font-bold text-blue-600" style={{ fontSize: '24px' }}>
-                        {item.time}
-                      </span>
-                    ) : (
-                      <span className="font-medium text-[#0f766e]" style={{ fontSize: '24px' }}>
-                        {getApproxTime(item.distance)}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                )}
               </div>
             ))}
           </div>
