@@ -54,14 +54,58 @@ const PrayerTimeFilter = () => {
     return [...new Set(times)].sort();
   };
 
+  // Get filtered masjids for block/table view based on selected prayer and time
+  const getFilteredMasjidsForView = () => {
+    if (!selectedRegion) return [];
+    
+    const regionData = prayerTimesData[selectedRegion as keyof typeof prayerTimesData] || [];
+    let filteredData = regionData;
+    
+    // Filter by sub-region if selected
+    if (selectedSubRegion) {
+      filteredData = regionData.filter(masjid => masjid.district === selectedSubRegion);
+    }
+    
+    // Filter by selected prayer time if both prayer and time are selected
+    if (activePrayer && selectedTime) {
+      filteredData = filteredData.filter(masjid => masjid[activePrayer] === selectedTime);
+    }
+    
+    return filteredData;
+  };
+
   // Get header title based on selections
   const getDisplayTitle = () => {
-    if (selectedSubRegion && selectedRegion) {
+    if (activePrayer && selectedTime) {
+      const baseLocation = selectedSubRegion ? selectedSubRegion : selectedRegion;
+      return `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime} in ${baseLocation}`;
+    } else if (selectedSubRegion && selectedRegion) {
       return `All Masjids in ${selectedSubRegion}, ${selectedRegion}`;
     } else if (selectedRegion) {
       return `All Masjids in ${selectedRegion}`;
     }
     return 'All Masjids';
+  };
+
+  // Define prayer colors for active states
+  const getPrayerActiveColor = (prayer: PrayerType) => {
+    const colors = {
+      fajr: 'bg-[#DB2777] text-white',
+      dhuhr: 'bg-[#D97706] text-white', 
+      asr: 'bg-[#059669] text-white',
+      isha: 'bg-[#4F46E5] text-white'
+    };
+    return colors[prayer];
+  };
+
+  const getPrayerHoverColor = (prayer: PrayerType) => {
+    const colors = {
+      fajr: 'hover:bg-[#DB2777] hover:text-white',
+      dhuhr: 'hover:bg-[#D97706] hover:text-white',
+      asr: 'hover:bg-[#059669] hover:text-white', 
+      isha: 'hover:bg-[#4F46E5] hover:text-white'
+    };
+    return colors[prayer];
   };
 
   return (
@@ -156,8 +200,8 @@ const PrayerTimeFilter = () => {
                       onClick={() => handlePrayerTimeClick('fajr', time)}
                       className={`w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 ${
                         activePrayer === 'fajr' && selectedTime === time
-                          ? 'bg-yellow-500 text-black'
-                          : 'bg-pink-50 text-[#DB2777] hover:bg-[#DB2777] hover:text-white'
+                          ? getPrayerActiveColor('fajr')
+                          : `bg-pink-50 text-[#DB2777] ${getPrayerHoverColor('fajr')}`
                       }`}
                     >
                       {time}
@@ -178,8 +222,8 @@ const PrayerTimeFilter = () => {
                       onClick={() => handlePrayerTimeClick('dhuhr', time)}
                       className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 ${
                         activePrayer === 'dhuhr' && selectedTime === time
-                          ? 'bg-yellow-500 text-black'
-                          : 'bg-amber-50 text-[#D97706] hover:bg-[#D97706] hover:text-white'
+                          ? getPrayerActiveColor('dhuhr')
+                          : `bg-amber-50 text-[#D97706] ${getPrayerHoverColor('dhuhr')}`
                       }`}
                     >
                       {time}
@@ -200,8 +244,8 @@ const PrayerTimeFilter = () => {
                       onClick={() => handlePrayerTimeClick('asr', time)}
                       className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 ${
                         activePrayer === 'asr' && selectedTime === time
-                          ? 'bg-yellow-500 text-black'
-                          : 'bg-emerald-50 text-[#059669] hover:bg-[#059669] hover:text-white'
+                          ? getPrayerActiveColor('asr')
+                          : `bg-emerald-50 text-[#059669] ${getPrayerHoverColor('asr')}`
                       }`}
                     >
                       {time}
@@ -222,8 +266,8 @@ const PrayerTimeFilter = () => {
                       onClick={() => handlePrayerTimeClick('isha', time)}
                       className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 ${
                         activePrayer === 'isha' && selectedTime === time
-                          ? 'bg-yellow-500 text-black'
-                          : 'bg-indigo-50 text-[#4F46E5] hover:bg-[#4F46E5] hover:text-white'
+                          ? getPrayerActiveColor('isha')
+                          : `bg-indigo-50 text-[#4F46E5] ${getPrayerHoverColor('isha')}`
                       }`}
                     >
                       {time}
@@ -257,7 +301,7 @@ const PrayerTimeFilter = () => {
                 selectedTime={selectedTime}
                 activePrayer={activePrayer}
                 searchType="earliest"
-                filteredPrayerTimes={getFilteredPrayerTimes()}
+                filteredPrayerTimes={getFilteredMasjidsForView()}
                 viewMode={viewMode}
               />
             </div>
