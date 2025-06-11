@@ -43,6 +43,17 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
     asr: 'bg-emerald-600',
     isha: 'bg-indigo-600',
   };
+
+  // Define active prayer colors (same as in PrayerTimeFilter)
+  const getPrayerActiveColor = (prayer: PrayerType) => {
+    const colors = {
+      fajr: 'bg-[#DB2777] text-white',
+      dhuhr: 'bg-[#D97706] text-white', 
+      asr: 'bg-[#059669] text-white',
+      isha: 'bg-[#4F46E5] text-white'
+    };
+    return colors[prayer];
+  };
   
   // Find the earliest and latest times for each prayer type
   const earliestTimes = prayerTypes.reduce((acc, prayer) => {
@@ -102,11 +113,11 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
                   key={prayer}
                   className={`p-2 rounded text-center ${
                     isSelected
-                      ? 'bg-yellow-500 text-black' 
+                      ? getPrayerActiveColor(prayer)
                       : prayerColors[prayer]
                   }`}
                 >
-                  <div className={`text-xs font-medium ${isSelected ? 'text-black' : prayerTextColors[prayer]}`}>
+                  <div className={`text-xs font-medium ${isSelected ? 'text-white' : prayerTextColors[prayer]}`}>
                     {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
                   </div>
                   <div className="text-center font-medium">{masjid[prayer]}</div>

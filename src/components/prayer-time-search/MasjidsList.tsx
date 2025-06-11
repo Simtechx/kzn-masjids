@@ -20,11 +20,7 @@ const MasjidsList: React.FC<MasjidsListProps> = ({
   viewMode
 }) => {
   return (
-    <div className="mt-6">
-      <h3 className="text-xl font-bold mb-4 text-teal-700">
-        {`All Masjids in ${selectedRegion}`}
-      </h3>
-      
+    <div>
       {viewMode === 'table' ? (
         <MasjidsTableView
           selectedRegion={selectedRegion}

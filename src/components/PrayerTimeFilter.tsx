@@ -291,10 +291,6 @@ const PrayerTimeFilter = () => {
             
             {/* Prayer Times Display */}
             <div className="mt-6">
-              <h3 className="text-xl font-bold mb-4 text-teal-700">
-                {getDisplayTitle()}
-              </h3>
-              
               <PrayerTimesDisplay
                 selectedRegion={selectedRegion}
                 selectedSubRegion={selectedSubRegion}
