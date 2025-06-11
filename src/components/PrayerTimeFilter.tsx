@@ -7,7 +7,6 @@ import RegionSelector from './prayer-time-search/RegionSelector';
 import RegionTable from './prayer-time-search/RegionTable';
 import RegionTiles from './prayer-time-search/RegionTiles';
 import SubRegionSelector from './prayer-time-search/SubRegionSelector';
-import PrayerTimeSelection from './prayer-time-search/PrayerTimeSelection';
 import ViewToggle from './prayer-time-search/ViewToggle';
 import PrayerTimesDisplay from './prayer-time-search/PrayerTimesDisplay';
 import { usePrayerTimeSearch } from '@/hooks/usePrayerTimeSearch';
@@ -40,14 +39,8 @@ const PrayerTimeFilter = () => {
         {/* Header */}
         <div className={`flex flex-col ${isMobile ? 'items-center text-center' : 'md:flex-row md:justify-between md:items-center'} gap-4 mb-6`}>
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#062C25] leading-tight">Prayer Time Filter</h2>
-            <p className="text-gray-600 mt-1">
-              {selectedRegion 
-                ? `Filter prayer times in ${selectedRegion}` 
-                : isMobile 
-                  ? "Filter Prayer Times\nin KwaZulu-Natal\nSelect a Region to View Times"
-                  : "Filter Prayer Times in KwaZulu-Natal – Select a Region to View Times"}
-            </p>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#062C25] leading-tight">Salaah Time Filters</h2>
+            <p className="text-gray-600 mt-1">Filter salaah times in KwaZulu-Natal</p>
           </div>
           
           <div className="bg-gray-100 p-2 rounded-md self-center md:self-auto overflow-x-auto">
@@ -114,40 +107,12 @@ const PrayerTimeFilter = () => {
           />
         )}
 
-        {/* Prayer Time Selection */}
+        {/* Vertical Prayer Time Cards - filtered by selected region and sub-region */}
         {selectedRegion && (
-          <div className="bg-gray-100 p-4 rounded-lg">
-            <PrayerTimeSelection
-              selectedRegion={selectedRegion}
-              activePrayer={activePrayer}
-              selectedTime={selectedTime}
-              onSelectPrayer={handlePrayerSelection}
-              onSelectTime={handleTimeSelection}
-            />
-            
-            {/* View Toggle */}
-            <ViewToggle 
-              viewMode={viewMode} 
-              onViewChange={setViewMode} 
-            />
-            
-            {/* Prayer Times Display */}
-            <PrayerTimesDisplay
-              selectedRegion={selectedRegion}
-              selectedSubRegion={selectedSubRegion}
-              selectedTime={selectedTime}
-              activePrayer={activePrayer}
-              searchType="earliest"
-              filteredPrayerTimes={getFilteredPrayerTimes()}
-              viewMode={viewMode}
-            />
-          </div>
-        )}
-
-        {/* Prayer Time Cards - Static version that matches the existing design */}
-        {selectedRegion && !activePrayer && (
           <div className="mt-8">
-            <h3 className="text-xl font-bold mb-6 text-[#062C25]">Prayer Times in {selectedRegion}</h3>
+            <h3 className="text-xl font-bold mb-6 text-[#062C25]">
+              Salaah Times in {selectedSubRegion ? selectedSubRegion : selectedRegion}
+            </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {/* FAJR */}
               <div className="min-w-0">
@@ -220,6 +185,28 @@ const PrayerTimeFilter = () => {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Block and Table View System - below the vertical time cards */}
+        {selectedRegion && (
+          <div className="mt-8 bg-gray-100 p-4 rounded-lg">
+            {/* View Toggle */}
+            <ViewToggle 
+              viewMode={viewMode} 
+              onViewChange={setViewMode} 
+            />
+            
+            {/* Prayer Times Display */}
+            <PrayerTimesDisplay
+              selectedRegion={selectedRegion}
+              selectedSubRegion={selectedSubRegion}
+              selectedTime={selectedTime}
+              activePrayer={activePrayer}
+              searchType="earliest"
+              filteredPrayerTimes={getFilteredPrayerTimes()}
+              viewMode={viewMode}
+            />
           </div>
         )}
       </div>
