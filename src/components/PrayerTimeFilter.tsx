@@ -10,27 +10,58 @@ import SubRegionSelector from './prayer-time-search/SubRegionSelector';
 import ViewToggle from './prayer-time-search/ViewToggle';
 import PrayerTimesDisplay from './prayer-time-search/PrayerTimesDisplay';
 import { usePrayerTimeSearch } from '@/hooks/usePrayerTimeSearch';
+import { prayerTimesData, PrayerType } from '@/utils/prayerTimeUtils';
 
 const PrayerTimeFilter = () => {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [regionViewMode, setRegionViewMode] = useState<'icons' | 'grid' | 'tiles'>('icons');
+  const [activePrayer, setActivePrayer] = useState<PrayerType | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const isMobile = useIsMobile();
 
   // Use the prayer time search hook for full functionality
   const {
     selectedSubRegion,
-    activePrayer,
-    selectedTime,
     viewMode,
     handleSubRegionSelection,
-    handlePrayerSelection,
-    handleTimeSelection,
     getFilteredPrayerTimes,
     setViewMode
   } = usePrayerTimeSearch();
 
   const handleRegionSelection = (region: string) => {
     setSelectedRegion(region);
+    setActivePrayer(null);
+    setSelectedTime(null);
+  };
+
+  const handlePrayerTimeClick = (prayer: PrayerType, time: string) => {
+    setActivePrayer(prayer);
+    setSelectedTime(time);
+  };
+
+  // Get filtered times based on region and sub-region
+  const getFilteredTimes = (prayer: PrayerType) => {
+    if (!selectedRegion) return [];
+    
+    const regionData = prayerTimesData[selectedRegion as keyof typeof prayerTimesData] || [];
+    let filteredData = regionData;
+    
+    if (selectedSubRegion) {
+      filteredData = regionData.filter(masjid => masjid.district === selectedSubRegion);
+    }
+    
+    const times = filteredData.map(masjid => masjid[prayer]).filter(time => time);
+    return [...new Set(times)].sort();
+  };
+
+  // Get header title based on selections
+  const getDisplayTitle = () => {
+    if (selectedSubRegion && selectedRegion) {
+      return `All Masjids in ${selectedSubRegion}, ${selectedRegion}`;
+    } else if (selectedRegion) {
+      return `All Masjids in ${selectedRegion}`;
+    }
+    return 'All Masjids';
   };
 
   return (
@@ -119,16 +150,19 @@ const PrayerTimeFilter = () => {
                 <div className="bg-[#DB2777] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center">FAJR</div>
                 <div className="bg-white border border-gray-200 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
                   <div className="bg-white text-[#DB2777] border-2 border-[#DB2777] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 bg-pink-50 text-[#DB2777] hover:bg-[#DB2777] hover:text-white">05:25</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 bg-pink-50 text-[#DB2777] hover:bg-[#DB2777] hover:text-white">05:31</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 bg-pink-50 text-[#DB2777] hover:bg-[#DB2777] hover:text-white">05:35</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 bg-pink-50 text-[#DB2777] hover:bg-[#DB2777] hover:text-white">05:40</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 bg-pink-50 text-[#DB2777] hover:bg-[#DB2777] hover:text-white">05:45</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 bg-pink-50 text-[#DB2777] hover:bg-[#DB2777] hover:text-white">05:50</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 bg-pink-50 text-[#DB2777] hover:bg-[#DB2777] hover:text-white">05:55</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 bg-pink-50 text-[#DB2777] hover:bg-[#DB2777] hover:text-white">06:00</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 bg-pink-50 text-[#DB2777] hover:bg-[#DB2777] hover:text-white">06:05</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 bg-pink-50 text-[#DB2777] hover:bg-[#DB2777] hover:text-white">06:10</button>
+                  {getFilteredTimes('fajr').map((time, index) => (
+                    <button 
+                      key={index}
+                      onClick={() => handlePrayerTimeClick('fajr', time)}
+                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 ${
+                        activePrayer === 'fajr' && selectedTime === time
+                          ? 'bg-yellow-500 text-black'
+                          : 'bg-pink-50 text-[#DB2777] hover:bg-[#DB2777] hover:text-white'
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
                   <div className="bg-[#8B1E4D] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">LATEST</div>
                 </div>
               </div>
@@ -138,15 +172,19 @@ const PrayerTimeFilter = () => {
                 <div className="bg-[#D97706] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center">DHUHR</div>
                 <div className="bg-white border border-gray-200 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
                   <div className="bg-white text-[#D97706] border-2 border-[#D97706] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-amber-50 text-[#D97706] hover:bg-[#D97706] hover:text-white">12:15</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-amber-50 text-[#D97706] hover:bg-[#D97706] hover:text-white">12:20</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-amber-50 text-[#D97706] hover:bg-[#D97706] hover:text-white">12:30</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-amber-50 text-[#D97706] hover:bg-[#D97706] hover:text-white">12:40</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-amber-50 text-[#D97706] hover:bg-[#D97706] hover:text-white">12:45</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-amber-50 text-[#D97706] hover:bg-[#D97706] hover:text-white">13:00</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-amber-50 text-[#D97706] hover:bg-[#D97706] hover:text-white">13:10</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-amber-50 text-[#D97706] hover:bg-[#D97706] hover:text-white">13:15</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-amber-50 text-[#D97706] hover:bg-[#D97706] hover:text-white">13:20</button>
+                  {getFilteredTimes('dhuhr').map((time, index) => (
+                    <button 
+                      key={index}
+                      onClick={() => handlePrayerTimeClick('dhuhr', time)}
+                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 ${
+                        activePrayer === 'dhuhr' && selectedTime === time
+                          ? 'bg-yellow-500 text-black'
+                          : 'bg-amber-50 text-[#D97706] hover:bg-[#D97706] hover:text-white'
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
                   <div className="bg-[#A05E05] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">LATEST</div>
                 </div>
               </div>
@@ -156,13 +194,19 @@ const PrayerTimeFilter = () => {
                 <div className="bg-[#059669] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center">ASR</div>
                 <div className="bg-white border border-gray-200 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
                   <div className="bg-white text-[#059669] border-2 border-[#059669] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-emerald-50 text-[#059669] hover:bg-[#059669] hover:text-white">15:15</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-emerald-50 text-[#059669] hover:bg-[#059669] hover:text-white">15:30</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-emerald-50 text-[#059669] hover:bg-[#059669] hover:text-white">15:45</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-emerald-50 text-[#059669] hover:bg-[#059669] hover:text-white">16:00</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-emerald-50 text-[#059669] hover:bg-[#059669] hover:text-white">16:15</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-emerald-50 text-[#059669] hover:bg-[#059669] hover:text-white">16:20</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-emerald-50 text-[#059669] hover:bg-[#059669] hover:text-white">16:25</button>
+                  {getFilteredTimes('asr').map((time, index) => (
+                    <button 
+                      key={index}
+                      onClick={() => handlePrayerTimeClick('asr', time)}
+                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 ${
+                        activePrayer === 'asr' && selectedTime === time
+                          ? 'bg-yellow-500 text-black'
+                          : 'bg-emerald-50 text-[#059669] hover:bg-[#059669] hover:text-white'
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
                   <div className="bg-[#046F4D] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">LATEST</div>
                 </div>
               </div>
@@ -172,15 +216,19 @@ const PrayerTimeFilter = () => {
                 <div className="bg-[#4F46E5] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center">ISHA</div>
                 <div className="bg-white border border-gray-200 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
                   <div className="bg-white text-[#4F46E5] border-2 border-[#4F46E5] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-indigo-50 text-[#4F46E5] hover:bg-[#4F46E5] hover:text-white">18:38</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-indigo-50 text-[#4F46E5] hover:bg-[#4F46E5] hover:text-white">18:40</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-indigo-50 text-[#4F46E5] hover:bg-[#4F46E5] hover:text-white">18:45</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-indigo-50 text-[#4F46E5] hover:bg-[#4F46E5] hover:text-white">18:50</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-indigo-50 text-[#4F46E5] hover:bg-[#4F46E5] hover:text-white">18:59</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-indigo-50 text-[#4F46E5] hover:bg-[#4F46E5] hover:text-white">19:00</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-indigo-50 text-[#4F46E5] hover:bg-[#4F46E5] hover:text-white">19:05</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-indigo-50 text-[#4F46E5] hover:bg-[#4F46E5] hover:text-white">19:10</button>
-                  <button className="w-full py-1 md:py-2 px-1 md:px-3 rounded bg-indigo-50 text-[#4F46E5] hover:bg-[#4F46E5] hover:text-white">19:15</button>
+                  {getFilteredTimes('isha').map((time, index) => (
+                    <button 
+                      key={index}
+                      onClick={() => handlePrayerTimeClick('isha', time)}
+                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 ${
+                        activePrayer === 'isha' && selectedTime === time
+                          ? 'bg-yellow-500 text-black'
+                          : 'bg-indigo-50 text-[#4F46E5] hover:bg-[#4F46E5] hover:text-white'
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
                   <div className="bg-[#3C35B8] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">LATEST</div>
                 </div>
               </div>
@@ -198,15 +246,21 @@ const PrayerTimeFilter = () => {
             />
             
             {/* Prayer Times Display */}
-            <PrayerTimesDisplay
-              selectedRegion={selectedRegion}
-              selectedSubRegion={selectedSubRegion}
-              selectedTime={selectedTime}
-              activePrayer={activePrayer}
-              searchType="earliest"
-              filteredPrayerTimes={getFilteredPrayerTimes()}
-              viewMode={viewMode}
-            />
+            <div className="mt-6">
+              <h3 className="text-xl font-bold mb-4 text-teal-700">
+                {getDisplayTitle()}
+              </h3>
+              
+              <PrayerTimesDisplay
+                selectedRegion={selectedRegion}
+                selectedSubRegion={selectedSubRegion}
+                selectedTime={selectedTime}
+                activePrayer={activePrayer}
+                searchType="earliest"
+                filteredPrayerTimes={getFilteredPrayerTimes()}
+                viewMode={viewMode}
+              />
+            </div>
           </div>
         )}
       </div>

@@ -21,11 +21,11 @@ const Index = () => {
       {/* Nearby Masjids Slider - New module between LivePrayerTimes and PrayerTimeFilter */}
       <NearbyMasjidsSlider />
       
+      {/* Find Masjids Hero Section - Moved above PrayerTimeFilter */}
+      <FindMasjidsHero />
+      
       {/* Prayer Time Filter - New section with region selector and prayer time cards */}
       <PrayerTimeFilter />
-      
-      {/* Find Masjids Hero Section */}
-      <FindMasjidsHero />
       
       <main>
         {/* SalaahTimeSearch */}
