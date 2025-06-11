@@ -6,11 +6,29 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import RegionSelector from './prayer-time-search/RegionSelector';
 import RegionTable from './prayer-time-search/RegionTable';
 import RegionTiles from './prayer-time-search/RegionTiles';
+import SubRegionSelector from './prayer-time-search/SubRegionSelector';
+import PrayerTimeSelection from './prayer-time-search/PrayerTimeSelection';
+import ViewToggle from './prayer-time-search/ViewToggle';
+import PrayerTimesDisplay from './prayer-time-search/PrayerTimesDisplay';
+import { usePrayerTimeSearch } from '@/hooks/usePrayerTimeSearch';
 
 const PrayerTimeFilter = () => {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [regionViewMode, setRegionViewMode] = useState<'icons' | 'grid' | 'tiles'>('icons');
   const isMobile = useIsMobile();
+
+  // Use the prayer time search hook for full functionality
+  const {
+    selectedSubRegion,
+    activePrayer,
+    selectedTime,
+    viewMode,
+    handleSubRegionSelection,
+    handlePrayerSelection,
+    handleTimeSelection,
+    getFilteredPrayerTimes,
+    setViewMode
+  } = usePrayerTimeSearch();
 
   const handleRegionSelection = (region: string) => {
     setSelectedRegion(region);
@@ -87,8 +105,47 @@ const PrayerTimeFilter = () => {
           />
         )}
 
-        {/* Prayer Time Cards */}
+        {/* Sub-region Selection */}
         {selectedRegion && (
+          <SubRegionSelector
+            selectedRegion={selectedRegion}
+            selectedSubRegion={selectedSubRegion}
+            onSelectSubRegion={handleSubRegionSelection}
+          />
+        )}
+
+        {/* Prayer Time Selection */}
+        {selectedRegion && (
+          <div className="bg-gray-100 p-4 rounded-lg">
+            <PrayerTimeSelection
+              selectedRegion={selectedRegion}
+              activePrayer={activePrayer}
+              selectedTime={selectedTime}
+              onSelectPrayer={handlePrayerSelection}
+              onSelectTime={handleTimeSelection}
+            />
+            
+            {/* View Toggle */}
+            <ViewToggle 
+              viewMode={viewMode} 
+              onViewChange={setViewMode} 
+            />
+            
+            {/* Prayer Times Display */}
+            <PrayerTimesDisplay
+              selectedRegion={selectedRegion}
+              selectedSubRegion={selectedSubRegion}
+              selectedTime={selectedTime}
+              activePrayer={activePrayer}
+              searchType="earliest"
+              filteredPrayerTimes={getFilteredPrayerTimes()}
+              viewMode={viewMode}
+            />
+          </div>
+        )}
+
+        {/* Prayer Time Cards - Static version that matches the existing design */}
+        {selectedRegion && !activePrayer && (
           <div className="mt-8">
             <h3 className="text-xl font-bold mb-6 text-[#062C25]">Prayer Times in {selectedRegion}</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
