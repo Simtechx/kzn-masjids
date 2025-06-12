@@ -1,229 +1,126 @@
 
-import React, { useRef } from 'react';
-import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import React from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
-
-interface MasjidInfo {
-  id: number;
-  name: string;
-  address: string;
-  distance: string;
-  timeAway: string;
-  type: 'MASJID' | 'MUSALLA';
-  image: string;
-  nextPrayer: {
-    name: string;
-    time: string;
-  };
-}
-
-const mockNearbyMasjids: MasjidInfo[] = [
-  {
-    id: 1,
-    name: "Masjid-E-Noor",
-    address: "123 Masjid Road, Durban Central",
-    distance: "0.5km",
-    timeAway: "2 min",
-    type: "MASJID",
-    image: "https://drive.google.com/thumbnail?id=1nEMtOkRyD1WRt-f5pMaLDdW4IJ9Lbn7w&sz=w800",
-    nextPrayer: { name: "Dhuhr", time: "12:45" }
-  },
-  {
-    id: 2,
-    name: "Westville Masjid",
-    address: "25 Jan Hofmeyr Road, Westville",
-    distance: "2.1km",
-    timeAway: "7 min",
-    type: "MASJID",
-    image: "https://drive.google.com/thumbnail?id=1IdOKjQktjarpCt-PAN3Fpzgd5VYS1qSN&sz=w800",
-    nextPrayer: { name: "Dhuhr", time: "13:00" }
-  },
-  {
-    id: 3,
-    name: "Asherville Musalla",
-    address: "456 Community Center, Asherville",
-    distance: "1.8km",
-    timeAway: "5 min",
-    type: "MUSALLA",
-    image: "https://drive.google.com/thumbnail?id=1GqvGcUYqY-EnCyGDF3DeaASg3T-tVDC3&sz=w800",
-    nextPrayer: { name: "Dhuhr", time: "12:30" }
-  },
-  {
-    id: 4,
-    name: "Central Masjid",
-    address: "789 Smith Street, Durban CBD",
-    distance: "3.2km",
-    timeAway: "12 min",
-    type: "MASJID",
-    image: "https://drive.google.com/thumbnail?id=1HX9jUCSWAYz9QlTYnmedHc5SGfxMwj0G&sz=w800",
-    nextPrayer: { name: "Dhuhr", time: "12:50" }
-  },
-  {
-    id: 5,
-    name: "Chatsworth Masjid",
-    address: "321 Arena Park, Chatsworth",
-    distance: "5.7km",
-    timeAway: "18 min",
-    type: "MASJID",
-    image: "https://drive.google.com/thumbnail?id=1Nu7B5FSlUpaqYUDxTpzh-LVXJupbko8f&sz=w800",
-    nextPrayer: { name: "Dhuhr", time: "12:55" }
-  },
-  {
-    id: 6,
-    name: "Phoenix Musalla",
-    address: "654 Phoenix Drive, Phoenix",
-    distance: "8.3km",
-    timeAway: "25 min",
-    type: "MUSALLA",
-    image: "https://drive.google.com/thumbnail?id=1Af62pPaGoPtTWOzugrSMHtEfLc2jvdg5&sz=w800",
-    nextPrayer: { name: "Dhuhr", time: "13:10" }
-  }
-];
 
 const NearbyMasjidsSlider: React.FC = () => {
   const isMobile = useIsMobile();
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const scrollAmount = isMobile ? 280 : 320;
-      scrollRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
-    }
-  };
 
   return (
-    <section className="py-8 md:py-12 px-4 bg-gray-50">
+    <section className="py-8 md:py-12 px-4 bg-white">
       <div className="container mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#062C25] mb-2">
-              Nearby Masjids & Musallahs
-            </h2>
-            <p className="text-gray-600">Find prayer spaces near your current location</p>
-          </div>
-          
-          {!isMobile && (
-            <div className="flex space-x-2">
-              <Button 
-                variant="outline" 
-                size="icon"
-                onClick={() => scroll('left')}
-                className="rounded-full"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button 
-                variant="outline" 
-                size="icon"
-                onClick={() => scroll('right')}
-                className="rounded-full"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          )}
+        <div className="text-center mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#062C25] mb-4">
+            Nearby Masjids & Musallahs in KwaZulu-Natal
+          </h2>
         </div>
 
-        {/* Scrollable Cards Container */}
-        <div 
-          ref={scrollRef}
-          className="flex overflow-x-auto scrollbar-hide space-x-4 pb-4"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {mockNearbyMasjids.map((masjid) => (
-            <div 
-              key={masjid.id}
-              className={`flex-shrink-0 bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 ${
-                isMobile ? 'w-72' : 'w-80'
-              }`}
-            >
-              {/* Image */}
-              <div className="relative h-48 overflow-hidden">
-                <img 
-                  src={masjid.image} 
-                  alt={masjid.name}
-                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                  onLoad={() => console.log(`Image loaded successfully: ${masjid.image}`)}
-                  onError={(e) => {
-                    console.error(`Failed to load image: ${masjid.image}`);
-                    (e.target as HTMLImageElement).src = '/placeholder.svg';
-                  }}
-                />
-                <div className="absolute top-3 right-3">
-                  <Badge 
-                    className={`${
-                      masjid.type === 'MASJID' 
-                        ? 'bg-green-600 text-white' 
-                        : 'bg-amber-600 text-white'
-                    } shadow-md`}
-                  >
-                    {masjid.type}
-                  </Badge>
+        {/* Search Radius Control */}
+        <div className="max-w-2xl mx-auto mb-8">
+          <div className="bg-[#062C25] text-white p-6 rounded-lg">
+            <div className="text-center mb-4">
+              <div className="text-3xl font-bold">15km</div>
+              <div className="text-sm opacity-80">Your search radius</div>
+            </div>
+            
+            {/* Slider */}
+            <div className="relative">
+              <div className="w-full h-2 bg-gray-600 rounded-full">
+                <div className="w-1/3 h-2 bg-yellow-500 rounded-full relative">
+                  <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-yellow-500 rounded-full border-2 border-white"></div>
                 </div>
               </div>
-
-              {/* Content */}
-              <div className="p-4">
-                <h3 className="font-bold text-lg text-teal-700 mb-2 line-clamp-1">
-                  {masjid.name}
-                </h3>
-                <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                  {masjid.address}
-                </p>
-
-                {/* Distance and Time Away */}
-                <div className="flex justify-between items-center mb-3">
-                  <div className="flex items-center text-gray-700">
-                    <MapPin className="h-4 w-4 mr-1" />
-                    <span className="text-sm font-medium">{masjid.distance}</span>
-                  </div>
-                  <div className="text-sm text-blue-600 font-medium">
-                    {masjid.timeAway} away
-                  </div>
-                </div>
-
-                {/* Next Prayer Info - Web view only show time away */}
-                <div className="flex justify-between items-center mb-4">
-                  {isMobile ? (
-                    <>
-                      <span className="text-sm text-gray-600">Next Prayer:</span>
-                      <div className="flex items-center space-x-2">
-                        <Badge variant="outline" className="text-teal-600 border-teal-600">
-                          {masjid.nextPrayer.name}
-                        </Badge>
-                        <span className="font-semibold text-teal-700">{masjid.nextPrayer.time}</span>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <span className="text-sm text-blue-600 font-medium">{masjid.timeAway} away</span>
-                      <div className="flex items-center space-x-2">
-                        <Badge variant="outline" className="text-teal-600 border-teal-600">
-                          {masjid.nextPrayer.name}
-                        </Badge>
-                        <span className="font-semibold text-teal-700">{masjid.nextPrayer.time}</span>
-                      </div>
-                    </>
-                  )}
-                </div>
-
-                {/* Directions Button */}
-                <Button 
-                  className="w-full bg-teal-600 hover:bg-teal-700 text-white"
-                  size="sm"
-                >
-                  <MapPin className="h-4 w-4 mr-2" />
-                  Get Directions
-                </Button>
+              <div className="flex justify-between mt-2 text-sm">
+                <span>1s km</span>
+                <span className="bg-yellow-500 text-black px-2 py-1 rounded text-xs font-medium">
+                  30 mins away
+                </span>
               </div>
             </div>
-          ))}
+          </div>
+        </div>
+
+        {/* Filter Buttons */}
+        <div className="flex justify-center mb-8">
+          <div className="flex bg-white rounded-lg shadow-sm overflow-hidden border">
+            <button className="px-6 py-2 bg-[#062C25] text-white font-medium flex items-center">
+              <span className="w-2 h-2 bg-white rounded-full mr-2"></span>
+              NEARBY
+            </button>
+            <button className="px-6 py-2 text-gray-600 hover:bg-gray-50 font-medium flex items-center">
+              <span className="w-2 h-2 border border-gray-400 rounded-full mr-2"></span>
+              UPCOMING
+            </button>
+            <button className="px-6 py-2 text-gray-600 hover:bg-gray-50 font-medium flex items-center">
+              <span className="w-2 h-2 border border-gray-400 rounded-full mr-2"></span>
+              INFO
+            </button>
+          </div>
+        </div>
+
+        {/* Nearby Masjids List */}
+        <div className="max-w-md mx-auto">
+          <div className="flex items-center text-[#062C25] mb-4">
+            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+            </svg>
+            <span className="font-medium">Nearby Masjids</span>
+          </div>
+
+          <div className="space-y-3">
+            {/* Masjid Items */}
+            <div className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
+              <div>
+                <div className="flex items-center">
+                  <h3 className="font-medium text-gray-800">Masjid-E-Noor</h3>
+                  <span className="ml-2 bg-green-600 text-white text-xs px-2 py-1 rounded">Masjid</span>
+                </div>
+                <p className="text-sm text-gray-600">0.5 km • Overport Road</p>
+              </div>
+              <div className="text-right">
+                <div className="text-blue-600 font-medium">2 mins away</div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
+              <div>
+                <div className="flex items-center">
+                  <h3 className="font-medium text-gray-800">Durban Islamic Centre</h3>
+                  <span className="ml-2 bg-green-600 text-white text-xs px-2 py-1 rounded">Masjid</span>
+                </div>
+                <p className="text-sm text-gray-600">1.2 km • Grey Street</p>
+              </div>
+              <div className="text-right">
+                <div className="text-blue-600 font-medium">2 mins away</div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
+              <div>
+                <div className="flex items-center">
+                  <h3 className="font-medium text-gray-800">Al-Ansaar Musalla</h3>
+                  <span className="ml-2 bg-amber-600 text-white text-xs px-2 py-1 rounded">Musalla</span>
+                </div>
+                <p className="text-sm text-gray-600">1.5 km • Chatsworth</p>
+              </div>
+              <div className="text-right">
+                <div className="text-blue-600 font-medium">3 mins away</div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
+              <div>
+                <div className="flex items-center">
+                  <h3 className="font-medium text-gray-800">Masjid Al-Hidaya</h3>
+                  <span className="ml-2 bg-green-600 text-white text-xs px-2 py-1 rounded">Masjid</span>
+                </div>
+                <p className="text-sm text-gray-600">2.1 km • Pietermaritzburg</p>
+              </div>
+              <div className="text-right">
+                <div className="text-blue-600 font-medium">4 mins away</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
