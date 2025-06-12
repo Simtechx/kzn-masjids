@@ -188,15 +188,29 @@ const NearbyMasjidsSlider: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Next Prayer Info */}
+                {/* Next Prayer Info - Web view only show time away */}
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-sm text-gray-600">Next Prayer:</span>
-                  <div className="flex items-center space-x-2">
-                    <Badge variant="outline" className="text-teal-600 border-teal-600">
-                      {masjid.nextPrayer.name}
-                    </Badge>
-                    <span className="font-semibold text-teal-700">{masjid.nextPrayer.time}</span>
-                  </div>
+                  {isMobile ? (
+                    <>
+                      <span className="text-sm text-gray-600">Next Prayer:</span>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="outline" className="text-teal-600 border-teal-600">
+                          {masjid.nextPrayer.name}
+                        </Badge>
+                        <span className="font-semibold text-teal-700">{masjid.nextPrayer.time}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-sm text-blue-600 font-medium">{masjid.timeAway} away</span>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="outline" className="text-teal-600 border-teal-600">
+                          {masjid.nextPrayer.name}
+                        </Badge>
+                        <span className="font-semibold text-teal-700">{masjid.nextPrayer.time}</span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Directions Button */}

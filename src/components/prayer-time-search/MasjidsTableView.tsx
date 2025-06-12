@@ -159,8 +159,12 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                       >
                         <div className="flex flex-col items-center justify-center">
                           <span>{masjid[prayer]}</span>
-                          {extremeType && !isSelected && (
-                            <Badge className={`mt-1 text-[10px] px-2 py-0 text-white ${badgeColors[prayer]}`}>
+                          {extremeType && (
+                            <Badge className={`mt-1 text-[10px] px-2 py-0 text-white ${
+                              isSelected 
+                                ? 'bg-white text-black border border-gray-300' 
+                                : `${badgeColors[prayer]}`
+                            }`}>
                               {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                             </Badge>
                           )}

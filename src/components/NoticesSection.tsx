@@ -130,14 +130,11 @@ const NoticesSection: React.FC = () => {
           {mockNotices.map((notice) => (
             <Card key={notice.id} className="group hover:shadow-lg transition-shadow duration-300 overflow-hidden">
               {/* Image */}
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-48 overflow-hidden bg-gray-100">
                 <img 
                   src={notice.image} 
                   alt={notice.title}
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
-                  style={{
-                    objectPosition: 'center center'
-                  }}
                 />
                 <div className="absolute top-3 left-3">
                   <Badge className={getCategoryColor(notice.category)}>
