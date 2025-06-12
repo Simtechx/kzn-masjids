@@ -31,10 +31,10 @@ const mockUpcomingData: MasjidData[] = [
 ];
 
 const mockInfoData: MasjidData[] = [
-  { id: 1, name: "Masjid Al-Hilal", distance: "1.0 km", address: "23 Main Street", type: "Masjid", status: "Now", prayer: "fajr", time: "6:00 AM" },
-  { id: 2, name: "Central Musalla", distance: "1.5 km", address: "45 Central Road", type: "Musalla", status: "Today", prayer: "maghrib", time: "6:15 PM" },
-  { id: 3, name: "Eastgate Masjid", distance: "2.0 km", address: "78 East Avenue", type: "Masjid", status: "Today", prayer: "asr", time: "4:30 PM" },
-  { id: 4, name: "Southlands Musalla", distance: "0.5 km", address: "12 South Street", type: "Musalla", status: "Now", prayer: "dhuhr", time: "1:15 PM" }
+  { id: 1, name: "Masjid Al-Hilal", distance: "1.0 km", address: "Fajr - 6:00 AM", type: "Masjid", status: "Now", prayer: "fajr", time: "6:00 AM" },
+  { id: 2, name: "Central Musalla", distance: "1.5 km", address: "Maghrib - 6:15 PM", type: "Musalla", status: "Today", prayer: "maghrib", time: "6:15 PM" },
+  { id: 3, name: "Eastgate Masjid", distance: "2.0 km", address: "Asr - 4:30 PM", type: "Masjid", status: "Today", prayer: "asr", time: "4:30 PM" },
+  { id: 4, name: "Southlands Musalla", distance: "0.5 km", address: "Zuhr - 1:15 PM", type: "Musalla", status: "Now", prayer: "dhuhr", time: "1:15 PM" }
 ];
 
 const NearbyMasjidsSlider = () => {
@@ -335,7 +335,7 @@ const NearbyMasjidsSlider = () => {
                       <div className="flex items-center gap-4 text-sm text-gray-600">
                         <span>{item.distance}</span>
                         <span>•</span>
-                        <span>{item.address}</span>
+                        <span>{activeTab === 'info' ? item.address?.split(' - ')[0] : item.address}</span>
                       </div>
                     </div>
                     

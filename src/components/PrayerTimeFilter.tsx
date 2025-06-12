@@ -1,142 +1,309 @@
 
 import React, { useState } from 'react';
-import { Clock, MapPin } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { LayoutGrid, Table2, Blocks } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import RegionSelector from './prayer-time-search/RegionSelector';
+import RegionTable from './prayer-time-search/RegionTable';
+import RegionTiles from './prayer-time-search/RegionTiles';
+import SubRegionSelector from './prayer-time-search/SubRegionSelector';
+import ViewToggle from './prayer-time-search/ViewToggle';
+import PrayerTimesDisplay from './prayer-time-search/PrayerTimesDisplay';
+import { usePrayerTimeSearch } from '@/hooks/usePrayerTimeSearch';
+import { prayerTimesData, PrayerType } from '@/utils/prayerTimeUtils';
 
-interface TimeBlock {
-  id: string;
-  prayer: string;
-  time: string;
-  count: number;
-  color: string;
-  bgColor: string;
-  selectedColor: string;
-}
+const PrayerTimeFilter = () => {
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [regionViewMode, setRegionViewMode] = useState<'icons' | 'grid' | 'tiles'>('icons');
+  const [activePrayer, setActivePrayer] = useState<PrayerType | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
-interface PrayerTimeFilterProps {}
+  // Use the prayer time search hook for full functionality
+  const {
+    selectedSubRegion,
+    viewMode,
+    handleSubRegionSelection,
+    getFilteredPrayerTimes,
+    setViewMode
+  } = usePrayerTimeSearch();
 
-const PrayerTimeFilter: React.FC<PrayerTimeFilterProps> = () => {
-  const [selectedTimeBlock, setSelectedTimeBlock] = useState<string | null>(null);
+  const handleRegionSelection = (region: string) => {
+    setSelectedRegion(region);
+    setActivePrayer(null);
+    setSelectedTime(null);
+  };
 
-  const timeBlocks: TimeBlock[] = [
-    { 
-      id: 'fajr', 
-      prayer: 'Fajr', 
-      time: '05:45', 
-      count: 23, 
-      color: 'text-pink-600',
-      bgColor: 'bg-pink-50 border-pink-200',
-      selectedColor: 'bg-pink-600 border-pink-700 text-white'
-    },
-    { 
-      id: 'dhuhr', 
-      prayer: 'Dhuhr', 
-      time: '12:30', 
-      count: 45, 
-      color: 'text-amber-600',
-      bgColor: 'bg-amber-50 border-amber-200',
-      selectedColor: 'bg-amber-600 border-amber-700 text-white'
-    },
-    { 
-      id: 'asr', 
-      prayer: 'Asr', 
-      time: '15:45', 
-      count: 34, 
-      color: 'text-emerald-600',
-      bgColor: 'bg-emerald-50 border-emerald-200',
-      selectedColor: 'bg-emerald-600 border-emerald-700 text-white'
-    },
-    { 
-      id: 'isha', 
-      prayer: 'Isha', 
-      time: '19:30', 
-      count: 28, 
-      color: 'text-indigo-600',
-      bgColor: 'bg-indigo-50 border-indigo-200',
-      selectedColor: 'bg-indigo-600 border-indigo-700 text-white'
+  const handlePrayerTimeClick = (prayer: PrayerType, time: string) => {
+    setActivePrayer(prayer);
+    setSelectedTime(time);
+  };
+
+  // Get filtered times based on region and sub-region
+  const getFilteredTimes = (prayer: PrayerType) => {
+    if (!selectedRegion) return [];
+    
+    const regionData = prayerTimesData[selectedRegion as keyof typeof prayerTimesData] || [];
+    let filteredData = regionData;
+    
+    if (selectedSubRegion) {
+      filteredData = regionData.filter(masjid => masjid.district === selectedSubRegion);
     }
-  ];
+    
+    const times = filteredData.map(masjid => masjid[prayer]).filter(time => time);
+    return [...new Set(times)].sort();
+  };
 
-  const handleTimeBlockClick = (timeBlockId: string) => {
-    setSelectedTimeBlock(selectedTimeBlock === timeBlockId ? null : timeBlockId);
+  // Get filtered masjids for block/table view based on selected prayer and time
+  const getFilteredMasjidsForView = () => {
+    if (!selectedRegion) return [];
+    
+    const regionData = prayerTimesData[selectedRegion as keyof typeof prayerTimesData] || [];
+    let filteredData = regionData;
+    
+    // Filter by sub-region if selected
+    if (selectedSubRegion) {
+      filteredData = regionData.filter(masjid => masjid.district === selectedSubRegion);
+    }
+    
+    // Filter by selected prayer time if both prayer and time are selected
+    if (activePrayer && selectedTime) {
+      filteredData = filteredData.filter(masjid => masjid[activePrayer] === selectedTime);
+    }
+    
+    return filteredData;
+  };
+
+  // Get header title based on selections
+  const getDisplayTitle = () => {
+    if (activePrayer && selectedTime) {
+      const baseLocation = selectedSubRegion ? selectedSubRegion : selectedRegion;
+      return `Masjids with ${activePrayer.charAt(0).toUpperCase() + activePrayer.slice(1)} at ${selectedTime} in ${baseLocation}`;
+    } else if (selectedSubRegion && selectedRegion) {
+      return `All Masjids in ${selectedSubRegion}, ${selectedRegion}`;
+    } else if (selectedRegion) {
+      return `All Masjids in ${selectedRegion}`;
+    }
+    return 'All Masjids';
+  };
+
+  // Define prayer colors for active states
+  const getPrayerActiveColor = (prayer: PrayerType) => {
+    const colors = {
+      fajr: 'bg-[#DB2777] text-white',
+      dhuhr: 'bg-[#D97706] text-white', 
+      asr: 'bg-[#059669] text-white',
+      isha: 'bg-[#4F46E5] text-white'
+    };
+    return colors[prayer];
+  };
+
+  const getPrayerHoverColor = (prayer: PrayerType) => {
+    const colors = {
+      fajr: 'hover:bg-[#DB2777] hover:text-white',
+      dhuhr: 'hover:bg-[#D97706] hover:text-white',
+      asr: 'hover:bg-[#059669] hover:text-white', 
+      isha: 'hover:bg-[#4F46E5] hover:text-white'
+    };
+    return colors[prayer];
   };
 
   return (
-    <section className="py-12 px-4 bg-gray-50">
-      <div className="container mx-auto max-w-6xl">
+    <section className="py-10 px-4 bg-white">
+      <div className="container mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            Prayer Time Search
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Find masjids by their prayer times across KwaZulu-Natal
-          </p>
+        <div className={`flex flex-col ${isMobile ? 'items-center text-center' : 'md:flex-row md:justify-between md:items-center'} gap-4 mb-6`}>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#062C25] leading-tight">Salaah Time Filters</h2>
+            <p className="text-gray-600 mt-1">Filter salaah times in KwaZulu-Natal</p>
+          </div>
+          
+          <div className="bg-gray-100 p-2 rounded-md self-center md:self-auto overflow-x-auto">
+            <ToggleGroup 
+              type="single" 
+              value={regionViewMode} 
+              onValueChange={(value) => value && setRegionViewMode(value as 'icons' | 'grid' | 'tiles')}
+              className="bg-white shadow-sm rounded-md flex-nowrap whitespace-nowrap"
+              role="group"
+              dir="ltr"
+            >
+              <ToggleGroupItem 
+                value="icons" 
+                aria-label="Icons" 
+                className="data-[state=on]:!bg-yellow-500 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
+              >
+                <LayoutGrid className="h-5 w-5" />
+                <span className="ml-2">Icons</span>
+              </ToggleGroupItem>
+              <ToggleGroupItem 
+                value="grid" 
+                aria-label="Grid" 
+                className="data-[state=on]:!bg-yellow-500 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
+              >
+                <Table2 className="h-5 w-5" />
+                <span className="ml-2">Grid</span>
+              </ToggleGroupItem>
+              <ToggleGroupItem 
+                value="tiles" 
+                aria-label="Tiles" 
+                className="data-[state=on]:!bg-yellow-500 data-[state=on]:!text-black data-[state=off]:!text-gray-700"
+              >
+                <Blocks className="h-5 w-5" />
+                <span className="ml-2">Tiles</span>
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
         </div>
 
-        {/* Vertical Time Blocks */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {timeBlocks.map((block) => {
-            const isSelected = selectedTimeBlock === block.id;
-            return (
-              <div
-                key={block.id}
-                onClick={() => handleTimeBlockClick(block.id)}
-                className={`p-6 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
-                  isSelected 
-                    ? block.selectedColor
-                    : `${block.bgColor} hover:shadow-md`
-                }`}
-              >
-                <div className="text-center">
-                  <div className={`text-sm font-medium mb-2 ${
-                    isSelected ? 'text-white' : block.color
-                  }`}>
-                    {block.prayer}
-                  </div>
-                  <div className={`text-2xl font-bold mb-2 ${
-                    isSelected ? 'text-white' : 'text-gray-800'
-                  }`}>
-                    {block.time}
-                  </div>
-                  <Badge variant="outline" className={`text-xs ${
-                    isSelected 
-                      ? 'bg-white text-gray-800 border-white' 
-                      : 'bg-white text-gray-600 border-gray-300'
-                  }`}>
-                    {block.count} masjids
-                  </Badge>
+        {/* Region Selection */}
+        {regionViewMode === 'icons' ? (
+          <RegionSelector 
+            selectedRegion={selectedRegion}
+            onSelectRegion={handleRegionSelection}
+          />
+        ) : regionViewMode === 'grid' ? (
+          <RegionTable 
+            selectedRegion={selectedRegion}
+            onSelectRegion={handleRegionSelection}
+          />
+        ) : (
+          <RegionTiles
+            selectedRegion={selectedRegion}
+            onSelectRegion={handleRegionSelection}
+          />
+        )}
+
+        {/* Sub-region Selection */}
+        {selectedRegion && (
+          <SubRegionSelector
+            selectedRegion={selectedRegion}
+            selectedSubRegion={selectedSubRegion}
+            onSelectSubRegion={handleSubRegionSelection}
+          />
+        )}
+
+        {/* Vertical Prayer Time Cards - filtered by selected region and sub-region */}
+        {selectedRegion && (
+          <div className="mt-8">
+            <h3 className="text-xl font-bold mb-6 text-[#062C25]">
+              Salaah Times in {selectedSubRegion ? selectedSubRegion : selectedRegion}
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {/* FAJR */}
+              <div className="min-w-0">
+                <div className="bg-[#DB2777] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border border-[#DB2777]">FAJR</div>
+                <div className="bg-white border border-gray-200 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
+                  <div className="bg-white text-[#DB2777] border-2 border-[#DB2777] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
+                  {getFilteredTimes('fajr').map((time, index) => (
+                    <button 
+                      key={index}
+                      onClick={() => handlePrayerTimeClick('fajr', time)}
+                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 border border-gray-200 ${
+                        activePrayer === 'fajr' && selectedTime === time
+                          ? getPrayerActiveColor('fajr')
+                          : `bg-pink-50 text-[#DB2777] ${getPrayerHoverColor('fajr')}`
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                  <div className="bg-[#8B1E4D] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border border-[#8B1E4D]">LATEST</div>
                 </div>
               </div>
-            );
-          })}
-        </div>
 
-        {/* Selected Time Results */}
-        {selectedTimeBlock && (
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">
-              Masjids with {timeBlocks.find(b => b.id === selectedTimeBlock)?.prayer} at{' '}
-              {timeBlocks.find(b => b.id === selectedTimeBlock)?.time}
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* Sample masjid cards */}
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="p-4 border border-gray-200 rounded-lg">
-                  <h4 className="font-semibold text-gray-800 mb-2">
-                    Masjid Al-Noor {i}
-                  </h4>
-                  <p className="text-sm text-gray-600 mb-2 flex items-center">
-                    <MapPin className="h-4 w-4 mr-1" />
-                    Durban, KwaZulu-Natal
-                  </p>
-                  <p className="text-sm text-gray-600 flex items-center">
-                    <Clock className="h-4 w-4 mr-1" />
-                    {timeBlocks.find(b => b.id === selectedTimeBlock)?.time}
-                  </p>
+              {/* DHUHR */}
+              <div className="min-w-0">
+                <div className="bg-[#D97706] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border border-[#D97706]">DHUHR</div>
+                <div className="bg-white border border-gray-200 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
+                  <div className="bg-white text-[#D97706] border-2 border-[#D97706] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
+                  {getFilteredTimes('dhuhr').map((time, index) => (
+                    <button 
+                      key={index}
+                      onClick={() => handlePrayerTimeClick('dhuhr', time)}
+                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 border border-gray-200 ${
+                        activePrayer === 'dhuhr' && selectedTime === time
+                          ? getPrayerActiveColor('dhuhr')
+                          : `bg-amber-50 text-[#D97706] ${getPrayerHoverColor('dhuhr')}`
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                  <div className="bg-[#A05E05] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border border-[#A05E05]">LATEST</div>
                 </div>
-              ))}
+              </div>
+
+              {/* ASR */}
+              <div className="min-w-0">
+                <div className="bg-[#059669] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border border-[#059669]">ASR</div>
+                <div className="bg-white border border-gray-200 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
+                  <div className="bg-white text-[#059669] border-2 border-[#059669] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
+                  {getFilteredTimes('asr').map((time, index) => (
+                    <button 
+                      key={index}
+                      onClick={() => handlePrayerTimeClick('asr', time)}
+                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 border border-gray-200 ${
+                        activePrayer === 'asr' && selectedTime === time
+                          ? getPrayerActiveColor('asr')
+                          : `bg-emerald-50 text-[#059669] ${getPrayerHoverColor('asr')}`
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                  <div className="bg-[#046F4D] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border border-[#046F4D]">LATEST</div>
+                </div>
+              </div>
+
+              {/* ISHA */}
+              <div className="min-w-0">
+                <div className="bg-[#4F46E5] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border border-[#4F46E5]">ISHA</div>
+                <div className="bg-white border border-gray-200 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
+                  <div className="bg-white text-[#4F46E5] border-2 border-[#4F46E5] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
+                  {getFilteredTimes('isha').map((time, index) => (
+                    <button 
+                      key={index}
+                      onClick={() => handlePrayerTimeClick('isha', time)}
+                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 border border-gray-200 ${
+                        activePrayer === 'isha' && selectedTime === time
+                          ? getPrayerActiveColor('isha')
+                          : `bg-indigo-50 text-[#4F46E5] ${getPrayerHoverColor('isha')}`
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                  <div className="bg-[#3C35B8] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border border-[#3C35B8]">LATEST</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Block and Table View System - below the vertical time cards */}
+        {selectedRegion && (
+          <div className="mt-8 bg-gray-100 p-4 rounded-lg">
+            {/* View Toggle */}
+            <ViewToggle 
+              viewMode={viewMode} 
+              onViewChange={setViewMode} 
+            />
+            
+            {/* Prayer Times Display */}
+            <div className="mt-6">
+              <h3 className="text-xl font-bold mb-4 text-teal-700">
+                {getDisplayTitle()}
+              </h3>
+              
+              <PrayerTimesDisplay
+                selectedRegion={selectedRegion}
+                selectedSubRegion={selectedSubRegion}
+                selectedTime={selectedTime}
+                activePrayer={activePrayer}
+                searchType="earliest"
+                filteredPrayerTimes={getFilteredMasjidsForView()}
+                viewMode={viewMode}
+              />
             </div>
           </div>
         )}

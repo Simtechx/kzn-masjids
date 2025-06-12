@@ -21,12 +21,12 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
   // Exclude maghrib as per requirements
   const prayerTypes: PrayerType[] = ['fajr', 'dhuhr', 'asr', 'isha'];
   
-  // Define prayer block colors - soft colors with borders
+  // Define prayer block colors - soft colors 
   const prayerColors = {
-    fajr: 'bg-pink-50 border-pink-200',
-    dhuhr: 'bg-amber-50 border-amber-200',
-    asr: 'bg-emerald-50 border-emerald-200',
-    isha: 'bg-indigo-50 border-indigo-200',
+    fajr: 'bg-pink-50',
+    dhuhr: 'bg-amber-50',
+    asr: 'bg-emerald-50',
+    isha: 'bg-indigo-50',
   };
   
   const prayerTextColors = {
@@ -38,10 +38,10 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
 
   // Define selected colors using prayer-specific colors instead of yellow
   const selectedColors = {
-    fajr: 'bg-pink-600 border-pink-700',
-    dhuhr: 'bg-amber-600 border-amber-700',
-    asr: 'bg-emerald-600 border-emerald-700',
-    isha: 'bg-indigo-600 border-indigo-700',
+    fajr: 'bg-pink-600',
+    dhuhr: 'bg-amber-600',
+    asr: 'bg-emerald-600',
+    isha: 'bg-indigo-600',
   };
 
   // Define darker colors for badges
@@ -50,14 +50,6 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
     dhuhr: 'bg-amber-600',
     asr: 'bg-emerald-600',
     isha: 'bg-indigo-600',
-  };
-
-  // Define very dark text colors for selected block badges
-  const selectedBadgeTextColors = {
-    fajr: 'text-pink-900',
-    dhuhr: 'text-amber-900',
-    asr: 'text-emerald-900',
-    isha: 'text-indigo-900',
   };
   
   // Find the earliest and latest times for each prayer type
@@ -90,19 +82,19 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {filteredPrayerTimes.map((masjid, index) => (
-        <div key={index} className="bg-white p-4 rounded-md shadow-sm border-2 border-gray-200 hover:shadow-md transition-shadow">
+        <div key={index} className="bg-white p-4 rounded-md shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
           <div className="flex items-center mb-3">
             <div>
               <h4 className="font-semibold text-lg text-teal-700">{masjid.masjid}</h4>
               <p className="text-gray-600 text-sm">{masjid.address || `123 Example St, ${selectedRegion}`}</p>
               <div className="flex flex-wrap gap-1 mt-1">
-                <Badge variant="outline" className="bg-gray-50 text-black border-gray-300">
+                <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
                   {selectedRegion}
                 </Badge>
-                <Badge variant="outline" className="bg-blue-50 text-black border-blue-300">
+                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
                   {masjid.district || 'Central'}
                 </Badge>
-                <Badge className={masjid.type === 'MASJID' ? 'bg-green-600 text-black' : 'bg-amber-600 text-black'}>
+                <Badge className={masjid.type === 'MASJID' ? 'bg-green-600 text-white' : 'bg-amber-600 text-white'}>
                   {masjid.type || 'MASJID'}
                 </Badge>
               </div>
@@ -116,7 +108,7 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
               return (
                 <div 
                   key={prayer}
-                  className={`p-2 rounded text-center border-2 ${
+                  className={`p-2 rounded text-center border border-gray-200 ${
                     isSelected
                       ? `${selectedColors[prayer]} text-white` 
                       : prayerColors[prayer]
@@ -127,10 +119,10 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
                   </div>
                   <div className="text-center font-medium">{masjid[prayer]}</div>
                   {extremeType && (
-                    <Badge className={`mt-1 text-[10px] px-2 py-0 mx-auto border ${
+                    <Badge className={`mt-1 text-[10px] px-2 py-0 mx-auto ${
                       isSelected 
-                        ? `bg-white border-white ${selectedBadgeTextColors[prayer]}`
-                        : `text-black border-gray-300 ${badgeColors[prayer]}`
+                        ? `bg-white ${prayerTextColors[prayer]} border-white`
+                        : `text-white ${badgeColors[prayer]}`
                     }`}>
                       {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                     </Badge>
