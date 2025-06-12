@@ -33,40 +33,32 @@ const NoticesSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Notice Card - Single centered card */}
-        <div className="max-w-md mx-auto">
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            {/* Notice Image */}
-            <div className="relative h-64 bg-gradient-to-br from-teal-600 to-teal-800 flex items-center justify-center">
-              <div className="text-center text-white p-6">
-                <div className="w-16 h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold">MEHBOOB-E-ILAAM</h3>
-                <p className="text-sm opacity-90 mt-2">Dhul Hijjah Focus Event</p>
-                <div className="mt-4 space-y-1 text-sm">
-                  <p>THURSDAY</p>
-                  <p>6th Zul Hijjah 1446 | 5th June 2025</p>
-                  <p>7pm</p>
-                </div>
-              </div>
-            </div>
+        {/* Notice Card with Navigation */}
+        <div className="relative max-w-lg mx-auto">
+          {/* Left Arrow */}
+          <button className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-12 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center z-10">
+            <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
 
-            {/* Notice Content */}
-            <div className="p-6">
-              <h4 className="font-bold text-lg text-teal-700 mb-2">
-                Zul Hijjah Focus Event
-              </h4>
-              <p className="text-gray-600 text-sm mb-4">
-                Mi Zubair Bayat
-              </p>
-              <p className="text-gray-700 text-sm">
-                The ultimate day of mercy and forgiveness
-              </p>
+          {/* Notice Card */}
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="p-4">
+              <img 
+                src="/lovable-uploads/0ac4d9a5-7f6f-4e68-bcee-bb2ed0759b3f.png" 
+                alt="Eid-ul-Adha Notice" 
+                className="w-full h-64 object-contain rounded-lg"
+              />
             </div>
           </div>
+
+          {/* Right Arrow */}
+          <button className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-12 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center z-10">
+            <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
 
         {/* Navigation Dots */}
