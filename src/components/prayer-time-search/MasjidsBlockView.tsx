@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MasjidData, PrayerType, findExtremeTime } from '@/utils/prayerTimeUtils';
 import { Button } from '@/components/ui/button';
@@ -81,7 +82,7 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {filteredPrayerTimes.map((masjid, index) => (
-        <div key={index} className="bg-white p-4 rounded-md shadow-sm border-2 border-gray-300 hover:shadow-md transition-shadow">
+        <div key={index} className="bg-white p-4 rounded-md shadow-sm border-2 border-gray-400 hover:shadow-md transition-shadow">
           <div className="flex items-center mb-3">
             <div>
               <h4 className="font-semibold text-lg text-teal-700">{masjid.masjid}</h4>
@@ -99,7 +100,7 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-1">
+          <div className="grid grid-cols-2 gap-2">
             {prayerTypes.map((prayer) => {
               const extremeType = isExtremeTime(prayer, masjid[prayer]);
               const isSelected = activePrayer === prayer && masjid[prayer] === selectedTime;
