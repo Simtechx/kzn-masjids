@@ -191,14 +191,14 @@ const PrayerTimeFilter = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {/* FAJR */}
               <div className="min-w-0">
-                <div className="bg-[#DB2777] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center">FAJR</div>
+                <div className="bg-[#DB2777] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border border-[#DB2777]">FAJR</div>
                 <div className="bg-white border border-gray-200 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
                   <div className="bg-white text-[#DB2777] border-2 border-[#DB2777] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
                   {getFilteredTimes('fajr').map((time, index) => (
                     <button 
                       key={index}
                       onClick={() => handlePrayerTimeClick('fajr', time)}
-                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 ${
+                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 border border-gray-200 ${
                         activePrayer === 'fajr' && selectedTime === time
                           ? getPrayerActiveColor('fajr')
                           : `bg-pink-50 text-[#DB2777] ${getPrayerHoverColor('fajr')}`
@@ -207,20 +207,20 @@ const PrayerTimeFilter = () => {
                       {time}
                     </button>
                   ))}
-                  <div className="bg-[#8B1E4D] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">LATEST</div>
+                  <div className="bg-[#8B1E4D] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border border-[#8B1E4D]">LATEST</div>
                 </div>
               </div>
 
               {/* DHUHR */}
               <div className="min-w-0">
-                <div className="bg-[#D97706] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center">DHUHR</div>
+                <div className="bg-[#D97706] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border border-[#D97706]">DHUHR</div>
                 <div className="bg-white border border-gray-200 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
                   <div className="bg-white text-[#D97706] border-2 border-[#D97706] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
                   {getFilteredTimes('dhuhr').map((time, index) => (
                     <button 
                       key={index}
                       onClick={() => handlePrayerTimeClick('dhuhr', time)}
-                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 ${
+                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 border border-gray-200 ${
                         activePrayer === 'dhuhr' && selectedTime === time
                           ? getPrayerActiveColor('dhuhr')
                           : `bg-amber-50 text-[#D97706] ${getPrayerHoverColor('dhuhr')}`
@@ -229,20 +229,20 @@ const PrayerTimeFilter = () => {
                       {time}
                     </button>
                   ))}
-                  <div className="bg-[#A05E05] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">LATEST</div>
+                  <div className="bg-[#A05E05] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border border-[#A05E05]">LATEST</div>
                 </div>
               </div>
 
               {/* ASR */}
               <div className="min-w-0">
-                <div className="bg-[#059669] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center">ASR</div>
+                <div className="bg-[#059669] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border border-[#059669]">ASR</div>
                 <div className="bg-white border border-gray-200 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
                   <div className="bg-white text-[#059669] border-2 border-[#059669] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
                   {getFilteredTimes('asr').map((time, index) => (
                     <button 
                       key={index}
                       onClick={() => handlePrayerTimeClick('asr', time)}
-                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 ${
+                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 border border-gray-200 ${
                         activePrayer === 'asr' && selectedTime === time
                           ? getPrayerActiveColor('asr')
                           : `bg-emerald-50 text-[#059669] ${getPrayerHoverColor('asr')}`
@@ -251,20 +251,20 @@ const PrayerTimeFilter = () => {
                       {time}
                     </button>
                   ))}
-                  <div className="bg-[#046F4D] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">LATEST</div>
+                  <div className="bg-[#046F4D] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border border-[#046F4D]">LATEST</div>
                 </div>
               </div>
 
               {/* ISHA */}
               <div className="min-w-0">
-                <div className="bg-[#4F46E5] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center">ISHA</div>
+                <div className="bg-[#4F46E5] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border border-[#4F46E5]">ISHA</div>
                 <div className="bg-white border border-gray-200 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
                   <div className="bg-white text-[#4F46E5] border-2 border-[#4F46E5] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
                   {getFilteredTimes('isha').map((time, index) => (
                     <button 
                       key={index}
                       onClick={() => handlePrayerTimeClick('isha', time)}
-                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 ${
+                      className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 border border-gray-200 ${
                         activePrayer === 'isha' && selectedTime === time
                           ? getPrayerActiveColor('isha')
                           : `bg-indigo-50 text-[#4F46E5] ${getPrayerHoverColor('isha')}`
@@ -273,7 +273,7 @@ const PrayerTimeFilter = () => {
                       {time}
                     </button>
                   ))}
-                  <div className="bg-[#3C35B8] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">LATEST</div>
+                  <div className="bg-[#3C35B8] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border border-[#3C35B8]">LATEST</div>
                 </div>
               </div>
             </div>

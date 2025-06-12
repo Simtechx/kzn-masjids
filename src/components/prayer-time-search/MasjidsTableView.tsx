@@ -33,12 +33,27 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
     isha: 'bg-indigo-50',
   };
 
+  // Define selected colors using prayer-specific colors instead of yellow
+  const selectedColors = {
+    fajr: 'bg-pink-600',
+    dhuhr: 'bg-amber-600',
+    asr: 'bg-emerald-600',
+    isha: 'bg-indigo-600',
+  };
+
   // Define darker colors for badges
   const badgeColors = {
     fajr: 'bg-pink-600',
     dhuhr: 'bg-amber-600',
     asr: 'bg-emerald-600',
     isha: 'bg-indigo-600',
+  };
+
+  const prayerTextColors = {
+    fajr: 'text-pink-600',
+    dhuhr: 'text-amber-600',
+    asr: 'text-emerald-600',
+    isha: 'text-indigo-600',
   };
   
   // Find the earliest and latest times for each prayer type
@@ -104,7 +119,7 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                 key={index} 
                 className={`hover:bg-gray-100 transition-colors ${
                   activePrayer && selectedTime && masjid[activePrayer] === selectedTime 
-                    ? 'bg-yellow-50' 
+                    ? 'bg-gray-50' 
                     : ''
                 }`}
               >
@@ -127,7 +142,7 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                     className={`text-center text-xs py-2 px-2`}
                   >
                     <div className="flex flex-col items-center justify-center">
-                      <span className="bg-yellow-500 text-black font-semibold px-3 py-1 rounded-full">
+                      <span className={`${selectedColors[activePrayer]} text-white font-semibold px-3 py-1 rounded-full`}>
                         {masjid[activePrayer]}
                       </span>
                     </div>
@@ -142,14 +157,18 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                         key={prayer} 
                         className={
                           isSelected
-                            ? `bg-yellow-500 text-black font-bold text-center` 
-                            : `${prayerColors[prayer]} text-center`
+                            ? `${selectedColors[prayer]} text-white font-bold text-center relative` 
+                            : `${prayerColors[prayer]} text-center relative`
                         }
                       >
-                        <div className="flex flex-col items-center justify-center">
+                        <div className="flex flex-col items-center justify-center relative z-10">
                           <span>{masjid[prayer]}</span>
-                          {extremeType && !isSelected && (
-                            <Badge className={`mt-1 text-[10px] px-2 py-0 text-white ${badgeColors[prayer]}`}>
+                          {extremeType && (
+                            <Badge className={`mt-1 text-[10px] px-2 py-0 relative z-20 ${
+                              isSelected 
+                                ? `bg-white ${prayerTextColors[prayer]} border-white`
+                                : `text-white ${badgeColors[prayer]}`
+                            }`}>
                               {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                             </Badge>
                           )}

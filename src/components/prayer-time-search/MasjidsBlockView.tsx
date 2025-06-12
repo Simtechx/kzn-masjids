@@ -36,6 +36,14 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
     isha: 'text-indigo-600',
   };
 
+  // Define selected colors using prayer-specific colors instead of yellow
+  const selectedColors = {
+    fajr: 'bg-pink-600',
+    dhuhr: 'bg-amber-600',
+    asr: 'bg-emerald-600',
+    isha: 'bg-indigo-600',
+  };
+
   // Define darker colors for badges
   const badgeColors = {
     fajr: 'bg-pink-600',
@@ -100,18 +108,22 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
               return (
                 <div 
                   key={prayer}
-                  className={`p-2 rounded text-center ${
+                  className={`p-2 rounded text-center border border-gray-200 ${
                     isSelected
-                      ? 'bg-yellow-500 text-black' 
+                      ? `${selectedColors[prayer]} text-white` 
                       : prayerColors[prayer]
                   }`}
                 >
-                  <div className={`text-xs font-medium ${isSelected ? 'text-black' : prayerTextColors[prayer]}`}>
+                  <div className={`text-xs font-medium ${isSelected ? 'text-white' : prayerTextColors[prayer]}`}>
                     {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
                   </div>
                   <div className="text-center font-medium">{masjid[prayer]}</div>
-                  {extremeType && !isSelected && (
-                    <Badge className={`mt-1 text-[10px] px-2 py-0 mx-auto text-white ${badgeColors[prayer]}`}>
+                  {extremeType && (
+                    <Badge className={`mt-1 text-[10px] px-2 py-0 mx-auto ${
+                      isSelected 
+                        ? `bg-white ${prayerTextColors[prayer]} border-white`
+                        : `text-white ${badgeColors[prayer]}`
+                    }`}>
                       {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                     </Badge>
                   )}

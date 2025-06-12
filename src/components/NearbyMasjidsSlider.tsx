@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
@@ -343,6 +342,9 @@ const NearbyMasjidsSlider = () => {
                     <div className="text-right ml-4">
                       {activeTab === 'upcoming' && item.time ? (
                         <div className="flex items-center gap-2">
+                          <span className="font-medium text-[#0f766e]" style={{ fontSize: '18px' }}>
+                            {getApproxTime(item.distance)}
+                          </span>
                           <Badge className={`${getPrayerBadgeStyle(item.prayer || '')}`}>
                             {item.prayer?.charAt(0).toUpperCase() + item.prayer?.slice(1)}
                           </Badge>
@@ -352,6 +354,9 @@ const NearbyMasjidsSlider = () => {
                         </div>
                       ) : activeTab === 'info' && item.prayer && item.time ? (
                         <div className="flex items-center gap-2">
+                          <span className="font-medium text-[#0f766e]" style={{ fontSize: '18px' }}>
+                            {getApproxTime(item.distance)}
+                          </span>
                           <Badge className={`${getPrayerBadgeStyle(item.prayer)}`}>
                             {item.prayer.charAt(0).toUpperCase() + item.prayer.slice(1)}
                           </Badge>
