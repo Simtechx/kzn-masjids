@@ -31,10 +31,10 @@ const mockUpcomingData: MasjidData[] = [
 ];
 
 const mockInfoData: MasjidData[] = [
-  { id: 1, name: "Masjid Al-Hilal", distance: "1.0 km", address: "Fajr - 6:00 AM", type: "Masjid", status: "Now", prayer: "fajr", time: "6:00 AM" },
-  { id: 2, name: "Central Musalla", distance: "1.5 km", address: "Maghrib - 6:15 PM", type: "Musalla", status: "Today", prayer: "maghrib", time: "6:15 PM" },
-  { id: 3, name: "Eastgate Masjid", distance: "2.0 km", address: "Asr - 4:30 PM", type: "Masjid", status: "Today", prayer: "asr", time: "4:30 PM" },
-  { id: 4, name: "Southlands Musalla", distance: "0.5 km", address: "Zuhr - 1:15 PM", type: "Musalla", status: "Now", prayer: "dhuhr", time: "1:15 PM" }
+  { id: 1, name: "Masjid Al-Hilal", distance: "1.0 km", address: "23 Main Street", type: "Masjid", status: "Now", prayer: "fajr", time: "6:00 AM" },
+  { id: 2, name: "Central Musalla", distance: "1.5 km", address: "87 Park Avenue", type: "Musalla", status: "Today", prayer: "maghrib", time: "6:15 PM" },
+  { id: 3, name: "Eastgate Masjid", distance: "2.0 km", address: "15 Oak Street", type: "Masjid", status: "Today", prayer: "asr", time: "4:30 PM" },
+  { id: 4, name: "Southlands Musalla", distance: "0.5 km", address: "42 Elm Road", type: "Musalla", status: "Now", prayer: "dhuhr", time: "1:15 PM" }
 ];
 
 const NearbyMasjidsSlider = () => {
@@ -259,32 +259,34 @@ const NearbyMasjidsSlider = () => {
                     </div>
                     
                     {/* Second line */}
-                    {activeTab === 'nearby' ? (
-                      <div className="text-sm text-gray-600 mb-3">
-                        <span className="font-medium">{item.distance}</span>
-                        <span className="mx-2">•</span>
-                        <span>{item.address}</span>
-                      </div>
-                    ) : activeTab === 'upcoming' ? (
+                    {activeTab === 'info' ? (
                       <div className="text-sm text-gray-600 mb-3">
                         <span className="font-medium">{item.distance}</span>
                         <span className="mx-2">•</span>
                         <span>{item.address}</span>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2 mb-3 text-sm text-gray-600">
+                      <div className="text-sm text-gray-600 mb-3">
                         <span className="font-medium">{item.distance}</span>
-                        <Badge 
-                          className={`text-xs px-2 py-0.5 ${getPrayerBadgeStyle(item.prayer || '')}`}
-                        >
-                          {item.prayer?.charAt(0).toUpperCase() + item.prayer?.slice(1)}
-                        </Badge>
-                        <span className="font-medium">{item.time}</span>
+                        <span className="mx-2">•</span>
+                        <span>{item.address}</span>
                       </div>
                     )}
                     
                     {/* Third line: Prayer info (for upcoming only) */}
                     {activeTab === 'upcoming' && item.prayer && item.time && (
+                      <div className="flex items-center gap-2 mb-3">
+                        <Badge 
+                          className={`text-xs px-2 py-0.5 ${getPrayerBadgeStyle(item.prayer)}`}
+                        >
+                          {item.prayer.charAt(0).toUpperCase() + item.prayer.slice(1)}
+                        </Badge>
+                        <span className="text-sm font-medium text-gray-800">{item.time}</span>
+                      </div>
+                    )}
+                    
+                    {/* Prayer info for Info tab on mobile */}
+                    {activeTab === 'info' && item.prayer && item.time && (
                       <div className="flex items-center gap-2 mb-3">
                         <Badge 
                           className={`text-xs px-2 py-0.5 ${getPrayerBadgeStyle(item.prayer)}`}
@@ -335,7 +337,7 @@ const NearbyMasjidsSlider = () => {
                       <div className="flex items-center gap-4 text-sm text-gray-600">
                         <span>{item.distance}</span>
                         <span>•</span>
-                        <span>{activeTab === 'info' ? item.address?.split(' - ')[0] : item.address}</span>
+                        <span>{item.address}</span>
                       </div>
                     </div>
                     
