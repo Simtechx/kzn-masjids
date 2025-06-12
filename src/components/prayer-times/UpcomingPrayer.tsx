@@ -3,13 +3,10 @@ import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Clock } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { PrayerTime } from './types';
 
 interface UpcomingPrayerProps {
-  upcomingPrayer: {
-    name: string;
-    time: string;
-    timeRemaining: string;
-  };
+  upcomingPrayer: PrayerTime;
   currentLocation: string;
   timeRemaining: string;
   remainingPercentage: number;
