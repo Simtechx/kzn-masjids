@@ -23,10 +23,10 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
   
   // Define prayer block colors - soft colors 
   const prayerColors = {
-    fajr: 'bg-pink-50 border-pink-200',
-    dhuhr: 'bg-amber-50 border-amber-200',
-    asr: 'bg-emerald-50 border-emerald-200',
-    isha: 'bg-indigo-50 border-indigo-200',
+    fajr: 'bg-pink-50',
+    dhuhr: 'bg-amber-50',
+    asr: 'bg-emerald-50',
+    isha: 'bg-indigo-50',
   };
   
   const prayerTextColors = {
@@ -42,17 +42,6 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
     dhuhr: 'bg-amber-600',
     asr: 'bg-emerald-600',
     isha: 'bg-indigo-600',
-  };
-
-  // Define active prayer colors (same as in PrayerTimeFilter)
-  const getPrayerActiveColor = (prayer: PrayerType) => {
-    const colors = {
-      fajr: 'bg-[#DB2777] text-white border-[#DB2777]',
-      dhuhr: 'bg-[#D97706] text-white border-[#D97706]', 
-      asr: 'bg-[#059669] text-white border-[#059669]',
-      isha: 'bg-[#4F46E5] text-white border-[#4F46E5]'
-    };
-    return colors[prayer];
   };
   
   // Find the earliest and latest times for each prayer type
@@ -111,22 +100,18 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
               return (
                 <div 
                   key={prayer}
-                  className={`p-2 rounded text-center border ${
+                  className={`p-2 rounded text-center ${
                     isSelected
-                      ? getPrayerActiveColor(prayer)
+                      ? 'bg-yellow-500 text-black' 
                       : prayerColors[prayer]
                   }`}
                 >
-                  <div className={`text-xs font-medium ${isSelected ? 'text-white' : prayerTextColors[prayer]}`}>
+                  <div className={`text-xs font-medium ${isSelected ? 'text-black' : prayerTextColors[prayer]}`}>
                     {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
                   </div>
                   <div className="text-center font-medium">{masjid[prayer]}</div>
-                  {extremeType && (
-                    <Badge className={`mt-1 text-[10px] px-2 py-0 mx-auto text-white ${
-                      isSelected 
-                        ? 'bg-white text-black border border-gray-300' 
-                        : `${badgeColors[prayer]}`
-                    }`}>
+                  {extremeType && !isSelected && (
+                    <Badge className={`mt-1 text-[10px] px-2 py-0 mx-auto text-white ${badgeColors[prayer]}`}>
                       {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                     </Badge>
                   )}

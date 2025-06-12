@@ -1,9 +1,8 @@
 
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Clock } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { PrayerTime } from './types';
+import { Progress } from '@/components/ui/progress';
+import { MapPin } from 'lucide-react';
+import { PrayerTime } from '@/components/prayer-times/types';
 
 interface UpcomingPrayerProps {
   upcomingPrayer: PrayerTime | null;
@@ -18,93 +17,70 @@ const UpcomingPrayer: React.FC<UpcomingPrayerProps> = ({
   timeRemaining,
   remainingPercentage
 }) => {
-  const isMobile = useIsMobile();
-
-  // Handle case when upcomingPrayer is null
-  if (!upcomingPrayer) {
-    return (
-      <div 
-        className="relative bg-cover bg-center bg-no-repeat rounded-lg overflow-hidden"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/313997ac-0790-47fa-a6e0-f866759aeeaa.png')`
-        }}
-      >
-        <div className="p-6 text-white">
-          <div className="flex items-center mb-4">
-            <Clock className="h-6 w-6 mr-2 text-yellow-400" />
-            <h3 className="text-xl font-bold">Next Salaah</h3>
-          </div>
-          
-          <div className="space-y-4">
-            <div>
-              <p className="text-gray-300 text-sm">{currentLocation}</p>
-            </div>
-            
-            <div className="text-center">
-              <p className="text-yellow-400 font-semibold text-lg">Loading prayer times...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Get background image based on upcoming prayer
+  const getBackgroundImage = () => {
+    if (!upcomingPrayer) return "";
+    
+    switch(upcomingPrayer.name) {
+      case 'Fajr':
+        return "url('https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&q=80')";
+      case 'Dhuhr':
+        return "url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80')";
+      case 'Asr (H)':
+      case 'Asr (S)':
+        return "url('https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&q=80')";
+      case 'Maghrib':
+        return "url('https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?auto=format&fit=crop&q=80')";
+      case 'Isha':
+        return "url('https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?auto=format&fit=crop&q=80')";
+      default:
+        return "";
+    }
+  };
 
   return (
     <div 
-      className="relative bg-cover bg-center bg-no-repeat rounded-lg overflow-hidden"
-      style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/313997ac-0790-47fa-a6e0-f866759aeeaa.png')`
-      }}
+      className="rounded-lg relative overflow-hidden bg-[#072c23]"
+      style={{ position: 'relative' }}
     >
-      <div className="p-6 text-white">
-        <div className="flex items-center mb-4">
-          <Clock className="h-6 w-6 mr-2 text-yellow-400" />
-          <h3 className="text-xl font-bold">Next Salaah</h3>
+      <div 
+        className="absolute inset-0" 
+        style={{
+          backgroundImage: getBackgroundImage(),
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      {/* Added darker overlay for better text visibility */}
+      <div className="absolute inset-0 bg-black/70"></div>
+      
+      <div className="p-6 text-white relative z-10">
+        <div className="flex justify-between items-start mb-3">
+          <div>
+            <h2 className="text-xl font-medium">Upcoming Salaah</h2>
+            {upcomingPrayer?.icon}
+            <h1 className="text-5xl font-bold mt-2">{upcomingPrayer?.name}</h1>
+            <div className="mt-1 text-white/80">
+              In {timeRemaining.split(':')[0]} hours {timeRemaining.split(':')[1]} mins
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="flex items-center justify-end mb-1">
+              <MapPin size={16} className="mr-1" />
+              <span>{currentLocation}</span>
+            </div>
+          </div>
         </div>
         
-        <div className="space-y-4">
-          <div>
-            <p className="text-gray-300 text-sm">{currentLocation}</p>
+        <div className="mt-8">
+          <div className="text-white/90 mb-1">Time remaining</div>
+          {/* Semi-transparent dark background for the countdown */}
+          <div className="bg-black/40 rounded-lg p-3 inline-block">
+            <div className="text-5xl font-bold text-white">{timeRemaining}</div>
           </div>
-          
-          {/* Time remaining and upcoming prayer info */}
-          <div className={`flex ${isMobile ? 'flex-col space-y-2' : 'items-center justify-between'}`}>
-            {/* Time away text (only for web view) */}
-            {!isMobile && (
-              <div className="text-yellow-400 font-semibold text-lg">
-                {timeRemaining}
-              </div>
-            )}
-            
-            <div className={`flex items-center ${isMobile ? 'justify-center' : 'space-x-3'}`}>
-              <Badge 
-                variant="secondary" 
-                className="bg-yellow-500 text-black font-bold text-lg px-4 py-2"
-              >
-                {upcomingPrayer.name.toUpperCase()}
-              </Badge>
-              
-              <div className="text-2xl font-bold text-white">
-                {upcomingPrayer.time}
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile time remaining */}
-          {isMobile && (
-            <div className="text-center">
-              <p className="text-yellow-400 font-semibold text-lg">
-                {timeRemaining}
-              </p>
-            </div>
-          )}
-          
-          {/* Progress bar */}
-          <div className="w-full bg-gray-700 rounded-full h-2">
-            <div 
-              className="bg-yellow-500 h-2 rounded-full transition-all duration-300" 
-              style={{ width: `${100 - remainingPercentage}%` }}
-            ></div>
+          <Progress value={remainingPercentage} className="h-2 bg-white/30 mt-3" />
+          <div className="mt-4 inline-block bg-black/50 py-2 px-4 rounded-md">
+            <span>Location-based times</span>
           </div>
         </div>
       </div>

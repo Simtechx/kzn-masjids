@@ -40,17 +40,6 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
     asr: 'bg-emerald-600',
     isha: 'bg-indigo-600',
   };
-
-  // Define active prayer colors (same as in PrayerTimeFilter)
-  const getPrayerActiveColor = (prayer: PrayerType) => {
-    const colors = {
-      fajr: 'bg-[#DB2777] text-white',
-      dhuhr: 'bg-[#D97706] text-white', 
-      asr: 'bg-[#059669] text-white',
-      isha: 'bg-[#4F46E5] text-white'
-    };
-    return colors[prayer];
-  };
   
   // Find the earliest and latest times for each prayer type
   const earliestTimes = prayerTypes.reduce((acc, prayer) => {
@@ -138,7 +127,7 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                     className={`text-center text-xs py-2 px-2`}
                   >
                     <div className="flex flex-col items-center justify-center">
-                      <span className={`font-semibold px-3 py-1 rounded-full ${getPrayerActiveColor(activePrayer)}`}>
+                      <span className="bg-yellow-500 text-black font-semibold px-3 py-1 rounded-full">
                         {masjid[activePrayer]}
                       </span>
                     </div>
@@ -153,18 +142,14 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
                         key={prayer} 
                         className={
                           isSelected
-                            ? `${getPrayerActiveColor(prayer)} font-bold text-center` 
+                            ? `bg-yellow-500 text-black font-bold text-center` 
                             : `${prayerColors[prayer]} text-center`
                         }
                       >
                         <div className="flex flex-col items-center justify-center">
                           <span>{masjid[prayer]}</span>
-                          {extremeType && (
-                            <Badge className={`mt-1 text-[10px] px-2 py-0 text-white ${
-                              isSelected 
-                                ? 'bg-white text-black border border-gray-300' 
-                                : `${badgeColors[prayer]}`
-                            }`}>
+                          {extremeType && !isSelected && (
+                            <Badge className={`mt-1 text-[10px] px-2 py-0 text-white ${badgeColors[prayer]}`}>
                               {extremeType === 'earliest' ? 'EARLIEST' : 'LATEST'}
                             </Badge>
                           )}
