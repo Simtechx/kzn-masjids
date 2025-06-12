@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MasjidData, PrayerType, findExtremeTime } from '@/utils/prayerTimeUtils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -24,35 +25,35 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
   // Exclude maghrib as per requirements
   const prayerTypes: PrayerType[] = ['fajr', 'dhuhr', 'asr', 'isha'];
 
-  // Define prayer block colors - updated with more muted colors
+  // Define prayer block colors - using custom hex colors
   const prayerColors = {
-    fajr: 'bg-pink-100',
-    dhuhr: 'bg-amber-100',
-    asr: 'bg-emerald-100',
-    isha: 'bg-indigo-100',
+    fajr: 'bg-pink-50',
+    dhuhr: 'bg-amber-50',
+    asr: 'bg-emerald-50',
+    isha: 'bg-indigo-50',
   };
 
-  // Define selected colors using the new muted prayer-specific colors
+  // Define selected colors using the custom hex colors
   const selectedColors = {
-    fajr: 'bg-pink-400',
-    dhuhr: 'bg-amber-500',
-    asr: 'bg-emerald-500',
-    isha: 'bg-indigo-500',
+    fajr: 'bg-[#991F4B]',
+    dhuhr: 'bg-[#B36100]',
+    asr: 'bg-[#046645]',
+    isha: 'bg-[#003049]',
   };
 
-  // Define darker colors for badges
+  // Define darker colors for badges using the custom hex colors
   const badgeColors = {
-    fajr: 'bg-pink-400',
-    dhuhr: 'bg-amber-500',
-    asr: 'bg-emerald-500',
-    isha: 'bg-indigo-500',
+    fajr: 'bg-[#991F4B]',
+    dhuhr: 'bg-[#B36100]',
+    asr: 'bg-[#046645]',
+    isha: 'bg-[#003049]',
   };
 
   const prayerTextColors = {
-    fajr: 'text-pink-700',
-    dhuhr: 'text-amber-700',
-    asr: 'text-emerald-700',
-    isha: 'text-indigo-700',
+    fajr: 'text-[#991F4B]',
+    dhuhr: 'text-[#B36100]',
+    asr: 'text-[#046645]',
+    isha: 'text-[#003049]',
   };
   
   // Find the earliest and latest times for each prayer type

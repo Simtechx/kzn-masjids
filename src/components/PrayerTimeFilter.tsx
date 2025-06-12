@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { LayoutGrid, Table2, Blocks } from 'lucide-react';
@@ -86,27 +87,6 @@ const PrayerTimeFilter = () => {
     return 'All Masjids';
   };
 
-  // Define prayer colors for active states - updated with more muted colors
-  const getPrayerActiveColor = (prayer: PrayerType) => {
-    const colors = {
-      fajr: 'bg-pink-400 text-white',
-      dhuhr: 'bg-amber-500 text-white', 
-      asr: 'bg-emerald-500 text-white',
-      isha: 'bg-indigo-500 text-white'
-    };
-    return colors[prayer];
-  };
-
-  const getPrayerHoverColor = (prayer: PrayerType) => {
-    const colors = {
-      fajr: 'hover:bg-pink-400 hover:text-white',
-      dhuhr: 'hover:bg-amber-500 hover:text-white',
-      asr: 'hover:bg-emerald-500 hover:text-white', 
-      isha: 'hover:bg-indigo-500 hover:text-white'
-    };
-    return colors[prayer];
-  };
-
   return (
     <section className="py-10 px-4 bg-white">
       <div className="container mx-auto">
@@ -190,89 +170,89 @@ const PrayerTimeFilter = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {/* FAJR */}
               <div className="min-w-0">
-                <div className="bg-pink-400 text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-pink-400">FAJR</div>
+                <div className="bg-[#991F4B] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-[#991F4B]">FAJR</div>
                 <div className="bg-white border-2 border-gray-300 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
-                  <div className="bg-white text-pink-700 border-2 border-pink-400 py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
+                  <div className="bg-white text-[#991F4B] border-2 border-[#991F4B] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
                   {getFilteredTimes('fajr').map((time, index) => (
                     <button 
                       key={index}
                       onClick={() => handlePrayerTimeClick('fajr', time)}
                       className={`w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 border-2 ${
                         activePrayer === 'fajr' && selectedTime === time
-                          ? 'bg-pink-400 text-white border-pink-400'
-                          : 'bg-pink-100 text-pink-700 border-pink-200 hover:bg-pink-400 hover:text-white'
+                          ? 'bg-[#991F4B] text-white border-[#991F4B]'
+                          : 'bg-pink-50 text-[#991F4B] border-pink-200 hover:bg-[#991F4B] hover:text-white'
                       }`}
                     >
                       {time}
                     </button>
                   ))}
-                  <div className="bg-pink-600 text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-pink-600">LATEST</div>
+                  <div className="bg-[#991F4B] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-[#991F4B]">LATEST</div>
                 </div>
               </div>
 
               {/* DHUHR */}
               <div className="min-w-0">
-                <div className="bg-amber-500 text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-amber-500">DHUHR</div>
+                <div className="bg-[#B36100] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-[#B36100]">DHUHR</div>
                 <div className="bg-white border-2 border-gray-300 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
-                  <div className="bg-white text-amber-700 border-2 border-amber-500 py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
+                  <div className="bg-white text-[#B36100] border-2 border-[#B36100] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
                   {getFilteredTimes('dhuhr').map((time, index) => (
                     <button 
                       key={index}
                       onClick={() => handlePrayerTimeClick('dhuhr', time)}
                       className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 border-2 ${
                         activePrayer === 'dhuhr' && selectedTime === time
-                          ? 'bg-amber-500 text-white border-amber-500'
-                          : 'bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-500 hover:text-white'
+                          ? 'bg-[#B36100] text-white border-[#B36100]'
+                          : 'bg-amber-50 text-[#B36100] border-amber-200 hover:bg-[#B36100] hover:text-white'
                       }`}
                     >
                       {time}
                     </button>
                   ))}
-                  <div className="bg-amber-700 text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-amber-700">LATEST</div>
+                  <div className="bg-[#B36100] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-[#B36100]">LATEST</div>
                 </div>
               </div>
 
               {/* ASR */}
               <div className="min-w-0">
-                <div className="bg-emerald-500 text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-emerald-500">ASR</div>
+                <div className="bg-[#046645] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-[#046645]">ASR</div>
                 <div className="bg-white border-2 border-gray-300 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
-                  <div className="bg-white text-emerald-700 border-2 border-emerald-500 py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
+                  <div className="bg-white text-[#046645] border-2 border-[#046645] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
                   {getFilteredTimes('asr').map((time, index) => (
                     <button 
                       key={index}
                       onClick={() => handlePrayerTimeClick('asr', time)}
                       className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 border-2 ${
                         activePrayer === 'asr' && selectedTime === time
-                          ? 'bg-emerald-500 text-white border-emerald-500'
-                          : 'bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-500 hover:text-white'
+                          ? 'bg-[#046645] text-white border-[#046645]'
+                          : 'bg-emerald-50 text-[#046645] border-emerald-200 hover:bg-[#046645] hover:text-white'
                       }`}
                     >
                       {time}
                     </button>
                   ))}
-                  <div className="bg-emerald-700 text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-emerald-700">LATEST</div>
+                  <div className="bg-[#046645] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-[#046645]">LATEST</div>
                 </div>
               </div>
 
               {/* ISHA */}
               <div className="min-w-0">
-                <div className="bg-indigo-500 text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-indigo-500">ISHA</div>
+                <div className="bg-[#003049] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-[#003049]">ISHA</div>
                 <div className="bg-white border-2 border-gray-300 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
-                  <div className="bg-white text-indigo-700 border-2 border-indigo-500 py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
+                  <div className="bg-white text-[#003049] border-2 border-[#003049] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
                   {getFilteredTimes('isha').map((time, index) => (
                     <button 
                       key={index}
                       onClick={() => handlePrayerTimeClick('isha', time)}
                       className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 border-2 ${
                         activePrayer === 'isha' && selectedTime === time
-                          ? 'bg-indigo-500 text-white border-indigo-500'
-                          : 'bg-indigo-100 text-indigo-700 border-indigo-200 hover:bg-indigo-500 hover:text-white'
+                          ? 'bg-[#003049] text-white border-[#003049]'
+                          : 'bg-indigo-50 text-[#003049] border-indigo-200 hover:bg-[#003049] hover:text-white'
                       }`}
                     >
                       {time}
                     </button>
                   ))}
-                  <div className="bg-indigo-700 text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-indigo-700">LATEST</div>
+                  <div className="bg-[#003049] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-[#003049]">LATEST</div>
                 </div>
               </div>
             </div>

@@ -20,35 +20,35 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
   // Exclude maghrib as per requirements
   const prayerTypes: PrayerType[] = ['fajr', 'dhuhr', 'asr', 'isha'];
   
-  // Define prayer block colors - updated with more muted colors
+  // Define prayer block colors - using custom hex colors
   const prayerColors = {
-    fajr: 'bg-pink-100 border-pink-400',
-    dhuhr: 'bg-amber-100 border-amber-500',
-    asr: 'bg-emerald-100 border-emerald-500',
-    isha: 'bg-indigo-100 border-indigo-500',
+    fajr: 'bg-pink-50 border-[#991F4B]',
+    dhuhr: 'bg-amber-50 border-[#B36100]',
+    asr: 'bg-emerald-50 border-[#046645]',
+    isha: 'bg-indigo-50 border-[#003049]',
   };
   
   const prayerTextColors = {
-    fajr: 'text-pink-700',
-    dhuhr: 'text-amber-700',
-    asr: 'text-emerald-700',
-    isha: 'text-indigo-700',
+    fajr: 'text-[#991F4B]',
+    dhuhr: 'text-[#B36100]',
+    asr: 'text-[#046645]',
+    isha: 'text-[#003049]',
   };
 
-  // Define selected colors using the new muted prayer-specific colors
+  // Define selected colors using the custom hex colors
   const selectedColors = {
-    fajr: 'bg-pink-400 border-pink-600',
-    dhuhr: 'bg-amber-500 border-amber-700',
-    asr: 'bg-emerald-500 border-emerald-700',
-    isha: 'bg-indigo-500 border-indigo-700',
+    fajr: 'bg-[#991F4B] border-[#991F4B]',
+    dhuhr: 'bg-[#B36100] border-[#B36100]',
+    asr: 'bg-[#046645] border-[#046645]',
+    isha: 'bg-[#003049] border-[#003049]',
   };
 
-  // Define darker colors for badges (EARLIEST/LATEST when not selected)
+  // Define darker colors for badges using the custom hex colors
   const badgeColors = {
-    fajr: 'bg-pink-400',
-    dhuhr: 'bg-amber-500',
-    asr: 'bg-emerald-500',
-    isha: 'bg-indigo-500',
+    fajr: 'bg-[#991F4B]',
+    dhuhr: 'bg-[#B36100]',
+    asr: 'bg-[#046645]',
+    isha: 'bg-[#003049]',
   };
   
   // Find the earliest and latest times for each prayer type

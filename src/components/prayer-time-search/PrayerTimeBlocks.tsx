@@ -19,28 +19,28 @@ const PrayerTimeBlocks: React.FC<PrayerTimeBlocksProps> = ({
   // Exclude maghrib as per requirements
   const prayerTypes: PrayerType[] = ['fajr', 'dhuhr', 'asr', 'isha'];
 
-  // Define prayer block base colors - updated with more muted colors
+  // Define prayer block base colors - using custom hex colors
   const prayerColors = {
-    fajr: 'bg-pink-100 hover:bg-pink-200',
-    dhuhr: 'bg-amber-100 hover:bg-amber-200',
-    asr: 'bg-emerald-100 hover:bg-emerald-200',
-    isha: 'bg-indigo-100 hover:bg-indigo-200',
+    fajr: 'bg-pink-50 hover:bg-pink-100',
+    dhuhr: 'bg-amber-50 hover:bg-amber-100',
+    asr: 'bg-emerald-50 hover:bg-emerald-100',
+    isha: 'bg-indigo-50 hover:bg-indigo-100',
   };
 
-  // Define prayer text colors
+  // Define prayer text colors using custom hex colors
   const prayerTextColors = {
-    fajr: 'text-pink-700',
-    dhuhr: 'text-amber-700',
-    asr: 'text-emerald-700',
-    isha: 'text-indigo-700',
+    fajr: 'text-[#991F4B]',
+    dhuhr: 'text-[#B36100]',
+    asr: 'text-[#046645]',
+    isha: 'text-[#003049]',
   };
 
-  // Define active block colors - using the new muted colors
+  // Define active block colors using custom hex colors
   const activeColors = {
-    fajr: 'bg-pink-400 text-white',
-    dhuhr: 'bg-amber-500 text-white',
-    asr: 'bg-emerald-500 text-white',
-    isha: 'bg-indigo-500 text-white',
+    fajr: 'bg-[#991F4B] text-white',
+    dhuhr: 'bg-[#B36100] text-white',
+    asr: 'bg-[#046645] text-white',
+    isha: 'bg-[#003049] text-white',
   };
 
   // For mobile, use a 2x2 grid layout
