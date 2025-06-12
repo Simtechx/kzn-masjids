@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MasjidData, PrayerType, findExtremeTime } from '@/utils/prayerTimeUtils';
 import { Button } from '@/components/ui/button';
