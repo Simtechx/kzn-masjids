@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { LayoutGrid, Table2, Blocks } from 'lucide-react';
@@ -87,23 +86,23 @@ const PrayerTimeFilter = () => {
     return 'All Masjids';
   };
 
-  // Define prayer colors for active states
+  // Define prayer colors for active states - updated with more muted colors
   const getPrayerActiveColor = (prayer: PrayerType) => {
     const colors = {
-      fajr: 'bg-[#DB2777] text-white',
-      dhuhr: 'bg-[#D97706] text-white', 
-      asr: 'bg-[#059669] text-white',
-      isha: 'bg-[#4F46E5] text-white'
+      fajr: 'bg-pink-400 text-white',
+      dhuhr: 'bg-amber-500 text-white', 
+      asr: 'bg-emerald-500 text-white',
+      isha: 'bg-indigo-500 text-white'
     };
     return colors[prayer];
   };
 
   const getPrayerHoverColor = (prayer: PrayerType) => {
     const colors = {
-      fajr: 'hover:bg-[#DB2777] hover:text-white',
-      dhuhr: 'hover:bg-[#D97706] hover:text-white',
-      asr: 'hover:bg-[#059669] hover:text-white', 
-      isha: 'hover:bg-[#4F46E5] hover:text-white'
+      fajr: 'hover:bg-pink-400 hover:text-white',
+      dhuhr: 'hover:bg-amber-500 hover:text-white',
+      asr: 'hover:bg-emerald-500 hover:text-white', 
+      isha: 'hover:bg-indigo-500 hover:text-white'
     };
     return colors[prayer];
   };
@@ -191,89 +190,89 @@ const PrayerTimeFilter = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {/* FAJR */}
               <div className="min-w-0">
-                <div className="bg-[#DB2777] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-[#DB2777]">FAJR</div>
+                <div className="bg-pink-400 text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-pink-400">FAJR</div>
                 <div className="bg-white border-2 border-gray-300 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
-                  <div className="bg-white text-[#DB2777] border-2 border-[#DB2777] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
+                  <div className="bg-white text-pink-700 border-2 border-pink-400 py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
                   {getFilteredTimes('fajr').map((time, index) => (
                     <button 
                       key={index}
                       onClick={() => handlePrayerTimeClick('fajr', time)}
                       className={`w-full py-1 md:py-2 px-1 md:px-3 rounded md:rounded-lg font-medium text-base transition-all duration-200 border-2 ${
                         activePrayer === 'fajr' && selectedTime === time
-                          ? 'bg-[#DB2777] text-white border-[#DB2777]'
-                          : 'bg-pink-50 text-[#DB2777] border-pink-200 hover:bg-[#DB2777] hover:text-white'
+                          ? 'bg-pink-400 text-white border-pink-400'
+                          : 'bg-pink-100 text-pink-700 border-pink-200 hover:bg-pink-400 hover:text-white'
                       }`}
                     >
                       {time}
                     </button>
                   ))}
-                  <div className="bg-[#8B1E4D] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-[#8B1E4D]">LATEST</div>
+                  <div className="bg-pink-600 text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-pink-600">LATEST</div>
                 </div>
               </div>
 
               {/* DHUHR */}
               <div className="min-w-0">
-                <div className="bg-[#D97706] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-[#D97706]">DHUHR</div>
+                <div className="bg-amber-500 text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-amber-500">DHUHR</div>
                 <div className="bg-white border-2 border-gray-300 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
-                  <div className="bg-white text-[#D97706] border-2 border-[#D97706] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
+                  <div className="bg-white text-amber-700 border-2 border-amber-500 py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
                   {getFilteredTimes('dhuhr').map((time, index) => (
                     <button 
                       key={index}
                       onClick={() => handlePrayerTimeClick('dhuhr', time)}
                       className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 border-2 ${
                         activePrayer === 'dhuhr' && selectedTime === time
-                          ? 'bg-[#D97706] text-white border-[#D97706]'
-                          : 'bg-amber-50 text-[#D97706] border-amber-200 hover:bg-[#D97706] hover:text-white'
+                          ? 'bg-amber-500 text-white border-amber-500'
+                          : 'bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-500 hover:text-white'
                       }`}
                     >
                       {time}
                     </button>
                   ))}
-                  <div className="bg-[#A05E05] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-[#A05E05]">LATEST</div>
+                  <div className="bg-amber-700 text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-amber-700">LATEST</div>
                 </div>
               </div>
 
               {/* ASR */}
               <div className="min-w-0">
-                <div className="bg-[#059669] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-[#059669]">ASR</div>
+                <div className="bg-emerald-500 text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-emerald-500">ASR</div>
                 <div className="bg-white border-2 border-gray-300 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
-                  <div className="bg-white text-[#059669] border-2 border-[#059669] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
+                  <div className="bg-white text-emerald-700 border-2 border-emerald-500 py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
                   {getFilteredTimes('asr').map((time, index) => (
                     <button 
                       key={index}
                       onClick={() => handlePrayerTimeClick('asr', time)}
                       className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 border-2 ${
                         activePrayer === 'asr' && selectedTime === time
-                          ? 'bg-[#059669] text-white border-[#059669]'
-                          : 'bg-emerald-50 text-[#059669] border-emerald-200 hover:bg-[#059669] hover:text-white'
+                          ? 'bg-emerald-500 text-white border-emerald-500'
+                          : 'bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-500 hover:text-white'
                       }`}
                     >
                       {time}
                     </button>
                   ))}
-                  <div className="bg-[#046F4D] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-[#046F4D]">LATEST</div>
+                  <div className="bg-emerald-700 text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-emerald-700">LATEST</div>
                 </div>
               </div>
 
               {/* ISHA */}
               <div className="min-w-0">
-                <div className="bg-[#4F46E5] text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-[#4F46E5]">ISHA</div>
+                <div className="bg-indigo-500 text-white py-2 md:py-3 px-1 md:px-4 rounded-t-md md:rounded-t-lg font-semibold text-xs md:text-lg text-center border-2 border-indigo-500">ISHA</div>
                 <div className="bg-white border-2 border-gray-300 rounded-b-md md:rounded-b-lg p-1 md:p-3 space-y-1 md:space-y-2">
-                  <div className="bg-white text-[#4F46E5] border-2 border-[#4F46E5] py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
+                  <div className="bg-white text-indigo-700 border-2 border-indigo-500 py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold">EARLIEST</div>
                   {getFilteredTimes('isha').map((time, index) => (
                     <button 
                       key={index}
                       onClick={() => handlePrayerTimeClick('isha', time)}
                       className={`w-full py-1 md:py-2 px-1 md:px-3 rounded font-medium text-base transition-all duration-200 border-2 ${
                         activePrayer === 'isha' && selectedTime === time
-                          ? 'bg-[#4F46E5] text-white border-[#4F46E5]'
-                          : 'bg-indigo-50 text-[#4F46E5] border-indigo-200 hover:bg-[#4F46E5] hover:text-white'
+                          ? 'bg-indigo-500 text-white border-indigo-500'
+                          : 'bg-indigo-100 text-indigo-700 border-indigo-200 hover:bg-indigo-500 hover:text-white'
                       }`}
                     >
                       {time}
                     </button>
                   ))}
-                  <div className="bg-[#3C35B8] text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-[#3C35B8]">LATEST</div>
+                  <div className="bg-indigo-700 text-white py-1 md:py-2 px-1 md:px-3 rounded text-center text-xs md:text-sm font-semibold border-2 border-indigo-700">LATEST</div>
                 </div>
               </div>
             </div>

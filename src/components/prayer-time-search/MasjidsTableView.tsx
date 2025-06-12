@@ -24,35 +24,35 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
   // Exclude maghrib as per requirements
   const prayerTypes: PrayerType[] = ['fajr', 'dhuhr', 'asr', 'isha'];
 
-  // Define prayer block colors - soft colors 
+  // Define prayer block colors - updated with more muted colors
   const prayerColors = {
-    fajr: 'bg-pink-50',
-    dhuhr: 'bg-amber-50',
-    asr: 'bg-emerald-50',
-    isha: 'bg-indigo-50',
+    fajr: 'bg-pink-100',
+    dhuhr: 'bg-amber-100',
+    asr: 'bg-emerald-100',
+    isha: 'bg-indigo-100',
   };
 
-  // Define selected colors using prayer-specific colors instead of yellow
+  // Define selected colors using the new muted prayer-specific colors
   const selectedColors = {
-    fajr: 'bg-pink-600',
-    dhuhr: 'bg-amber-600',
-    asr: 'bg-emerald-600',
-    isha: 'bg-indigo-600',
+    fajr: 'bg-pink-400',
+    dhuhr: 'bg-amber-500',
+    asr: 'bg-emerald-500',
+    isha: 'bg-indigo-500',
   };
 
   // Define darker colors for badges
   const badgeColors = {
-    fajr: 'bg-pink-600',
-    dhuhr: 'bg-amber-600',
-    asr: 'bg-emerald-600',
-    isha: 'bg-indigo-600',
+    fajr: 'bg-pink-400',
+    dhuhr: 'bg-amber-500',
+    asr: 'bg-emerald-500',
+    isha: 'bg-indigo-500',
   };
 
   const prayerTextColors = {
-    fajr: 'text-pink-600',
-    dhuhr: 'text-amber-600',
-    asr: 'text-emerald-600',
-    isha: 'text-indigo-600',
+    fajr: 'text-pink-700',
+    dhuhr: 'text-amber-700',
+    asr: 'text-emerald-700',
+    isha: 'text-indigo-700',
   };
   
   // Find the earliest and latest times for each prayer type
