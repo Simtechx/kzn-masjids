@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -111,7 +112,6 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
                   backgroundImage: `url(${regionData.backgroundImage})`,
                 }}
               >
-                {/* Overlay with region name */}
                 <div className="absolute inset-0 bg-black/40"></div>
                 <span className="relative z-10 text-white font-bold text-xl flex items-center justify-center h-full">
                   {regionData.name}
@@ -142,7 +142,7 @@ const RegionTable: React.FC<RegionTableProps> = ({ selectedRegion, onSelectRegio
                 <div className="ml-auto">
                   <Button 
                     variant="outline" 
-                    className="bg-teal-600 text-white hover:bg-teal-700"
+                    className="bg-yellow-500 text-black border-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold"
                     onClick={(e) => {
                       e.stopPropagation();
                       onSelectRegion(regionData.name);

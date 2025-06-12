@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MasjidData, PrayerType, findExtremeTime } from '@/utils/prayerTimeUtils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -180,7 +179,7 @@ const MasjidsTableView: React.FC<MasjidsTableViewProps> = ({
 
                 {!isMobile && (
                   <TableCell className="text-center">
-                    <Button variant="outline" size="sm" className="bg-teal-600 text-white border-teal-700 hover:bg-teal-700">
+                    <Button variant="outline" size="sm" className="bg-yellow-500 text-black border-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold">
                       <MapPin className="mr-1 h-4 w-4" />
                       Directions
                     </Button>

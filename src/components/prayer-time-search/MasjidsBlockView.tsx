@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MasjidData, PrayerType, findExtremeTime } from '@/utils/prayerTimeUtils';
 import { Button } from '@/components/ui/button';
@@ -132,7 +131,7 @@ const MasjidsBlockView: React.FC<MasjidsBlockViewProps> = ({
             })}
           </div>
           <div className="mt-3 text-center">
-            <Button variant="outline" size="sm" className="w-full bg-teal-600 text-white border-teal-700 hover:bg-teal-700">
+            <Button variant="outline" size="sm" className="w-full bg-yellow-500 text-black border-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold">
               <MapPin className="mr-1 h-4 w-4" />
               Directions
             </Button>
