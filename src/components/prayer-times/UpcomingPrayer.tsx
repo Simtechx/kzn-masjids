@@ -6,7 +6,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { PrayerTime } from './types';
 
 interface UpcomingPrayerProps {
-  upcomingPrayer: PrayerTime;
+  upcomingPrayer: PrayerTime | null;
   currentLocation: string;
   timeRemaining: string;
   remainingPercentage: number;
@@ -19,6 +19,35 @@ const UpcomingPrayer: React.FC<UpcomingPrayerProps> = ({
   remainingPercentage
 }) => {
   const isMobile = useIsMobile();
+
+  // Handle case when upcomingPrayer is null
+  if (!upcomingPrayer) {
+    return (
+      <div 
+        className="relative bg-cover bg-center bg-no-repeat rounded-lg overflow-hidden"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/313997ac-0790-47fa-a6e0-f866759aeeaa.png')`
+        }}
+      >
+        <div className="p-6 text-white">
+          <div className="flex items-center mb-4">
+            <Clock className="h-6 w-6 mr-2 text-yellow-400" />
+            <h3 className="text-xl font-bold">Next Salaah</h3>
+          </div>
+          
+          <div className="space-y-4">
+            <div>
+              <p className="text-gray-300 text-sm">{currentLocation}</p>
+            </div>
+            
+            <div className="text-center">
+              <p className="text-yellow-400 font-semibold text-lg">Loading prayer times...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div 
