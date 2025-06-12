@@ -38,36 +38,36 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
     // If this is the upcoming prayer, use darker shade of same color with white text
     if (isUpcoming) {
       if (prayerName === 'Fajr') {
-        return { bgColor: 'bg-pink-600', textColor: 'text-white' };
+        return { bgColor: 'bg-pink-600', textColor: 'text-white', borderColor: 'border-pink-700' };
       } else if (prayerName === 'Dhuhr') {
-        return { bgColor: 'bg-amber-600', textColor: 'text-white' };
+        return { bgColor: 'bg-amber-600', textColor: 'text-white', borderColor: 'border-amber-700' };
       } else if (prayerName === 'Asr (S)') {
-        return { bgColor: 'bg-green-600', textColor: 'text-white' };
+        return { bgColor: 'bg-green-600', textColor: 'text-white', borderColor: 'border-green-700' };
       } else if (prayerName === 'Asr (H)') {
-        return { bgColor: 'bg-teal-600', textColor: 'text-white' };
+        return { bgColor: 'bg-teal-600', textColor: 'text-white', borderColor: 'border-teal-700' };
       } else if (prayerName === 'Maghrib') {
-        return { bgColor: 'bg-red-600', textColor: 'text-white' };
+        return { bgColor: 'bg-red-600', textColor: 'text-white', borderColor: 'border-red-700' };
       } else if (prayerName === 'Isha') {
-        return { bgColor: 'bg-indigo-600', textColor: 'text-white' };
+        return { bgColor: 'bg-indigo-600', textColor: 'text-white', borderColor: 'border-indigo-700' };
       }
     }
     
-    // For non-upcoming prayers, use the original light colors
+    // For non-upcoming prayers, use the original light colors with matching borders
     if (prayerName === 'Fajr') {
-      return { bgColor: 'bg-pink-50', textColor: 'text-pink-600' };
+      return { bgColor: 'bg-pink-50', textColor: 'text-pink-600', borderColor: 'border-pink-300' };
     } else if (prayerName === 'Dhuhr') {
-      return { bgColor: 'bg-amber-50', textColor: 'text-amber-600' };
+      return { bgColor: 'bg-amber-50', textColor: 'text-amber-600', borderColor: 'border-amber-300' };
     } else if (prayerName === 'Asr (S)') {
-      return { bgColor: 'bg-green-50', textColor: 'text-green-600' };
+      return { bgColor: 'bg-green-50', textColor: 'text-green-600', borderColor: 'border-green-300' };
     } else if (prayerName === 'Asr (H)') {
-      return { bgColor: 'bg-teal-100', textColor: 'text-teal-800' };
+      return { bgColor: 'bg-teal-100', textColor: 'text-teal-800', borderColor: 'border-teal-300' };
     } else if (prayerName === 'Maghrib') {
-      return { bgColor: 'bg-red-50', textColor: 'text-red-600' };
+      return { bgColor: 'bg-red-50', textColor: 'text-red-600', borderColor: 'border-red-300' };
     } else if (prayerName === 'Isha') {
-      return { bgColor: 'bg-indigo-50', textColor: 'text-indigo-600' };
+      return { bgColor: 'bg-indigo-50', textColor: 'text-indigo-600', borderColor: 'border-indigo-300' };
     }
     
-    return { bgColor: 'bg-gray-50', textColor: 'text-gray-600' };
+    return { bgColor: 'bg-gray-50', textColor: 'text-gray-600', borderColor: 'border-gray-300' };
   };
 
   return (
@@ -78,21 +78,21 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
         {reorderedPrayers.map((prayer, index) => {
           const isUpcoming = prayer.name === upcomingPrayer;
           // Get custom colors for prayers
-          const { bgColor, textColor } = getPrayerColors(prayer.name, isUpcoming);
+          const { bgColor, textColor, borderColor } = getPrayerColors(prayer.name, isUpcoming);
             
           return (
-            <div key={index} className={`${bgColor} rounded-lg p-4 relative overflow-hidden shadow-sm`}>
+            <div key={index} className={`${bgColor} rounded-lg p-4 relative overflow-hidden shadow-sm border-2 ${borderColor}`}>
               {/* Prayer name now at top left */}
               <div className={`${textColor} font-medium mb-1`}>{prayer.name}</div>
               
               {/* Time is now on left side */}
               <div className={`${textColor} text-2xl font-semibold`}>{prayer.time}</div>
               
-              {/* UPCOMING badge on right top */}
+              {/* NEXT badge on right top */}
               {isUpcoming && (
                 <div className="absolute top-0 right-0">
                   <Badge className="bg-yellow-500 text-black rounded-bl-md font-semibold">
-                    UPCOMING
+                    NEXT
                   </Badge>
                 </div>
               )}
