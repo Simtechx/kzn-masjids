@@ -88,10 +88,10 @@ const TodaysPrayers: React.FC<TodaysPrayersProps> = ({ todayPrayerTimes }) => {
               {/* Time is now on left side */}
               <div className={`${textColor} text-2xl font-semibold`}>{prayer.time}</div>
               
-              {/* NEXT badge on right top */}
+              {/* NEXT badge on right top - bigger for web view */}
               {isUpcoming && (
                 <div className="absolute top-0 right-0">
-                  <Badge className="bg-yellow-500 text-black rounded-bl-md font-semibold">
+                  <Badge className="bg-yellow-500 text-black rounded-bl-md font-semibold text-xs md:text-sm px-2 md:px-3 py-1 md:py-1.5">
                     NEXT
                   </Badge>
                 </div>

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -263,13 +264,13 @@ const NoticesSection = () => {
   };
 
   return (
-    <section className="py-8 md:py-12 px-4 bg-gray-50">
+    <section className="py-12 md:py-16 px-4 bg-gray-50">
       <div className="container mx-auto max-w-6xl">
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-2 text-gray-800">NOTICES</h2>
-        <p className="text-center text-gray-600 mb-6 md:mb-8 text-sm md:text-base">Stay informed about the latest events, programs, and announcements</p>
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-4 text-gray-800">NOTICES</h2>
+        <p className="text-center text-gray-600 mb-8 md:mb-12 text-sm md:text-base">Stay informed about the latest events, programs, and announcements</p>
         
         {/* Tabs */}
-        <div className="flex justify-center mb-8 md:mb-12">
+        <div className="flex justify-center mb-10 md:mb-16">
           <div className="flex bg-white shadow-sm rounded-full overflow-hidden p-1 w-full max-w-sm">
             {tabs.map(tab => (
               <Button
@@ -290,7 +291,7 @@ const NoticesSection = () => {
 
         {/* Loading state */}
         {loading && (
-          <div className="flex justify-center items-center h-60 md:h-80">
+          <div className="flex justify-center items-center h-60 md:h-80 mb-8 md:mb-12">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 md:h-12 md:w-12 border-b-2 border-yellow-500 mx-auto mb-4"></div>
               <p className="text-gray-500 font-medium text-sm md:text-base">Loading notices...</p>
@@ -301,7 +302,7 @@ const NoticesSection = () => {
         {/* 3D Carousel */}
         {!loading && currentNotices.length > 0 && (
           <div 
-            className="relative"
+            className="relative mb-8 md:mb-12"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
@@ -411,7 +412,7 @@ const NoticesSection = () => {
 
             {/* Dots Indicator */}
             {currentNotices.length > 1 && (
-              <div className="flex justify-center mt-6 md:mt-8 space-x-2">
+              <div className="flex justify-center mt-8 md:mt-10 space-x-2">
                 {currentNotices.map((_, index) => (
                   <button
                     key={index}
@@ -428,7 +429,7 @@ const NoticesSection = () => {
 
         {/* No notices state */}
         {!loading && currentNotices.length === 0 && (
-          <div className="flex justify-center items-center h-60 md:h-80">
+          <div className="flex justify-center items-center h-60 md:h-80 mb-8 md:mb-12">
             <div className="text-center">
               <p className="text-gray-500 font-medium text-sm md:text-base">No notices available for {activeTab}</p>
               <p className="text-gray-400 text-xs md:text-sm mt-1">Check back soon for updates</p>
